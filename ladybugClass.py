@@ -1,8 +1,11 @@
 # ladybug.py
 import pygame
 import random
+
+import main
 from fireballClass import Fireball
 from main import WINDOW_WIDTH, WINDOW_HEIGHT
+import math
 
 # Define the Ladybug class
 class Ladybug:
@@ -14,6 +17,7 @@ class Ladybug:
 
         # Get the rect of the image
         self.rect = self.image.get_rect()
+        #self.rect.center = (screen_width // 2, screen_height // 2)
 
         self.fireballs = []
 
@@ -22,67 +26,50 @@ class Ladybug:
         self.winMode = False
         self.initilizeGame()
         self.current_direction = 0
+        self.current_x = float(self.rect.x)
+        self.current_y = float(self.rect.y)
         self.last_shot_time = 0
 
     def initilizeGame(self):
         self.rect.x = random.randint(0, WINDOW_WIDTH - self.rect.width)
         self.rect.y = random.randint(0, WINDOW_HEIGHT - self.rect.height)
+        self.current_x = float(self.rect.x)
+        self.current_y = float(self.rect.y)
         self.winMode = False
+
 
     def update(self, keys):
         if self.winMode:
             return
         # Move the ladybug based on the arrow key input
         if keys[pygame.K_LEFT]:
-            self.rect.x -= self.speed
-            if keys[pygame.K_UP]:
-                self.image = pygame.transform.rotate(self.original, 45)
-                self.current_direction = 45
-            elif keys[pygame.K_DOWN]:
-                self.image = pygame.transform.rotate(self.original, 135)
-                self.current_direction = 135
-            else:
-                self.image = pygame.transform.rotate(self.original, 90)
-                self.current_direction = 90
+            self.current_direction = (self.current_direction - 5) % 360
+            #print(f"direction: {self.current_direction}")
 
         if keys[pygame.K_RIGHT]:
-            self.rect.x += self.speed
-            if keys[pygame.K_UP]:
-                self.image = pygame.transform.rotate(self.original, 315)
-                self.current_direction = 315
-            elif keys[pygame.K_DOWN]:
-                self.image = pygame.transform.rotate(self.original, 225)
-                self.current_direction = 225
-            else:
-                self.image = pygame.transform.rotate(self.original, 270)
-                self.current_direction = 270
+            self.current_direction = (self.current_direction + 5) % 360
+            #print(f"direction: {self.current_direction}")
 
         if keys[pygame.K_UP]:
-            self.rect.y -= self.speed
-            if keys[pygame.K_RIGHT]:
-                self.image = pygame.transform.rotate(self.original, 315)
-                self.current_direction = 315
-            elif keys[pygame.K_LEFT]:
-                self.image = pygame.transform.rotate(self.original, 45)
-                self.current_direction = 45
-            else:
-                self.image = pygame.transform.rotate(self.original, 0)
-                self.current_direction = 0
-        if keys[pygame.K_DOWN]:
-            self.rect.y += self.speed
-            if keys[pygame.K_RIGHT]:
-                self.image = pygame.transform.rotate(self.original, 225)
-                self.current_direction = 225
-            elif keys[pygame.K_LEFT]:
-                self.image = pygame.transform.rotate(self.original, 135)
-                self.current_direction = 135
-            else:
-                self.image = pygame.transform.rotate(self.original, 180)
-                self.current_direction = 180
+            self.current_x, self.current_y, self.rect.x, self.rect.y =\
+                main.trigo(self.current_direction, self.speed, self.current_x, self.current_y)
+
+
+
+            #print(f"dx: {dx}, dy: {dy}, self.rect.x: {self.rect.x}, self.rect.y: {self.rect.y},  direction: {self.current_direction}")
+            #print(f"self.current_x: {self.current_x}, self.current_y: {self.current_y}")
+            #print()
+
+
+        self.image = pygame.transform.rotate(self.original, -self.current_direction)
+        center = self.rect.center
+        self.rect = self.image.get_rect()
+        self.rect.center = center
 
         #print(current_direction)
         if keys[pygame.K_SPACE]:
-            self.shoot(self.current_direction,self.rect.x,self.rect.y)
+            self.shoot(self.current_direction,center[0],
+                       center[1])
         for fireball in self.fireballs:
             fireball.move()
             if fireball.self_destruct:
@@ -92,12 +79,20 @@ class Ladybug:
         # Keep the ladybug inside the window
         if self.rect.left < 0:
             self.rect.left = 0
+            self.current_x = 0
+            self.rect.x = 0
         if self.rect.right > WINDOW_WIDTH:
             self.rect.right = WINDOW_WIDTH
+            self.current_x = WINDOW_WIDTH - self.image.get_width()
+            self.rect.x = WINDOW_WIDTH - self.image.get_width()
         if self.rect.top < 0:
             self.rect.top = 0
+            self.current_y = 0
+            self.rect.y = 0
         if self.rect.bottom > WINDOW_HEIGHT:
             self.rect.bottom = WINDOW_HEIGHT
+            self.current_y = WINDOW_HEIGHT - self.image.get_height()
+            self.rect.y = WINDOW_HEIGHT - self.image.get_height()
 
     def draw(self, surface):
         # Draw the image on the surface
@@ -111,14 +106,14 @@ class Ladybug:
 
     def shoot(self, direction, x,y):
         current_time = pygame.time.get_ticks()
-        x_val = 12
-        y_val = 12
+        x_val = 17
+        y_val = 17
 
-        if direction == 45 or direction == 135 or direction == 225 or direction == 315:
+        if 45 <= direction <= 135 or 225 <= direction <= 315:
             x_val = 17
             y_val = 17
 
         if current_time - self.last_shot_time >= 333:
             self.last_shot_time = current_time
-            self.fireballs.append(Fireball(direction,x,y,x_val,y_val))
+            self.fireballs.append(Fireball(direction,x,y))
 
