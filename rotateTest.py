@@ -1,5 +1,6 @@
 import math
 import pygame
+from spriteTest import Sprite
 
 def blitRotate(surf, image, pos, originPos, angle):
     image_rect = image.get_rect(topleft = (pos[0] - originPos[0], pos[1]-originPos[1]))
@@ -7,6 +8,8 @@ def blitRotate(surf, image, pos, originPos, angle):
     rotated_offset = offset_center_to_pivot.rotate(-angle)
     rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
     rotated_image = pygame.transform.rotate(image, angle)
+    #rotated_image = image.rotate(angle)
+
     rotated_image_rect = rotated_image.get_rect(center = rotated_image_center)
     surf.blit(rotated_image, rotated_image_rect)
 
@@ -16,6 +19,8 @@ screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 
 image = pygame.image.load("flame001.gif")
+spr = Sprite("flame001.png", 93, 216, 15, 5, 25)
+image = spr.fill_frames_and_get_first_frame()
 pivot = (46, 216)
 
 angle = 90
@@ -25,6 +30,7 @@ rotate_speed = 2
 done = False
 right_pressed = False
 left_pressed = False
+current_time = pygame.time.get_ticks()
 while not done:
     clock.tick(60)
     for event in pygame.event.get():
@@ -54,8 +60,13 @@ while not done:
         pos[0] = 200 + math.cos(math.radians(angle))*50
         pos[1] = 200 - math.sin(math.radians(angle))*50  # crosshair moves left when rotating left
 
-    print(f"{angle}, {math.radians(angle)}")
+    #print(f"{angle}, {math.radians(angle)}")
     blitRotate(screen, image, pos, pivot, angle-90)
+
+    #image = spr.get_next_frame()
+    #current_time = pygame.time.get_ticks()
+    #time = current_time - original_time
+    image, current_time = spr.update_animation_frame(current_time)
 
     pygame.draw.line(screen, (0, 255, 0), (pos[0]-20, pos[1]), (pos[0]+20, pos[1]), 3)
     pygame.draw.line(screen, (0, 255, 0), (pos[0], pos[1]-20), (pos[0], pos[1]+20), 3)
