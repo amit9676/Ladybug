@@ -30,6 +30,7 @@ class Fireball:
         self.current_y = float(self.rect.y)
         self.winMode = False
 
+    '''move fireball at the pre determined path'''
     def move(self):
         self.current_x, self.current_y, self.rect.x, self.rect.y = \
             main.trigo(self.direction, self.speed, self.current_x, self.current_y)

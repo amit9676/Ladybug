@@ -32,6 +32,7 @@ class Game:
         self.win = False
         self.button = None
 
+    '''main method for event handling, such as game over and stuff'''
     def handle_events(self):
         # Handle events
         for event in pygame.event.get():
@@ -43,6 +44,7 @@ class Game:
                 if self.button.collidepoint(event.pos):
                     self.reset()
 
+    '''update the game - in here make sure everything in the game is being updated.'''
     def update(self):
         # Update the ladybug object
         keys = pygame.key.get_pressed()
@@ -58,6 +60,7 @@ class Game:
             self.message = None
             self.show_message("YOU WIN!")
 
+    '''main draw method - in here make sure every game instance is being drown'''
     def draw(self):
         # Fill the window with the background color
         window.fill(background_color)
