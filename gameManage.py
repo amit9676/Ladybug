@@ -69,6 +69,10 @@ class Game:
         for fireball in self.ladybug.fireballs:
             fireball.draw(window)
 
+        if self.ladybug.flame:
+            self.ladybug.flame.draw(window)
+
+
         # Show the message if there is one
         if self.message:
             text_surface = self.font.render("YOU WIN", True, (255, 255, 255))

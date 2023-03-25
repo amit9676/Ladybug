@@ -14,8 +14,6 @@ class Flag:
         self.rect = self.image.get_rect()
 
         # Set the initial position to a random location on the screen
-        #self.rect.x = random.randint(0, WINDOW_WIDTH - self.rect.width)
-        #self.rect.y = random.randint(0, WINDOW_HEIGHT - self.rect.height)
         self.winMode = False
         self.initilizeGame()
 
