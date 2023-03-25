@@ -3,7 +3,7 @@ import math
 import pygame
 import main
 from main import WINDOW_WIDTH, WINDOW_HEIGHT
-from spriteTest import Sprite
+from spriteHandler_Class import Sprite
 
 
 class Flamethrower:
