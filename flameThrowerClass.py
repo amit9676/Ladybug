@@ -1,8 +1,6 @@
 import math
 
 import pygame
-import main
-from main import WINDOW_WIDTH, WINDOW_HEIGHT
 from spriteHandler_Class import Sprite
 
 
@@ -10,10 +8,11 @@ class Flamethrower:
     """main initlization of the flamethrower - takes the sprite, direction and x,y coordinates from external method.
     in addition initilize from vairables required for the object, such as radius, speed"""
 
-    def __init__(self, direction, emergence_x, emergence_y):
+    def __init__(self, direction, emergence_x, emergence_y, mainActions):
         # self.spr = Sprite("flame001.png", 93, 216, 15, 5, 30)
         self.spr = Sprite("flame002.png", 181, 404, 10, 5, 40)
         self.image = self.spr.fill_frames_and_get_first_frame()
+        self.mainActions = mainActions
 
         self.pivot = self.spr.get_pivot()
         direction = self.__game_to_graph_axis_degrees(direction)
@@ -70,4 +69,4 @@ class Flamethrower:
     ''' draw the flame on screen'''
     def draw(self, surface):
         # Draw the image on the surface
-        surface.blit(self.image, self.rect)
+        self.mainActions.draw(surface,self.image,self.rect)

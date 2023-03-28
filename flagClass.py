@@ -1,33 +1,39 @@
 # flag.py
 import pygame
 import random
-from main import WINDOW_WIDTH, WINDOW_HEIGHT
+
 
 # Define the Flag class
 class Flag:
-    def __init__(self):
+    def __init__(self, window, mainActions):
         # Load the image
-        self.image = pygame.image.load("redFlag.png")
-        self.image = pygame.transform.scale(self.image, (30, 30))
+        self.__image = pygame.image.load("redFlag.png")
+        self.__image = pygame.transform.scale(self.__image, (30, 30))
+        self.__mainActions = mainActions
+        self.__window = window
 
         # Get the rect of the image
-        self.rect = self.image.get_rect()
+        self.__rect = self.__image.get_rect()
 
         # Set the initial position to a random location on the screen
-        self.winMode = False
-        self.initilizeGame()
+        self.__winMode = False
+        self.initilize_instance()
+        # self.__rect.x, self.__rect.y, self.__winMode =\
+        #     self.mainActions.initilize_instance(self.get_rect().x, self.get_rect().y)
 
     def draw(self, surface):
         # Draw the image on the surface
-        surface.blit(self.image, self.rect)
+        self.__mainActions.draw(surface, self.__image, self.__rect)
 
+    def get_rect(self):
+        return self.__rect
 
-    def initilizeGame(self):
-        self.rect.x = random.randint(0, WINDOW_WIDTH - self.rect.width)
-        self.rect.y = random.randint(0, WINDOW_HEIGHT - self.rect.height)
+    def initilize_instance(self):
+        self.__rect.x = random.randint(0, self.__window[0] - self.__rect.width)
+        self.__rect.y = random.randint(0, self.__window[1] - self.__rect.height)
         self.winMode = False
 
     def win(self):
-        self.winMode = True
-        self.rect.x = -100
-        self.rect.y = -100
+        self.__winMode = True
+        self.__rect.x = -100
+        self.__rect.y = -100
