@@ -1,4 +1,5 @@
 import math
+import pygame
 import random
 
 
@@ -26,4 +27,25 @@ class main:
         # Draw the image on the surface
         surface.blit(image, rect)
 
+
+    '''this method is responsible for rotating an image as we will.
+    image argument its the the image we would like to rotate.
+    pos is (x,y) tuple of to where place the pivot of the image on the screen.
+    pivot is (x,y) tuple - the point on image that would be used as rotation anchor-the image will be rotated around it.
+    angle is the rotation angle, based on mathematical axis graph.
+    the output is the rotation image, and the rectangle of it.'''
+    def blitRotate(self, image, pos, pivot, angle):
+        image_rect = image.get_rect(topleft=(pos[0] - pivot[0], pos[1] - pivot[1]))
+        offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
+        rotated_offset = offset_center_to_pivot.rotate(-angle)
+        rotated_image_center = (pos[0] - rotated_offset.x, pos[1] - rotated_offset.y)
+        rotated_image = pygame.transform.rotate(image, angle)
+
+        rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
+        return rotated_image, rotated_image_rect
+
+    '''this private method is required to convert the game directions (which 0 degrees is up arrow) - to mathematical
+    angles which are needed for the rotation calculations, which are based on radians, circles and trigonometry.'''
+    def game_to_graph_axis_degrees(self, direction):
+        return (90 - direction) % 360
 

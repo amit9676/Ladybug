@@ -2,6 +2,7 @@ import pygame
 import random
 from ladybugClass import Ladybug
 from flagClass import Flag
+from wagonGunClass import  WagonGun
 from main import main
 
 
@@ -26,6 +27,7 @@ class Game:
         self.__window, self.background = self.__start_initilzation()
         self.__ladybug = Ladybug(self.__window_size, self.__mainActions)
         self.__flag = Flag(self.__window_size, self.__mainActions)
+        self.__wagonGun = WagonGun(self.__window_size, self.__mainActions)
 
         # Set the game state to "running"
         self.__running = True
@@ -88,6 +90,7 @@ class Game:
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
         self.__flag.draw(self.__window)
+        self.__wagonGun.draw(self.__window)
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
