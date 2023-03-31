@@ -32,8 +32,10 @@ class WarWagon:
         self.__rects = [self.__image1.get_rect(), self.__image2.get_rect(), self.__image3.get_rect()]
         self.__pivots = ((30, 79), (17, 55), (15, 15))
         self.__current_direction = 0
+        self.rotate_direction = 0
+        self.rotate_direction2 = 0
         self.__current_x, self.__current_y = self.initilizeWagon()
-        self.__speed = 3
+        self.__speed = 1
 
         self.self_destruct = False  # public method
         self.__active = False
@@ -48,14 +50,18 @@ class WarWagon:
         direction = self.__generate_random_direction()
         self.__current_direction = direction
         rotate_direction = self.__mainActions.game_to_graph_axis_degrees(direction) - 90
+        self.rotate_direction = rotate_direction
+        self.rotate_direction2 = self.rotate_direction
 
         x, y = self.__initilizePlacement(self.__current_direction)
         print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
+        #x,y = 250,250
 
         self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__images[0], (x, y), self.__pivots[0],
                                                                           rotate_direction)
-        self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__images[1], (250, 250),
+        self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__images[1], (x, y),
                                                                           self.__pivots[1], rotate_direction)
+        #time.sleep(0.5)
         return x, y
 
     '''rectangle section - in here we are taking care of all rectangle related methods which are necessary to handle
@@ -69,7 +75,7 @@ class WarWagon:
       b: the cart will immediately travel toward the screen at straight line.
       
       input: one or 2 rectangles in which the wagon should be places.
-      outplace: a point randomly selected from the rectangles, there we weill place the wagon'''
+      output: a point randomly selected from the rectangles, there we weill place the wagon'''
     def __initilizePlacement(self, direction):
         print(direction)
 
@@ -171,8 +177,19 @@ class WarWagon:
     '''update wagon movement - the wagon will always move straight. no turns - when it will finishes crossing the
     screen - it will be considered as non active and will be self destrcuted.'''
     def update(self):
-        self.__current_x, self.__current_y, self.__rects[0].x, self.__rects[0].y = \
+
+        #time.sleep(0.5)
+        self.__current_x, self.__current_y, a, b = \
             self.__mainActions.trigo(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
+
+        self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__originals[0], (a, b),
+                                                                          self.__pivots[0], self.rotate_direction)
+
+        self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__originals[1], (a, b),
+                                                                          self.__pivots[1], self.rotate_direction2)
+
+        self.rotate_direction2 += 5
+        self.rotate_direction2 %= 360
 
 
         if not self.__active:
@@ -185,7 +202,7 @@ class WarWagon:
         for img, rect in zip(self.__images, self.__rects):
             surface.blit(img, rect)
 
-        pygame.draw.rect(surface, (255, 0, 0), self.__rects[0], 2)
-        pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
+        #pygame.draw.rect(surface, (255, 0, 0), self.__rects[0], 2)
+        #pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
         pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
         # pygame.draw.circle(surface, (195, 145, 145),  (self.rects[0].centerx,self.rects[0].centery + 25), 7, 0)
