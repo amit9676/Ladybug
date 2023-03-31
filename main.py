@@ -6,8 +6,8 @@ import random
 '''main operations class - this class contains method which are used by multiple classes'''
 class main:
     def __init__(self):
-        self.__WINDOW_WIDTH = 800
-        self.__WINDOW_HEIGHT = 600
+        self.__WINDOW_WIDTH = 1000
+        self.__WINDOW_HEIGHT = 750
         self.winMode = True
 
     def get_window(self):
@@ -48,4 +48,10 @@ class main:
     angles which are needed for the rotation calculations, which are based on radians, circles and trigonometry.'''
     def game_to_graph_axis_degrees(self, direction):
         return (90 - direction) % 360
+
+    def check_for_boundry_crossing(self, rect):
+        if rect.right < 0 or rect.left > self.__WINDOW_WIDTH or rect.bottom < 0 \
+                or rect.top > self.__WINDOW_HEIGHT:
+            return True
+        return False
 

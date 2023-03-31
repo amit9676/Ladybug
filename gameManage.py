@@ -2,7 +2,7 @@ import pygame
 import random
 from ladybugClass import Ladybug
 from flagClass import Flag
-from wagonGunClass import  WagonGun
+from warWagonClass import  WarWagon
 from main import main
 
 
@@ -27,7 +27,7 @@ class Game:
         self.__window, self.background = self.__start_initilzation()
         self.__ladybug = Ladybug(self.__window_size, self.__mainActions)
         self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__wagonGun = WagonGun(self.__window_size, self.__mainActions)
+        self.__warWagon = WarWagon(self.__window_size, self.__mainActions)
 
         # Set the game state to "running"
         self.__running = True
@@ -71,6 +71,14 @@ class Game:
         keys = pygame.key.get_pressed()
         self.__ladybug.update(keys)
 
+        '''war wagons'''
+
+        '''update if war wagon still exists'''
+        if self.__warWagon is not None:
+            self.__warWagon.update()
+            if self.__warWagon.self_destruct:
+                self.__warWagon = None
+
         # Check if the ladybug has reached the flag
         if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
             self.__win = True
@@ -90,7 +98,9 @@ class Game:
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
         self.__flag.draw(self.__window)
-        self.__wagonGun.draw(self.__window)
+
+        if self.__warWagon:
+            self.__warWagon.draw(self.__window)
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
