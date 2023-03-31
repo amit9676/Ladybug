@@ -16,7 +16,7 @@ class main:
     def trigo(self, direction, speed, current_x, current_y):
         dx = math.sin(math.radians(direction)) * speed
         dy = math.cos(math.radians(direction)) * speed
-        # Update the ladybug's position
+        # Update the  position
         return current_x + dx, current_y - dy, round(current_x + dx), round(current_y - dy)
 
 
