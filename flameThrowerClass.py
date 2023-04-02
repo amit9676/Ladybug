@@ -9,12 +9,12 @@ class Flamethrower:
     in addition initilize from vairables required for the object, such as radius, speed"""
 
     def __init__(self, direction, emergence_x, emergence_y, mainActions):
-        # self.spr = Sprite("flame001.png", 93, 216, 15, 5, 30)
-        self.spr = Sprite("flame002.png", 181, 404, 10, 5, 40)
+        self.spr = Sprite("flame001.png", 93, 216, 15, 5, 30)
+        #self.spr = Sprite("flame002.png", 181, 404, 10, 5, 40)
         self.image = self.spr.fill_frames_and_get_first_frame()
         self.mainActions = mainActions
 
-        self.pivot = self.spr.get_pivot()
+        self.pivot = (self.spr.get_dimentions()[0]/2, self.spr.get_dimentions()[1])
         direction = self.mainActions.game_to_graph_axis_degrees(direction)
         self.radius = 3
         pos = [emergence_x + math.cos(math.radians(direction)) * self.radius,

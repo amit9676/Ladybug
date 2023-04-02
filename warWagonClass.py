@@ -55,12 +55,11 @@ class WarWagon:
 
         x, y = self.__initilizePlacement(self.__current_direction)
         print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
-        #x,y = 250,250
 
-        self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__images[0], (x, y), self.__pivots[0],
-                                                                          rotate_direction)
-        self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__images[1], (x, y),
-                                                                          self.__pivots[1], rotate_direction)
+        for i in range(1,len(self.__images)):
+            self.__images[i], self.__rects[i] = self.__mainActions.blitRotate(self.__images[i], (x, y),
+                                                                              self.__pivots[i], rotate_direction)
+
         #time.sleep(0.5)
         return x, y
 
@@ -188,6 +187,9 @@ class WarWagon:
         self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__originals[1], (a, b),
                                                                           self.__pivots[1], self.rotate_direction2)
 
+        self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
+                                                                          self.__pivots[2], self.rotate_direction2)
+
         self.rotate_direction2 += 5
         self.rotate_direction2 %= 360
 
@@ -204,5 +206,5 @@ class WarWagon:
 
         #pygame.draw.rect(surface, (255, 0, 0), self.__rects[0], 2)
         #pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
-        pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
+        #pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
         # pygame.draw.circle(surface, (195, 145, 145),  (self.rects[0].centerx,self.rects[0].centery + 25), 7, 0)

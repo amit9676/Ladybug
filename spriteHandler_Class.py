@@ -29,10 +29,11 @@ class Sprite:
         self.__current_frame_index = 0
         self.__start = True
 
-    '''gets anchor point for rotation, for now fits only for the flame thrower. might change in the future.'''
 
-    def get_pivot(self):
-        return self.__frame_width // 2, self.__frame_height
+
+    def get_dimentions(self):
+        return self.__frame_width, self.__frame_height
+
 
     '''this method should be run from the outside - it fills the frame list from sprite
         and returns the first frame from the recent made list - ready to be displayed
@@ -49,8 +50,7 @@ class Sprite:
         return self.__get_current_frame()
 
     '''this method is for testing only, it runs the animation from inside the class.
-    the coordinates input is tuple of (x,y) and determine where the flame will be displayed on screen'''
-
+    the coordinates input is tuple of (x,y) and determine where the sprite will be displayed on screen'''
     def __run(self, coordinates):
         pygame.init()
         win = pygame.display.set_mode((640, 480))
