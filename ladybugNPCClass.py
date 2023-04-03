@@ -117,17 +117,15 @@ class Ladybug_NPC:
 
     def turn_right(self):
         self.__current_direction = (self.__current_direction + 1) % 360
-        self.rotate_image()
 
     def turn_left(self):
         self.__current_direction = (self.__current_direction - 1) % 360
-        self.rotate_image()
 
     def advance(self):
         self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
             self.__mainActions.trigo(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
 
-    def rotate_image(self):
+    def __rotate_image(self):
         self.__image = pygame.transform.rotate(self.__original, -self.__current_direction)
         center = self.__rect.center
         self.__rect = self.__image.get_rect()
@@ -143,6 +141,7 @@ class Ladybug_NPC:
         self.__get_target()
         self.__desired_direction = self.__get_desired_direction()
         self.make_turn()
+        self.__rotate_image()
         #print(f"d: {self.__desired_direction}")
 
         # distance_to_turn = abs(self.__current_direction - self.__desired_direction)

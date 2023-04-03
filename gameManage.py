@@ -1,6 +1,6 @@
 import pygame
 import random
-from ladybugPlayerClass import Ladybug
+from ladybugPlayerClass import Ladybug_Player
 from flagClass import Flag
 from warWagonClass import  WarWagon
 from ladybugNPCClass import Ladybug_NPC
@@ -26,7 +26,7 @@ class Game:
         self.__mainActions = main()
         self.__window_size = self.__mainActions.get_window()
         self.__window, self.background = self.__start_initilzation()
-        self.__ladybug = Ladybug(self.__window_size, self.__mainActions, self, "red")
+        self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
         #a list of all inctances (ladybugs, warwagons and future instances)
