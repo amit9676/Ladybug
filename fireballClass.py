@@ -8,7 +8,7 @@ class Fireball:
         self.__image = pygame.image.load("fireball.png")
         self.__image = pygame.transform.scale(self.__image, (6, 6))
         self.__mainActions = mainActions
-        self.__speed = 10
+        self.__speed = 2
 
         # Get the rect of the image
         self.__rect = self.__image.get_rect()

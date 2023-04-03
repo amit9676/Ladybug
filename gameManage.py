@@ -1,8 +1,9 @@
 import pygame
 import random
-from ladybugClass import Ladybug
+from ladybugPlayerClass import Ladybug
 from flagClass import Flag
 from warWagonClass import  WarWagon
+from ladybugNPCClass import Ladybug_NPC
 from main import main
 
 
@@ -12,7 +13,7 @@ from main import main
 # # Create the window
 # window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 # pygame.display.set_caption("Ladybug Game")
-# pygame_icon = pygame.image.load('ladybug.png')
+# pygame_icon = pygame.image.load('ladybug_red.png')
 # pygame.display.set_icon(pygame_icon)
 #
 # # Set the background color
@@ -25,9 +26,21 @@ class Game:
         self.__mainActions = main()
         self.__window_size = self.__mainActions.get_window()
         self.__window, self.background = self.__start_initilzation()
-        self.__ladybug = Ladybug(self.__window_size, self.__mainActions)
+        self.__ladybug = Ladybug(self.__window_size, self.__mainActions, self, "red")
+        self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
+
+        #a list of all inctances (ladybugs, warwagons and future instances)
+        self.inctances = []
+
+        '''the placement of the following 2 line of codes is TEMPORARY for testing'''
+        self.inctances.append(self.__ladybug)
+        self.inctances.append(self.__ladybug_npc)
+        ''' until here'''
+
         self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__warWagon = WarWagon(self.__window_size, self.__mainActions)
+        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "red")
+
+
 
         # Set the game state to "running"
         self.__running = True
@@ -44,15 +57,23 @@ class Game:
         # Create the window
         window = pygame.display.set_mode((self.__window_size[0], self.__window_size[1]))
         pygame.display.set_caption("Ladybug Game")
-        pygame_icon = pygame.image.load('ladybug.png')
+        pygame_icon = pygame.image.load('ladybug_red.png')
         pygame.display.set_icon(pygame_icon)
 
         # Set the background color
         background_color = (135, 206, 235)
         return window, background_color
 
-    '''main method for event handling, such as game over and stuff'''
 
+
+    '''this method compiles a list of all actives instances on the game - that include player controlled ladybugs,
+    NPC ladybugs, war wagon and future instances. this method has to be PUBLIC in order for the "players" to receive
+    real time data about other players - instances, and their current location. all inctances must have a public method
+    "get_current_location()" in order for every instance to "read the map"'''
+    def get_inctances(self):
+        pass
+
+    '''main method for event handling, such as game over and stuff'''
     def __handle_events(self):
         # Handle events
         for event in pygame.event.get():
@@ -70,6 +91,7 @@ class Game:
         # Update the ladybug object
         keys = pygame.key.get_pressed()
         self.__ladybug.update(keys)
+        self.__ladybug_npc.update()
 
         '''war wagons'''
 
@@ -98,6 +120,7 @@ class Game:
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
         self.__flag.draw(self.__window)
+        self.__ladybug_npc.draw(self.__window)
 
         if self.__warWagon:
             self.__warWagon.draw(self.__window)
@@ -151,7 +174,7 @@ class Game:
 
     def run(self):
         # Set the game's framerate
-        framerate = 60
+        framerate = 300
 
         while self.__running:
             # Handle events

@@ -14,11 +14,12 @@ class WarWagon:
     in the active time (the time the wagon is visible on screen - the machine gun mounted on it will fire at any enemies
     it will locate."""
 
-    def __init__(self, window, mainActions):
+    def __init__(self, window, mainActions, game, team):
+        self.game = game
         self.__mainActions = mainActions
         self.__image1 = pygame.image.load("wagon.png")
         self.__image2 = pygame.image.load("machine_gun.png")
-        self.__image3 = pygame.image.load("ladybug_blue.png")
+        self.__image3 = pygame.image.load(f"ladybug_{team}.png")
         self.__window = window
 
         # Scale the images
@@ -35,7 +36,7 @@ class WarWagon:
         self.rotate_direction = 0
         self.rotate_direction2 = 0
         self.__current_x, self.__current_y = self.initilizeWagon()
-        self.__speed = 1
+        self.__speed = 0.25
 
         self.self_destruct = False  # public method
         self.__active = False
@@ -190,7 +191,7 @@ class WarWagon:
         self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
                                                                           self.__pivots[2], self.rotate_direction2)
 
-        self.rotate_direction2 += 5
+        self.rotate_direction2 += 1
         self.rotate_direction2 %= 360
 
 
