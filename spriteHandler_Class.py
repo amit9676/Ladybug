@@ -7,7 +7,7 @@ class Sprite:
     """initialization method - it takes the filename, width and height of each frame, amount of rows and
     columns, and frame rate"""
 
-    def __init__(self, filename, frame_width, frame_height, num_rows, num_cols, frame_rate):
+    def __init__(self, filename, frame_width, frame_height, num_rows, num_cols, frame_rate, num_rows_start=0):
 
         # Load sprite sheet
         self.__sheet = pygame.image.load(filename)
@@ -28,6 +28,7 @@ class Sprite:
         self.__frame_rate = frame_rate
         self.__current_frame_index = 0
         self.__start = True
+        self.__num_start = num_rows_start
 
 
 
@@ -40,7 +41,7 @@ class Sprite:
         from the calling class - assign self.image for this method output'''
 
     def fill_frames_and_get_first_frame(self):
-        for row in range(self.__num_rows):
+        for row in range(self.__num_rows + self.__num_start):
             for col in range(self.__num_cols):
                 x = col * self.__frame_width
                 y = row * self.__frame_height
@@ -106,9 +107,9 @@ class Sprite:
         self.__current_frame_index += 1
         self.__current_frame_index %= len(self.__frames)
         '''the commended code is in case i would like to make the sprite appearance gradual, currently not in use'''
-        # if self.__current_frame_index == 0 and self.__start:
-        #     self.__frames = self.__frames[10:]
-        #     self.__start = False
+        if self.__current_frame_index == 0 and self.__start:
+            self.__frames = self.__frames[(5*self.__num_start):]
+            self.__start = False
         return self.__frames[self.__current_frame_index]
 
     '''drawing method - is used internally for testing (called by run)'''

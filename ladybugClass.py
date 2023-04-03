@@ -107,6 +107,7 @@ class Ladybug:
     def draw(self, surface):
         # Draw the image on the surface
         # surface.blit(self.image, self.rect)
+        pygame.draw.rect(surface, (140, 140, 21), self._rect, 2)
         self._mainActions.draw(surface, self._image, self._rect)
 
     '''if player wins - disable ladybug'''

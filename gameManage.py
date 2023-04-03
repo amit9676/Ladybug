@@ -106,6 +106,7 @@ class Game:
             self.__win = True
             self.__playing = False
             self.__ladybug.win()
+            self.__ladybug_npc.win()
             self.__flag.win()
             self.__create_button()
             self.__message = None
@@ -128,8 +129,14 @@ class Game:
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
 
+        for fireball in self.__ladybug_npc.fireballs:
+            fireball.draw(self.__window)
+
         if self.__ladybug.flame:
             self.__ladybug.flame.draw(self.__window)
+
+        if self.__ladybug_npc.flame:
+            self.__ladybug_npc.flame.draw(self.__window)
 
         # Show the message if there is one
         if self.__message:
@@ -167,6 +174,7 @@ class Game:
     def __reset(self):
         # Reset the game state
         self.__ladybug.initilize_instance()
+        self.__ladybug_npc.initilize_instance()
         self.__flag.initilize_instance()
         self.__message = None
         self.__button = None

@@ -9,8 +9,8 @@ class Flamethrower:
     in addition initilize from vairables required for the object, such as radius, speed"""
 
     def __init__(self, direction, emergence_x, emergence_y, mainActions):
-        #self.spr = Sprite("flame001.png", 93, 216, 15, 5, 23)
-        self.spr = Sprite("flame002.png", 181, 404, 10, 5, 30)
+        self.spr = Sprite("flame001_5frames.png", 93, 216, 15, 5, 23, 1)
+        #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0)
         self.image = self.spr.fill_frames_and_get_first_frame()
         self.mainActions = mainActions
 
