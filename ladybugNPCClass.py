@@ -7,6 +7,7 @@ import random
 from fireballClass import Fireball
 from ladybugClass import Ladybug
 from flameThrowerClass import Flamethrower
+from InstanceClass import NPCInstance
 
 
 # Define the Ladybug class
@@ -17,13 +18,15 @@ class Ladybug_NPC(Ladybug):
         super().__init__(window, mainActions, game, team)
 
         '''which inctance this inctance is targeting at any moment'''
+        self._instance_struct = NPCInstance(team, mainActions)
         self.__target = None
-        self.__desired_direction = self.__get_desired_direction()
+        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
+        #print(f"a: {self.__desired_direction}")
 
 
 
     '''this method is responsible for the NPC to acquire a target to attack'''
-    def __get_target(self):
+    '''def __get_target(self):
         for ins in self._game.inctances:
             if ins.get_team() != self._team:
                 self.__target = ins
@@ -55,7 +58,7 @@ class Ladybug_NPC(Ladybug):
         dx, dy = self.__you_and_target()
         if dx is None:
             return
-        return int(math.sqrt((dx)**2 + (dy)**2))
+        return int(math.sqrt((dx)**2 + (dy)**2))'''
 
     def make_turn(self):
         current_dir = self._current_direction
@@ -90,10 +93,11 @@ class Ladybug_NPC(Ladybug):
         if super().update():
             return
 
-        self.__get_target()
-        self.__desired_direction = self.__get_desired_direction()
+        self.__target = self.get_instance_struct().get_target(self._game)
+        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         diff = self.make_turn()
-        dist = self.__calculate_distance()
+
+        dist = self.get_instance_struct().calculate_distance(self.__target, self.get_rect())
         center = self._rotate_image()
 
         #print(diff)

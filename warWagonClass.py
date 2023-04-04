@@ -3,7 +3,7 @@ import random
 import time
 
 import pygame
-
+from InstanceClass import NPCInstance
 
 class WarWagon:
     """main initialization of the war wagon - the object of this class is comprised of 3 parts - the wagon, the machine
@@ -15,7 +15,7 @@ class WarWagon:
     it will locate."""
 
     def __init__(self, window, mainActions, game, team):
-        self.game = game
+        self.__game = game
         self.__mainActions = mainActions
         self.__image1 = pygame.image.load("wagon.png")
         self.__image2 = pygame.image.load("machine_gun.png")
@@ -33,10 +33,14 @@ class WarWagon:
         self.__rects = [self.__image1.get_rect(), self.__image2.get_rect(), self.__image3.get_rect()]
         self.__pivots = ((30, 79), (17, 55), (15, 15))
         self.__current_direction = 0
-        self.rotate_direction = 0
-        self.rotate_direction2 = 0
+        self.__rotate_direction = 0
+        self.__rotate_direction2 = 0
         self.__current_x, self.__current_y = self.initilizeWagon()
         self.__speed = 0.25
+
+        self.__instance_struct = NPCInstance(team, mainActions)
+        self.__target = None
+        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
 
         self.self_destruct = False  # public method
         self.__active = False
@@ -51,8 +55,9 @@ class WarWagon:
         direction = self.__generate_random_direction()
         self.__current_direction = direction
         rotate_direction = self.__mainActions.game_to_graph_axis_degrees(direction) - 90
-        self.rotate_direction = rotate_direction
-        self.rotate_direction2 = self.rotate_direction
+        self.__rotate_direction = rotate_direction
+        self.__rotate_direction2 = self.__rotate_direction
+
 
         x, y = self.__initilizePlacement(self.__current_direction)
         print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
@@ -77,7 +82,7 @@ class WarWagon:
       input: one or 2 rectangles in which the wagon should be places.
       output: a point randomly selected from the rectangles, there we weill place the wagon'''
     def __initilizePlacement(self, direction):
-        print(direction)
+        #print(direction)
 
         # rectangle tuple = (top-left,top-right,bottom-right,bottom-left)
         # for diagonal angles - rect_a = hotizonal, rect_b = vertical
@@ -174,25 +179,65 @@ class WarWagon:
     '''end of rectangle section'''
 
 
+    def get_instance_struct(self):
+        return self.__instance_struct
+
+    def get_rect(self):
+        return self.__rects[0]
+
+    def get_current_location(self):
+        return self.__rects[0].centerx, self.__rects[0].centery
+
     '''update wagon movement - the wagon will always move straight. no turns - when it will finishes crossing the
     screen - it will be considered as non active and will be self destrcuted.'''
     def update(self):
 
-        #time.sleep(0.5)
         self.__current_x, self.__current_y, a, b = \
             self.__mainActions.trigo(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
 
         self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__originals[0], (a, b),
-                                                                          self.__pivots[0], self.rotate_direction)
+                                                                          self.__pivots[0], self.__rotate_direction)
 
         self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__originals[1], (a, b),
-                                                                          self.__pivots[1], self.rotate_direction2)
+                                                                          self.__pivots[1], self.__rotate_direction2)
 
         self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
-                                                                          self.__pivots[2], self.rotate_direction2)
+                                                                          self.__pivots[2], self.__rotate_direction2)
 
-        self.rotate_direction2 += 1
-        self.rotate_direction2 %= 360
+        #self.rotate_direction2 += 1
+        #self.rotate_direction2 %= 360
+        if self.__target is None:
+            self.__target = self.get_instance_struct().get_target(self.__game)
+        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
+        print(f"cd: {self.__current_direction}, rd2: {self.__rotate_direction2},"
+              f" rd2: {self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90}")
+        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
+        self.__rotate_direction2, diff = self.get_instance_struct().\
+            make_turn(self.__rotate_direction2, self.__desired_direction)
+
+        if diff == 0:
+            self.get_instance_struct().shoot\
+                (self.__rotate_direction2, self.__rects[1].centerx,self.__rects[1].centery, 4, 100)
+        self.get_instance_struct().update_fireballs()
+        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
+
+        '''# self.rotate_direction2, diff = self.get_instance_struct().\
+        #     make_turn(self.rotate_direction2, self.__desired_direction)
+        self.rotate_direction2 = self.__desired_direction
+        print(f"desired direction: {self.__desired_direction}, rotate direction2: {self.rotate_direction2}")'''
+
+        '''shooting section'''
+        # self.__target = self.get_instance_struct().get_target(self.__game)
+        # self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
+        #
+        #
+        #
+        # dist = self.get_instance_struct().calculate_distance(self.__target, self.get_rect())
+        #
+        #
+        # if diff == 0:
+        #     self._shoot(self.__current_direction, center[0], center[1])
+        # self._update_fireballs()
 
 
         if not self.__active:

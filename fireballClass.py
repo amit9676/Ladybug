@@ -4,11 +4,11 @@ import pygame
 
 
 class Fireball:
-    def __init__(self, direction, emergence_x, emergence_y, mainActions):
+    def __init__(self, direction, emergence_x, emergence_y, mainActions, speed=2):
         self.__image = pygame.image.load("fireball.png")
         self.__image = pygame.transform.scale(self.__image, (6, 6))
         self.__mainActions = mainActions
-        self.__speed = 2
+        self.__speed = speed
 
         # Get the rect of the image
         self.__rect = self.__image.get_rect()

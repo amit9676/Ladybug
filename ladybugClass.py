@@ -4,6 +4,7 @@ import random
 
 from fireballClass import Fireball
 from flameThrowerClass import Flamethrower
+from InstanceClass import Instance
 
 
 # Define the Ladybug class
@@ -14,6 +15,7 @@ class Ladybug:
         self._game = game
         self._team = team
 
+
         # Load the image
         self._image = pygame.image.load(f"ladybug_{team}.png")
         self._image = pygame.transform.scale(self._image, (30, 30))
@@ -23,6 +25,7 @@ class Ladybug:
 
         # Get the rect of the image
         self._rect = self._image.get_rect()
+        self._instance_struct = Instance(team, mainActions)
 
         self.fireballs = []
         self.flame = None
@@ -52,11 +55,11 @@ class Ladybug:
     def get_rect(self):
         return self._rect
 
-    def get_team(self):
-        return self._team
-
     def get_current_location(self):
         return self._rect.centerx, self._rect.centery
+
+    def get_instance_struct(self):
+        return self._instance_struct
 
     def turn_right(self):
         self._current_direction = (self._current_direction + 1) % 360

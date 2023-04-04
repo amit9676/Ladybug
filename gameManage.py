@@ -29,16 +29,19 @@ class Game:
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
+        self.__flag = Flag(self.__window_size, self.__mainActions)
+        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
+
         #a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
+        self.inctances.append(self.__warWagon)
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
 
-        self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "red")
+
 
 
 
@@ -85,9 +88,12 @@ class Game:
                 if self.__button.collidepoint(event.pos):
                     self.__reset()
 
+
     '''update the game - in here make sure everything in the game is being updated.'''
 
     def __update(self):
+
+
         # Update the ladybug object
         keys = pygame.key.get_pressed()
         self.__ladybug.update(keys)
@@ -99,6 +105,7 @@ class Game:
         if self.__warWagon is not None:
             self.__warWagon.update()
             if self.__warWagon.self_destruct:
+                self.inctances.remove(self.__warWagon)
                 self.__warWagon = None
 
         # Check if the ladybug has reached the flag
@@ -125,6 +132,9 @@ class Game:
 
         if self.__warWagon:
             self.__warWagon.draw(self.__window)
+            for fireball in self.__warWagon.get_instance_struct().fireballs:
+                fireball.draw(self.__window)
+
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
