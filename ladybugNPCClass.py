@@ -57,6 +57,7 @@ class Ladybug_NPC(Ladybug):
         if super().update():
             return
 
+        #return
         self.__target = self.get_instance_struct().get_target(self._game)
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         diff = self.make_turn()
@@ -73,6 +74,6 @@ class Ladybug_NPC(Ladybug):
         #     self.advance()
         #print(diff)
         if diff == 0:
-            self.get_instance_struct().shoot(self, self._current_direction, center[0], center[1])
+            self.get_instance_struct().shoot(self, self._current_direction, center)
         self.get_instance_struct().update_fireballs(self)
 

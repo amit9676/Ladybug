@@ -69,7 +69,7 @@ class Ladybug:
 
     def advance(self):
         self._current_x, self._current_y, self._rect.x, self._rect.y = \
-            self._mainActions.trigo(self._current_direction, self._speed, self._current_x, self._current_y)
+            self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
 
 
     def _rotate_image(self):
@@ -112,7 +112,7 @@ class Ladybug:
         # surface.blit(self.image, self.rect)
         #pygame.draw.rect(surface, (140, 140, 21), self._rect, 2)
         self._mainActions.draw(surface, self._image, self._rect)
-        pygame.draw.circle(surface, (0, 255, 0), self._rect.center, 2, 0)
+        #pygame.draw.circle(surface, (255, 25, 0), self._rect.center, 2, 0)
 
 
     '''if player wins - disable ladybug'''

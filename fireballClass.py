@@ -4,7 +4,7 @@ import pygame
 
 
 class Fireball:
-    def __init__(self, direction, emergence_x, emergence_y, mainActions, speed=2):
+    def __init__(self, direction, emergence, mainActions, speed=2):
         self.__image = pygame.image.load("fireball.png")
         self.__image = pygame.transform.scale(self.__image, (6, 6))
         self.__mainActions = mainActions
@@ -13,8 +13,7 @@ class Fireball:
         # Get the rect of the image
         self.__rect = self.__image.get_rect()
 
-        self.__emergence_x = emergence_x
-        self.__emergence_y = emergence_y
+        self.__emergence_x, self.__emergence_y = emergence
         self.__direction = direction
         self.__initilizeBullet()
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
@@ -32,7 +31,7 @@ class Fireball:
     def move(self):
         window_size = self.__mainActions.get_window()
         self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
-            self.__mainActions.trigo(self.__direction, self.__speed, self.__current_x, self.__current_y)
+            self.__mainActions.advance(self.__direction, self.__speed, self.__current_x, self.__current_y)
 
         #
         # if self.__rect.left < 0 or self.__rect.right > window_size[0] or self.__rect.top < 0 \

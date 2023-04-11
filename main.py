@@ -13,7 +13,7 @@ class main:
     def get_window(self):
         return self.__WINDOW_WIDTH, self.__WINDOW_HEIGHT
 
-    def trigo(self, direction, speed, current_x, current_y):
+    def advance(self, direction, speed, current_x, current_y):
         dx = math.sin(math.radians(direction)) * speed
         dy = math.cos(math.radians(direction)) * speed
         # Update the  position

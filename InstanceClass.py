@@ -21,12 +21,12 @@ class Instance:
     def get_team(self):
         return self._team
 
-    def shoot(self,caller , direction, x, y, speed=2, rate_of_fire=333):
+    def shoot(self,caller , direction, emergernce_pos, speed=2, rate_of_fire=333):
         current_time = pygame.time.get_ticks()
 
         if current_time - caller._last_shot_time >= rate_of_fire:
             caller._last_shot_time = current_time
-            caller.fireballs.append(Fireball(direction, x, y, self.__mainActions, speed))
+            caller.fireballs.append(Fireball(direction, emergernce_pos, self.__mainActions, speed))
             '''add new fireball instance to the fireball list'''
 
     def update_fireballs(self, caller):
@@ -68,7 +68,8 @@ class NPCInstance(Instance):
             return None, None
         dx = rect.centerx - target.get_current_location()[0]
         dy = rect.centery - target.get_current_location()[1]
-        #print(f"target location: {target.get_current_location()[0]}, {target.get_current_location()[1]}")
+        #print(f"target.centerx: {target.get_current_location()[0]}, target.gcentery: {target.get_current_location()[1]}")
+        #print(f"rect.centerx: {rect.centerx}, rect. centery{rect.centery}")
         return dx, dy
 
     def get_desired_direction(self, target, rect):
@@ -98,6 +99,7 @@ class NPCInstance(Instance):
     def make_turn(self, current_dir, desired_dir):
 
         # If the current and desired direction are the same, return None
+        #print(f"current_dir: {current_dir}, desired_dir: {desired_dir}")
         if current_dir == desired_dir:
             return current_dir, 0
 

@@ -16,7 +16,7 @@ class Flamethrower:
 
         self.pivot = (self.spr.get_dimentions()[0]/2, self.spr.get_dimentions()[1])
         direction = self.mainActions.game_to_graph_axis_degrees(direction)
-        self.radius = 3
+        self.radius = 3 #distance of flamethrower initlization - might be needed to be external parameter
         pos = [emergence_x + math.cos(math.radians(direction)) * self.radius,
                emergence_y - math.sin(math.radians(direction)) * self.radius]
         self.speed = 5  # for now speed is hardcoded, if changes - the speed needs to be an input parameter.
