@@ -37,7 +37,7 @@ class Ladybug_Player(Ladybug):
         #print(f"center: {center}\n")
 
         '''Keep the ladybug inside the window'''
-        self._boundry_keeping()
+        self._boundary_keeping()
 
         '''end of movement section'''
 

@@ -16,65 +16,70 @@ class WarWagon:
     it will locate."""
 
     def __init__(self, window, mainActions, game, team):
+        '''wagon initlization'''
         self.__game = game
         self.__mainActions = mainActions
+        self.__instance_struct = NPCInstance(team, mainActions)
         self.__image1 = pygame.image.load("wagon.png")
         self.__image2 = pygame.image.load("machine_gun.png")
         self.__image3 = pygame.image.load(f"ladybug_{team}.png")
         self.__window = window
 
-        # Scale the images
+        '''Scale the images'''
         self.__image1 = pygame.transform.scale(self.__image1, (60, 108))
         self.__image2 = pygame.transform.scale(self.__image2, (35, 70))
         self.__image3 = pygame.transform.scale(self.__image3, (30, 30))
 
-        # Store the images in a list
+        '''Store the images in a list'''
         self.__images = [self.__image1, self.__image2, self.__image3]
         self.__originals = [self.__image1, self.__image2, self.__image3]
         self.__rects = [self.__image1.get_rect(), self.__image2.get_rect(), self.__image3.get_rect()]
         self.__pivots = ((30, 79), (17, 55), (15, 15))
-        # self.second_pivot = (17,17)
-        self.__current_direction = 0
-        self.__rotate_direction = 0
-        self.__rotate_direction2 = 0
-        self.__current_x, self.__current_y = self.initilizeWagon()
+
+        '''position, moment and aiming fields'''
+        self.__current_direction = 0 # where the wagon is heading (game degrees)
+        self.__rotate_direction = 0 # where the wagon is heading (graph degrees)
+        self.__rotate_direction2 = 0 # where the wagon is aiming
+        self.__current_x, self.__current_y = self.initilizeWagon() # wagon position
         self.__speed = 0.25
 
-        self.__instance_struct = NPCInstance(team, mainActions)
-        self.__target = None
-        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
 
+
+
+        '''initlization on screen and destruction fields'''
         self.self_destruct = False  # public method
         self.__active = False
 
+        '''firing fields'''
+        self.__target = None #current target
+
+        '''where wagon should aim'''
+        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
+
         self._last_shot_time = 0
-        self.fireballs = []
+        self.fireballs = [] # list of current fireballs fired from wagon
 
-        self.__fireball_emergence_position = [
-            self.__rects[1].centerx + math.cos(math.radians(self.__rotate_direction2)) * 4,
-            self.__rects[1].centery - math.sin(math.radians(self.__rotate_direction2)) * 4]
+        '''make the fireball emerge at the end of the barrel (51 pixels away from center)'''
+        self.__fireball_emergence_position = self.__mainActions. \
+            circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
-    '''this method is resposible for the creating itself of the wagon - where to place it (a bit outside the screen)
+    '''this method is responsible for the creating itself of the wagon - where to place it (a bit outside the screen)
     and in which direction it will travel'''
 
     def initilizeWagon(self):
-        # self.__rects[1].center = -100, -100
-        self.__rects[2].center = -100, -100
-
-        direction = self.__generate_random_direction()
+        direction = self.__generate_random_direction() # create random direction in which the wagon will go
         self.__current_direction = direction  # game direction of wagon movement
-        rotate_direction = self.__mainActions.game_to_graph_axis_degrees(direction) - 90
+        rotate_direction = self.__mainActions.game_to_graph_axis_degrees(direction)
         self.__rotate_direction = rotate_direction  # graph direction of wagon movement
         self.__rotate_direction2 = self.__rotate_direction  # graph direction of wagon aiming
 
         x, y = self.__initilizePlacement(self.__current_direction)
-        # print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
 
+        '''rotation of all object images'''
         for i in range(1, len(self.__images)):
             self.__images[i], self.__rects[i] = self.__mainActions.blitRotate(self.__images[i], (x, y),
                                                                               self.__pivots[i], rotate_direction)
 
-        # time.sleep(0.5)
         return x, y
 
     '''rectangle section - in here we are taking care of all rectangle related methods which are necessary to handle
@@ -90,11 +95,9 @@ class WarWagon:
       input: one or 2 rectangles in which the wagon should be places.
       output: a point randomly selected from the rectangles, there we weill place the wagon'''
 
-    def __initilizePlacement(self, direction):
-        # print(direction)
-
-        # rectangle tuple = (top-left,top-right,bottom-right,bottom-left)
-        # for diagonal angles - rect_a = hotizonal, rect_b = vertical
+    def __initilizePlacement(self, direction: int):
+        ''' rectangle tuple = (top-left,top-right,bottom-right,bottom-left)
+        for diagonal angles - rect_a = hotizonal, rect_b = vertical'''
         cart_width, cart_height = self.__images[0].get_height(), self.__images[0].get_height()
 
         if direction == 0:
@@ -201,10 +204,12 @@ class WarWagon:
 
     def update(self):
 
+        '''move wagon on screen'''
         self.__current_x, self.__current_y, a, b = \
             self.__mainActions.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
 
-        # a,b = 400,500
+
+        '''rotate images according developments'''
         self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__originals[0], (a, b),
                                                                           self.__pivots[0], self.__rotate_direction)
 
@@ -214,45 +219,43 @@ class WarWagon:
         self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
                                                                           self.__pivots[2], self.__rotate_direction2)
 
-        # self.rotate_direction2 += 1
-        # self.rotate_direction2 %= 360
+        '''target acquisition mechanism - if there is no target - activate the function which assigns one'''
         if self.__target is None:
             self.__target = self.get_instance_struct().get_target(self.__game)
+
+        '''lock wagon aiming on target'''
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.__rects[2])
-        # print(f"cd: {self.__current_direction}, rd2: {self.__rotate_direction2},"
-        #       f" rd2: {self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90}")
-        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
+
+        '''move machine toward target'''
+        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2)
         self.__rotate_direction2, diff = self.get_instance_struct(). \
             make_turn(self.__rotate_direction2 % 360, self.__desired_direction)
 
-        # print(f"{self.__rects[1].centerx}, {self.__rects[1].centery}, {self.__rotate_direction2}")
-        # print(f"rotate direction {self.__rotate_direction2}, desired direction{self.__desired_direction}")
-
+        '''when machine gun is aiming on target (diff==0) - FIRE!'''
         if diff == 0:
             self.get_instance_struct().shoot \
                 (self, self.__rotate_direction2, self.__fireball_emergence_position, 4, 100)  # original 4,100
         self.get_instance_struct().update_fireballs(self)
 
-        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
-        self.__fireball_emergence_position = [
-            self.__rects[2].centerx + math.cos(math.radians(self.__rotate_direction2 + 90)) * 51,
-            self.__rects[2].centery - math.sin(math.radians(self.__rotate_direction2 + 90)) * 51]
+        '''update shooting data for next time'''
+        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2)
+        self.__fireball_emergence_position = self.__mainActions.\
+            circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
+        '''when the wagon is no longer on screen - self destruct the object and erase it from memory'''
         if not self.__active:
-            self.__active = not self.__mainActions.check_for_boundry_crossing(self.__rects[0])
+            self.__active = not self.__mainActions.check_for_boundary_crossing(self.__rects[0])
         else:
-            self.self_destruct = self.__mainActions.check_for_boundry_crossing(self.__rects[0])
+            self.self_destruct = self.__mainActions.check_for_boundary_crossing(self.__rects[0])
 
     def draw(self, surface):
-
         for img, rect in zip(self.__images, self.__rects):
-            # pass
-            surface.blit(img, rect)
+            self.__mainActions.draw(surface, img, rect)
 
         # pygame.draw.rect(surface, (255, 0, 0), self.__rects[0], 2)
         # pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
         # pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
         # pygame.draw.circle(surface, (195, 145, 145),  (self.rects[0].centerx,self.rects[0].centery + 25), 7, 0)
-        pygame.draw.circle(surface, (0, 255, 0), self.__rects[2].center, 2, 0)
-        pygame.draw.circle(surface, (253, 255, 0), self.__rects[1].center, 2, 0)
+        #pygame.draw.circle(surface, (0, 255, 0), self.__rects[2].center, 2, 0)
+        #pygame.draw.circle(surface, (253, 255, 0), self.__rects[1].center, 2, 0)
         # pygame.draw.circle(surface, (222, 255, 0), self.pos, 2, 0)

@@ -52,13 +52,13 @@ class Ladybug:
         self._winMode = False
         self._current_x, self._current_y = self._mainActions.initilize_currents(self._rect.x, self._rect.y)
 
-    def get_rect(self):
+    def get_rect(self) -> pygame.rect:
         return self._rect
 
-    def get_current_location(self):
+    def get_current_location(self) -> (int, int):
         return self._rect.centerx, self._rect.centery
 
-    def get_instance_struct(self):
+    def get_instance_struct(self) -> Instance:
         return self._instance_struct
 
     def turn_right(self):
@@ -79,7 +79,7 @@ class Ladybug:
         self._rect.center = center
         return center
 
-    def _boundry_keeping(self):
+    def _boundary_keeping(self):
         if self._rect.left < 0:
             self._rect.left = 0
             self._current_x = 0
@@ -127,7 +127,7 @@ class Ladybug:
 
     def manage_flamethrower(self):
         if self.flame is None:
-            self.flame = Flamethrower(self._current_direction, self._rect.center[0], self._rect.center[1],
+            self.flame = Flamethrower(self._current_direction, self._rect.center,
                                       self._mainActions)
         else:
-            self.flame.move(self._current_direction, self._rect.center[0], self._rect.center[1])
+            self.flame.move(self._current_direction, self._rect.center)

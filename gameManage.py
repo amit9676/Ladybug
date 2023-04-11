@@ -104,7 +104,7 @@ class Game:
         '''update if war wagon still exists'''
         if self.__warWagon is not None:
             self.__warWagon.update()
-            if self.__warWagon.self_destruct:
+            if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
                 self.inctances.remove(self.__warWagon)
                 self.__warWagon = None
 

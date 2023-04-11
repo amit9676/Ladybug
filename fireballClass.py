@@ -29,15 +29,10 @@ class Fireball:
     '''move fireball at the pre determined path'''
 
     def move(self):
-        window_size = self.__mainActions.get_window()
         self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
             self.__mainActions.advance(self.__direction, self.__speed, self.__current_x, self.__current_y)
 
-        #
-        # if self.__rect.left < 0 or self.__rect.right > window_size[0] or self.__rect.top < 0 \
-        #         or self.__rect.bottom > window_size[1]:
-        #     self.self_destruct = True
-        if self.__mainActions.check_for_boundry_crossing(self.__rect):
+        if self.__mainActions.check_for_boundary_crossing(self.__rect):
             self.self_destruct = True
 
     def draw(self, surface):

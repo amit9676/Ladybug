@@ -2,8 +2,9 @@ import math
 import pygame
 import random
 
-
 '''main operations class - this class contains method which are used by multiple classes'''
+
+
 class main:
     def __init__(self):
         self.__WINDOW_WIDTH = 1000
@@ -13,20 +14,18 @@ class main:
     def get_window(self):
         return self.__WINDOW_WIDTH, self.__WINDOW_HEIGHT
 
-    def advance(self, direction, speed, current_x, current_y):
+    def advance(self, direction: int, speed: float, current_x: float, current_y: float) -> (float, float, int, int):
         dx = math.sin(math.radians(direction)) * speed
         dy = math.cos(math.radians(direction)) * speed
         # Update the  position
         return current_x + dx, current_y - dy, round(current_x + dx), round(current_y - dy)
 
-
-    def initilize_currents(self,x,y):
+    def initilize_currents(self, x, y) -> (float, float):
         return float(x), float(y)
 
-    def draw(self, surface, image, rect):
+    def draw(self, surface: pygame.surface, image: pygame.surface, rect: pygame.rect):
         # Draw the image on the surface
         surface.blit(image, rect)
-
 
     '''this method is responsible for rotating an image as we will.
     image argument its the the image we would like to rotate.
@@ -34,7 +33,9 @@ class main:
     pivot is (x,y) tuple - the point on image that would be used as rotation anchor-the image will be rotated around it.
     angle is the rotation angle, based on mathematical axis graph.
     the output is the rotation image, and the rectangle of it.'''
-    def blitRotate(self, image, pos, pivot, angle):
+
+    def blitRotate(self, image, pos: (int, int), pivot: (int,int), angle: int) -> (pygame.surface, pygame.rect):
+        angle -= 90
         image_rect = image.get_rect(topleft=(pos[0] - pivot[0], pos[1] - pivot[1]))
         offset_center_to_pivot = pygame.math.Vector2(pos) - image_rect.center
         rotated_offset = offset_center_to_pivot.rotate(-angle)
@@ -46,12 +47,16 @@ class main:
 
     '''this private method is required to convert the game directions (which 0 degrees is up arrow) - to mathematical
     angles which are needed for the rotation calculations, which are based on radians, circles and trigonometry.'''
-    def game_to_graph_axis_degrees(self, direction):
+
+    def game_to_graph_axis_degrees(self, direction: int) -> int:
         return (90 - direction) % 360
 
-    def check_for_boundry_crossing(self, rect):
+    def check_for_boundary_crossing(self, rect: pygame.rect) -> bool:
         if rect.right < 0 or rect.left > self.__WINDOW_WIDTH or rect.bottom < 0 \
                 or rect.top > self.__WINDOW_HEIGHT:
             return True
         return False
 
+    def circular_emergernce_position(self, position: (int, int), direction: int, radius: int) -> (int,int):
+        return [position[0] + math.cos(math.radians(direction)) * radius,
+                position[1] - math.sin(math.radians(direction)) * radius]

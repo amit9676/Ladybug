@@ -13,14 +13,14 @@ so to keep things precise - the connection of Instance classes and the units who
 class Instance:
     def __init__(self, team, mainActions):
         self._team = team
-        #self._last_shot_time = 0
-        #self.fireballs = []
         self.__mainActions = mainActions
 
 
     def get_team(self):
         return self._team
 
+
+    '''shoting sections - these function responsible for shooting fireballs'''
     def shoot(self,caller , direction, emergernce_pos, speed=2, rate_of_fire=333):
         current_time = pygame.time.get_ticks()
 
@@ -36,13 +36,13 @@ class Instance:
                 '''for every game update we check if fireball has crossed the boundries,
                 if so - the fireball is destroyed and removed from list and game memory.'''
                 caller.fireballs.remove(fireball)
+    '''end of shooting section'''
 
+    def turn_right(self, current_direction):
+        return (current_direction + 1) % 360
 
-    '''def get_rect(self):
-        return self._rect
-
-    def get_current_location(self):
-        return self._rect.centerx, self._rect.centery'''
+    def turn_left(self, current_direction):
+        return (current_direction - 1) % 360
 
 
 '''this is an NPC instance class - a child class of Instance - which holds common fields and actions for all NPC
@@ -57,24 +57,24 @@ class NPCInstance(Instance):
     '''npc section - the method below are for npc units only.'''
     '''this method is responsible for the NPC to acquire a target to attack'''
 
+    '''get target function'''
     def get_target(self, game):
         for ins in game.inctances:
             if ins.get_instance_struct().get_team() != self.get_team():
                 return ins
         return None
 
-    def __you_and_target(self, rect, target):
+    '''get the x.y distance between you and your target'''
+    def __you_and_target(self, you, target):
         if target is None:
             return None, None
-        dx = rect.centerx - target.get_current_location()[0]
-        dy = rect.centery - target.get_current_location()[1]
-        #print(f"target.centerx: {target.get_current_location()[0]}, target.gcentery: {target.get_current_location()[1]}")
-        #print(f"rect.centerx: {rect.centerx}, rect. centery{rect.centery}")
+        dx = you.centerx - target.get_current_location()[0]
+        dy = you.centery - target.get_current_location()[1]
         return dx, dy
 
-    def get_desired_direction(self, target, rect):
-        dx, dy = self.__you_and_target(rect, target)
-        #print(f"target location:{dx}, {dy}")
+    '''get the direction (game bases) from you to your target'''
+    def get_desired_direction(self, target, you):
+        dx, dy = self.__you_and_target(you, target)
         if dx is None:
             return None
 
@@ -90,11 +90,7 @@ class NPCInstance(Instance):
             return
         return int(math.sqrt(dx ** 2 + dy ** 2))
 
-    def turn_right(self, current_direction):
-        return (current_direction + 1) % 360
 
-    def turn_left(self, current_direction):
-        return (current_direction - 1) % 360
 
     def make_turn(self, current_dir, desired_dir):
 
