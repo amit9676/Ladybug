@@ -13,29 +13,29 @@ so to keep things precise - the connection of Instance classes and the units who
 class Instance:
     def __init__(self, team, mainActions):
         self._team = team
-        self._last_shot_time = 0
-        self.fireballs = []
+        #self._last_shot_time = 0
+        #self.fireballs = []
         self.__mainActions = mainActions
 
 
     def get_team(self):
         return self._team
 
-    def shoot(self, direction, x, y, speed=2, rate_of_fire=333):
+    def shoot(self,caller , direction, x, y, speed=2, rate_of_fire=333):
         current_time = pygame.time.get_ticks()
 
-        if current_time - self._last_shot_time >= rate_of_fire:
-            self._last_shot_time = current_time
-            self.fireballs.append(Fireball(direction, x, y, self.__mainActions, speed))
+        if current_time - caller._last_shot_time >= rate_of_fire:
+            caller._last_shot_time = current_time
+            caller.fireballs.append(Fireball(direction, x, y, self.__mainActions, speed))
             '''add new fireball instance to the fireball list'''
 
-    def update_fireballs(self):
-        for fireball in self.fireballs:
+    def update_fireballs(self, caller):
+        for fireball in caller.fireballs:
             fireball.move()  # update fireball
             if fireball.self_destruct:
                 '''for every game update we check if fireball has crossed the boundries,
                 if so - the fireball is destroyed and removed from list and game memory.'''
-                self.fireballs.remove(fireball)
+                caller.fireballs.remove(fireball)
 
 
     '''def get_rect(self):
@@ -52,8 +52,6 @@ instances such as npc lady bugs, war wagon and more'''
 class NPCInstance(Instance):
     def __init__(self, team, mainActions):
         super().__init__(team, mainActions)
-        #self.__target = None
-        #self.__desired_direction = self.__get_desired_direction()
 
 
     '''npc section - the method below are for npc units only.'''
@@ -70,11 +68,12 @@ class NPCInstance(Instance):
             return None, None
         dx = rect.centerx - target.get_current_location()[0]
         dy = rect.centery - target.get_current_location()[1]
-        #print(f"dx, dy: {target.get_current_location()[0]}, {target.get_current_location()[1]}")
+        #print(f"target location: {target.get_current_location()[0]}, {target.get_current_location()[1]}")
         return dx, dy
 
     def get_desired_direction(self, target, rect):
         dx, dy = self.__you_and_target(rect, target)
+        #print(f"target location:{dx}, {dy}")
         if dx is None:
             return None
 
@@ -97,9 +96,6 @@ class NPCInstance(Instance):
         return (current_direction - 1) % 360
 
     def make_turn(self, current_dir, desired_dir):
-        #current_dir = self._current_direction
-        #desired_dir = self.__desired_direction
-        #print(desired_dir)
 
         # If the current and desired direction are the same, return None
         if current_dir == desired_dir:

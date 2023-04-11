@@ -110,8 +110,10 @@ class Ladybug:
     def draw(self, surface):
         # Draw the image on the surface
         # surface.blit(self.image, self.rect)
-        pygame.draw.rect(surface, (140, 140, 21), self._rect, 2)
+        #pygame.draw.rect(surface, (140, 140, 21), self._rect, 2)
         self._mainActions.draw(surface, self._image, self._rect)
+        pygame.draw.circle(surface, (0, 255, 0), self._rect.center, 2, 0)
+
 
     '''if player wins - disable ladybug'''
 
@@ -121,24 +123,6 @@ class Ladybug:
         self._rect.y = -100
         self.fireballs.clear()
         self.flame = None
-
-    '''fireball shoot method'''
-
-    def _shoot(self, direction, x, y):
-        current_time = pygame.time.get_ticks()
-
-        if current_time - self._last_shot_time >= 333:
-            self._last_shot_time = current_time
-            self.fireballs.append(Fireball(direction, x, y, self._mainActions))
-            '''add new fireball instance to the fireball list'''
-
-    def _update_fireballs(self):
-        for fireball in self.fireballs:
-            fireball.move()  # update fireball
-            if fireball.self_destruct:
-                '''for every game update we check if fireball has crossed the boundries,
-                if so - the fireball is destroyed and removed from list and game memory.'''
-                self.fireballs.remove(fireball)
 
 
     def manage_flamethrower(self):

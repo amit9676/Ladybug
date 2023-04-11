@@ -45,6 +45,9 @@ class WarWagon:
         self.self_destruct = False  # public method
         self.__active = False
 
+        self._last_shot_time = 0
+        self.fireballs = []
+
     '''this method is resposible for the creating itself of the wagon - where to place it (a bit outside the screen)
     and in which direction it will travel'''
 
@@ -60,7 +63,7 @@ class WarWagon:
 
 
         x, y = self.__initilizePlacement(self.__current_direction)
-        print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
+        #print(f"x: {x}, y: {y}, dir: {self.__current_direction}")
 
         for i in range(1,len(self.__images)):
             self.__images[i], self.__rects[i] = self.__mainActions.blitRotate(self.__images[i], (x, y),
@@ -195,6 +198,7 @@ class WarWagon:
         self.__current_x, self.__current_y, a, b = \
             self.__mainActions.trigo(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
 
+        a,b = 400,500
         self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__originals[0], (a, b),
                                                                           self.__pivots[0], self.__rotate_direction)
 
@@ -209,36 +213,19 @@ class WarWagon:
         if self.__target is None:
             self.__target = self.get_instance_struct().get_target(self.__game)
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
-        print(f"cd: {self.__current_direction}, rd2: {self.__rotate_direction2},"
-              f" rd2: {self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90}")
+        # print(f"cd: {self.__current_direction}, rd2: {self.__rotate_direction2},"
+        #       f" rd2: {self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90}")
         self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
         self.__rotate_direction2, diff = self.get_instance_struct().\
             make_turn(self.__rotate_direction2, self.__desired_direction)
 
+        #print(f"{self.__rects[1].centerx}, {self.__rects[1].centery}, {self.__rotate_direction2}")
+
         if diff == 0:
             self.get_instance_struct().shoot\
-                (self.__rotate_direction2, self.__rects[1].centerx,self.__rects[1].centery, 4, 100)
-        self.get_instance_struct().update_fireballs()
+                (self, self.__rotate_direction2, self.__rects[1].centerx,self.__rects[1].centery, 4, 100) #original 4,100
+        self.get_instance_struct().update_fireballs(self)
         self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2) - 90
-
-        '''# self.rotate_direction2, diff = self.get_instance_struct().\
-        #     make_turn(self.rotate_direction2, self.__desired_direction)
-        self.rotate_direction2 = self.__desired_direction
-        print(f"desired direction: {self.__desired_direction}, rotate direction2: {self.rotate_direction2}")'''
-
-        '''shooting section'''
-        # self.__target = self.get_instance_struct().get_target(self.__game)
-        # self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
-        #
-        #
-        #
-        # dist = self.get_instance_struct().calculate_distance(self.__target, self.get_rect())
-        #
-        #
-        # if diff == 0:
-        #     self._shoot(self.__current_direction, center[0], center[1])
-        # self._update_fireballs()
-
 
         if not self.__active:
             self.__active = not self.__mainActions.check_for_boundry_crossing(self.__rects[0])
@@ -254,3 +241,5 @@ class WarWagon:
         #pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
         #pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
         # pygame.draw.circle(surface, (195, 145, 145),  (self.rects[0].centerx,self.rects[0].centery + 25), 7, 0)
+        pygame.draw.circle(surface, (0, 255, 0), self.__rects[2].center, 2, 0)
+        pygame.draw.circle(surface, (253, 255, 0), self.__rects[1].center, 2, 0)

@@ -34,6 +34,7 @@ class Ladybug_Player(Ladybug):
 
         '''keep center point for smooth ladybug movment'''
         center = self._rotate_image()
+        #print(f"center: {center}\n")
 
         '''Keep the ladybug inside the window'''
         self._boundry_keeping()
@@ -43,9 +44,9 @@ class Ladybug_Player(Ladybug):
         '''weapons section'''
         '''fireball'''
         if keys[pygame.K_SPACE]:
-            self._shoot(self._current_direction, center[0],
-                        center[1])
-        self._update_fireballs()
+            self.get_instance_struct().shoot(self, self._current_direction, center[0],
+                                     center[1])
+        self.get_instance_struct().update_fireballs(self)
 
         '''flamethrower'''
         if keys[pygame.K_a]:

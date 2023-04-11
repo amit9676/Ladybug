@@ -24,42 +24,6 @@ class Ladybug_NPC(Ladybug):
         #print(f"a: {self.__desired_direction}")
 
 
-
-    '''this method is responsible for the NPC to acquire a target to attack'''
-    '''def __get_target(self):
-        for ins in self._game.inctances:
-            if ins.get_team() != self._team:
-                self.__target = ins
-
-    def __you_and_target(self):
-        if self.__target is None:
-            return None, None
-        dx = self._rect.centerx - self.__target.get_current_location()[0]
-        dy = self._rect.centery - self.__target.get_current_location()[1]
-        return dx, dy
-
-    def __get_desired_direction(self):
-        dx, dy = self.__you_and_target()
-        if dx is None:
-            return
-
-        angle = math.atan2(dy, dx)
-        direction = math.degrees(angle) % 360
-        direction = int(direction)
-        direction = (direction - 90) % 360
-        #print(direction)
-        return direction
-        #self.__desired_direction = int(direction)
-        #self.__desired_direction = (self.__desired_direction - 90) % 360
-        #print(self.__desired_direction)
-
-
-    def __calculate_distance(self):
-        dx, dy = self.__you_and_target()
-        if dx is None:
-            return
-        return int(math.sqrt((dx)**2 + (dy)**2))'''
-
     def make_turn(self):
         current_dir = self._current_direction
         desired_dir = self.__desired_direction
@@ -109,6 +73,6 @@ class Ladybug_NPC(Ladybug):
         #     self.advance()
         #print(diff)
         if diff == 0:
-            self._shoot(self._current_direction, center[0], center[1])
-        self._update_fireballs()
+            self.get_instance_struct().shoot(self, self._current_direction, center[0], center[1])
+        self.get_instance_struct().update_fireballs(self)
 

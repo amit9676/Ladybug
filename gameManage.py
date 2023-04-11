@@ -132,7 +132,7 @@ class Game:
 
         if self.__warWagon:
             self.__warWagon.draw(self.__window)
-            for fireball in self.__warWagon.get_instance_struct().fireballs:
+            for fireball in self.__warWagon.fireballs:
                 fireball.draw(self.__window)
 
 

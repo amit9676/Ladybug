@@ -22,8 +22,8 @@ class Fireball:
         self.__winMode = False
 
     def __initilizeBullet(self):
-        self.__rect.x = self.__emergence_x
-        self.__rect.y = self.__emergence_y
+        self.__rect.centerx = self.__emergence_x
+        self.__rect.centery = self.__emergence_y
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False
 
@@ -44,3 +44,4 @@ class Fireball:
     def draw(self, surface):
         # Draw the image on the surface
         self.__mainActions.draw(surface, self.__image, self.__rect)
+        #pygame.draw.rect(surface, (140, 140, 21), self.__rect, 2)
