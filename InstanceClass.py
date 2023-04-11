@@ -65,7 +65,7 @@ class NPCInstance(Instance):
         return None
 
     '''get the x.y distance between you and your target'''
-    def __you_and_target(self, you, target):
+    def __you_and_target(self, you: pygame.rect, target: pygame.rect) -> (int, int) or (None, None):
         if target is None:
             return None, None
         dx = you.centerx - target.get_current_location()[0]
@@ -73,7 +73,7 @@ class NPCInstance(Instance):
         return dx, dy
 
     '''get the direction (game bases) from you to your target'''
-    def get_desired_direction(self, target, you):
+    def get_desired_direction(self, target: pygame.rect, you: pygame.rect) -> int or None:
         dx, dy = self.__you_and_target(you, target)
         if dx is None:
             return None
@@ -84,7 +84,7 @@ class NPCInstance(Instance):
         direction = (direction - 90) % 360
         return direction
 
-    def calculate_distance(self, target, rect):
+    def calculate_distance(self, target: pygame.rect, rect: pygame.rect) -> int:
         dx, dy = self.__you_and_target(rect, target)
         if dx is None:
             return
@@ -92,7 +92,7 @@ class NPCInstance(Instance):
 
 
 
-    def make_turn(self, current_dir, desired_dir):
+    def make_turn(self, current_dir: int, desired_dir: int) -> (int, int):
 
         # If the current and desired direction are the same, return None
         #print(f"current_dir: {current_dir}, desired_dir: {desired_dir}")

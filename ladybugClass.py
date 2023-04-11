@@ -25,7 +25,7 @@ class Ladybug:
 
         # Get the rect of the image
         self._rect = self._image.get_rect()
-        self._instance_struct = Instance(team, mainActions)
+        self._instance_struct: Instance = Instance(team, mainActions)
 
         self.fireballs = []
         self.flame = None
@@ -58,18 +58,8 @@ class Ladybug:
     def get_current_location(self) -> (int, int):
         return self._rect.centerx, self._rect.centery
 
-    def get_instance_struct(self) -> Instance:
+    def get_instance_struct(self) -> type(Instance):
         return self._instance_struct
-
-    def turn_right(self):
-        self._current_direction = (self._current_direction + 1) % 360
-
-    def turn_left(self):
-        self._current_direction = (self._current_direction - 1) % 360
-
-    def advance(self):
-        self._current_x, self._current_y, self._rect.x, self._rect.y = \
-            self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
 
 
     def _rotate_image(self):

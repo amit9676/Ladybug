@@ -22,19 +22,18 @@ class Ladybug_Player(Ladybug):
         # Move the ladybug based on the arrow key input
         '''turn left'''
         if keys[pygame.K_LEFT]:
-            self.turn_left()
+            self._current_direction = self.get_instance_struct().turn_left(self._current_direction)
 
         '''turn right'''
         if keys[pygame.K_RIGHT]:
-            self.turn_right()
+            self._current_direction = self.get_instance_struct().turn_right(self._current_direction)
 
         '''advance'''
         if keys[pygame.K_UP]:
-            self.advance()
+            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
 
         '''keep center point for smooth ladybug movment'''
         center = self._rotate_image()
-        #print(f"center: {center}\n")
 
         '''Keep the ladybug inside the window'''
         self._boundary_keeping()

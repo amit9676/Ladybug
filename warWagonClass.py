@@ -92,8 +92,8 @@ class WarWagon:
      the cart initialization such that: a. the location will be outside the screen.
       b: the cart will immediately travel toward the screen at straight line.
       
-      input: one or 2 rectangles in which the wagon should be places.
-      output: a point randomly selected from the rectangles, there we weill place the wagon'''
+      input: one or 2 rectangles in which the wagon should be placed.
+      output: a point randomly selected from the rectangles, there we will place the wagon'''
 
     def __initilizePlacement(self, direction: int):
         ''' rectangle tuple = (top-left,top-right,bottom-right,bottom-left)
@@ -169,12 +169,12 @@ class WarWagon:
     '''calculate a random direction in which the cart will travel - the possible directions are up, down, right, left
     and diagonals it means the possible values are 0, 45, 90, 135, 180, 225, 270, 315'''
 
-    def __generate_random_direction(self):
+    def __generate_random_direction(self) -> int:
         return random.randint(0, 7) * 45
 
     '''aid method to return a random point within the broundries of a rectangle, NOT including the edges'''
 
-    def __random_point_within_rect(self, rect):
+    def __random_point_within_rect(self, rect) -> (int, int):
 
         x = random.randint(rect[0][0] + 1, rect[1][0] - 1)
         y = random.randint(rect[0][1] + 1, rect[3][1] - 1)
@@ -184,7 +184,7 @@ class WarWagon:
     because there is an intersection between the 2 rectangles - the chance the random point will be in the
     intersection is higher than outside of it.'''
 
-    def __random_point_within_union(self, rect_a, rect_b):
+    def __random_point_within_union(self, rect_a, rect_b) -> (int, int):
         rect = random.choice((rect_a, rect_b))
         return self.__random_point_within_rect(rect)
 

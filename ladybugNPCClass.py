@@ -18,36 +18,11 @@ class Ladybug_NPC(Ladybug):
         super().__init__(window, mainActions, game, team)
 
         '''which inctance this inctance is targeting at any moment'''
-        self._instance_struct = NPCInstance(team, mainActions)
+        self._instance_struct: NPCInstance = NPCInstance(team, mainActions)
         self.__target = None
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         #print(f"a: {self.__desired_direction}")
 
-
-    def make_turn(self):
-        current_dir = self._current_direction
-        desired_dir = self.__desired_direction
-
-        # If the current and desired direction are the same, return None
-        if current_dir == desired_dir:
-            return 0
-
-        # Calculate the difference between the current and desired direction
-        diff = desired_dir - current_dir
-
-        # If the difference is greater than 180, turn the opposite direction
-        if diff > 180:
-            diff -= 360
-        elif diff < -180:
-            diff += 360
-
-        # If the difference is positive, turn right; otherwise, turn left
-        if diff > 0:
-            #self.__current_direction = (self.__current_direction + 1) % 360
-            self.turn_right()
-        else:
-            self.turn_left()
-        return diff
 
 
     '''the main ladybug method - check for any keyboard input and updates the ladybug according.
@@ -60,7 +35,7 @@ class Ladybug_NPC(Ladybug):
         #return
         self.__target = self.get_instance_struct().get_target(self._game)
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
-        diff = self.make_turn()
+        self._current_direction,diff = self.get_instance_struct().make_turn(self._current_direction,self.__desired_direction)
 
         dist = self.get_instance_struct().calculate_distance(self.__target, self.get_rect())
         center = self._rotate_image()
