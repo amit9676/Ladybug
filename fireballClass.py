@@ -23,7 +23,7 @@ class Fireball:
     def __initilizeBullet(self):
         self.__rect.centerx = self.__emergence_x
         self.__rect.centery = self.__emergence_y
-        self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
+        #self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False
 
     '''move fireball at the pre determined path'''

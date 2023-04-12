@@ -105,7 +105,6 @@ class Ladybug:
     def draw(self, surface):
         # Draw the image on the surface
         # surface.blit(self.image, self.rect)
-        #pygame.draw.rect(surface, (140, 140, 21), self._rect, 2)
         self._mainActions.draw(surface, self._image, self._rect)
         #pygame.draw.circle(surface, (255, 25, 0), self._rect.center, 2, 0)
 
@@ -129,4 +128,4 @@ class Ladybug:
 
     def add_rocket(self):
         self.rockets.append(Rocket(self._game, self._team,self._current_direction, self._rect.center,
-                                   self._mainActions))
+                                   self._mainActions,2.5))
