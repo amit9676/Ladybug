@@ -207,6 +207,7 @@ class WarWagon:
         '''move wagon on screen'''
         self.__current_x, self.__current_y, a, b = \
             self.__mainActions.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
+        a,b = 200,200
 
 
         '''rotate images according developments'''

@@ -2,7 +2,7 @@ import pygame
 import random
 from ladybugPlayerClass import Ladybug_Player
 from flagClass import Flag
-from warWagonClass import  WarWagon
+from warWagonClass import WarWagon
 from ladybugNPCClass import Ladybug_NPC
 from main import main
 
@@ -32,7 +32,7 @@ class Game:
         self.__flag = Flag(self.__window_size, self.__mainActions)
         self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
 
-        #a list of all inctances (ladybugs, warwagons and future instances)
+        # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
@@ -40,10 +40,6 @@ class Game:
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
-
-
-
-
 
         # Set the game state to "running"
         self.__running = True
@@ -67,16 +63,16 @@ class Game:
         background_color = (135, 206, 235)
         return window, background_color
 
-
-
     '''this method compiles a list of all actives instances on the game - that include player controlled ladybugs,
     NPC ladybugs, war wagon and future instances. this method has to be PUBLIC in order for the "players" to receive
     real time data about other players - instances, and their current location. all inctances must have a public method
     "get_current_location()" in order for every instance to "read the map"'''
+
     def get_inctances(self):
         pass
 
     '''main method for event handling, such as game over and stuff'''
+
     def __handle_events(self):
         # Handle events
         for event in pygame.event.get():
@@ -88,11 +84,9 @@ class Game:
                 if self.__button.collidepoint(event.pos):
                     self.__reset()
 
-
     '''update the game - in here make sure everything in the game is being updated.'''
 
     def __update(self):
-
 
         # Update the ladybug object
         keys = pygame.key.get_pressed()
@@ -135,12 +129,17 @@ class Game:
             for fireball in self.__warWagon.fireballs:
                 fireball.draw(self.__window)
 
-
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
 
         for fireball in self.__ladybug_npc.fireballs:
             fireball.draw(self.__window)
+
+        for rocket in self.__ladybug.rockets:
+            rocket.draw(self.__window)
+
+        for rocket in self.__ladybug_npc.rockets:
+            rocket.draw(self.__window)
 
         if self.__ladybug.flame:
             self.__ladybug.flame.draw(self.__window)

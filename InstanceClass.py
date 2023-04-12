@@ -3,6 +3,7 @@ import math
 import pygame
 
 from fireballClass import Fireball
+#from rocketClass import Rocket
 
 '''this class is instance class - it holds values and methods required by the various units in this game
 this class is NOT hereditary based but encapsulation based, means in every units there is a field
@@ -19,10 +20,11 @@ class Instance:
     def get_team(self):
         return self._team
 
+    '''weapons firing section'''
 
     '''shoting sections - these function responsible for shooting fireballs'''
-    def shoot(self,caller , direction, emergernce_pos, speed=2, rate_of_fire=333):
-        current_time = pygame.time.get_ticks()
+    def shoot(self,caller, direction, emergernce_pos, speed=2, rate_of_fire=333):
+        current_time = pygame.time.get_ticks() + rate_of_fire
 
         if current_time - caller._last_shot_time >= rate_of_fire:
             caller._last_shot_time = current_time
@@ -37,6 +39,22 @@ class Instance:
                 if so - the fireball is destroyed and removed from list and game memory.'''
                 caller.fireballs.remove(fireball)
     '''end of shooting section'''
+
+    '''launch rockets section'''
+    def launch_rocket(self,caller, direction, emergernce_pos, speed=2, rate_of_fire=2000):
+        current_time = pygame.time.get_ticks() + rate_of_fire
+        if current_time - caller._last_rocket_shot_time >= rate_of_fire:
+            caller._last_rocket_shot_time = current_time
+            caller.add_rocket()
+
+    def update_rockets(self, caller):
+        for rocket in caller.rockets:
+            rocket.move()  # update rocket
+            if rocket.self_destruct:
+                caller.rockets.remove(rocket)
+    '''end of rockets section'''
+
+    '''end of weapons sections'''
 
     def turn_right(self, current_direction):
         return (current_direction + 1) % 360

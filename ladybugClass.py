@@ -8,6 +8,9 @@ from InstanceClass import Instance
 
 
 # Define the Ladybug class
+from rocketClass import Rocket
+
+
 class Ladybug:
     """initilize the ladybug with necessary parameters"""
 
@@ -29,6 +32,7 @@ class Ladybug:
 
         self.fireballs = []
         self.flame = None
+        self.rockets = []
 
         # Set the initial speed
         self._speed = 1.3
@@ -45,6 +49,7 @@ class Ladybug:
         self._current_x, self._current_y = self._mainActions.initilize_currents(self._rect.x, self._rect.y)
 
         self._last_shot_time = 0
+        self._last_rocket_shot_time = 0
 
     def initilize_instance(self):
         self._rect.x = random.randint(0, self._window[0] - self._rect.width)
@@ -121,3 +126,7 @@ class Ladybug:
                                       self._mainActions)
         else:
             self.flame.move(self._current_direction, self._rect.center)
+
+    def add_rocket(self):
+        self.rockets.append(Rocket(self._game, self._team,self._current_direction, self._rect.center,
+                                   self._mainActions))

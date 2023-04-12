@@ -48,3 +48,4 @@ class Flamethrower:
     def draw(self, surface):
         # Draw the image on the surface
         self.mainActions.draw(surface,self.image,self.rect)
+        #pygame.draw.rect(surface, (255, 0, 0), self.rect, 2)
