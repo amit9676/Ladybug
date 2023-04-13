@@ -23,6 +23,7 @@ class Ladybug:
         self._image = pygame.image.load(f"ladybug_{team}.png")
         self._image = pygame.transform.scale(self._image, (30, 30))
         self._original = self._image
+        self._mask = pygame.mask.from_surface(self._image)
         self._window = window
         self._mainActions = mainActions
 
@@ -60,6 +61,9 @@ class Ladybug:
     def get_rect(self) -> pygame.rect:
         return self._rect
 
+    def get_mask(self) -> pygame.rect:
+        return self._mask
+
     def get_current_location(self) -> (int, int):
         return self._rect.centerx, self._rect.centery
 
@@ -69,6 +73,7 @@ class Ladybug:
 
     def _rotate_image(self):
         self._image = pygame.transform.rotate(self._original, -self._current_direction)
+        self._mask = pygame.mask.from_surface(self._image)
         center = self._rect.center
         self._rect = self._image.get_rect()
         self._rect.center = center
@@ -127,5 +132,5 @@ class Ladybug:
             self.flame.move(self._current_direction, self._rect.center)
 
     def add_rocket(self):
-        self.rockets.append(Rocket(self._game, self._team,self._current_direction, self._rect.center,
+        self.rockets.append(Rocket(self._game, self, self._team,self._current_direction, self._rect.center,
                                    self._mainActions,2.5))

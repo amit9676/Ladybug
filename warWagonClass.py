@@ -25,6 +25,7 @@ class WarWagon:
         self.__image3 = pygame.image.load(f"ladybug_{team}.png")
         self.__window = window
 
+
         '''Scale the images'''
         self.__image1 = pygame.transform.scale(self.__image1, (60, 108))
         self.__image2 = pygame.transform.scale(self.__image2, (35, 70))
@@ -35,6 +36,9 @@ class WarWagon:
         self.__originals = [self.__image1, self.__image2, self.__image3]
         self.__rects = [self.__image1.get_rect(), self.__image2.get_rect(), self.__image3.get_rect()]
         self.__pivots = ((30, 79), (17, 55), (15, 15))
+
+        '''initlize mask'''
+        self.__mask = pygame.mask.from_surface(self.__images[0])
 
         '''position, moment and aiming fields'''
         self.__current_direction = 0 # where the wagon is heading (game degrees)
@@ -196,6 +200,9 @@ class WarWagon:
     def get_rect(self):
         return self.__rects[0]
 
+    def get_mask(self) -> pygame.rect:
+        return self.__mask
+
     def get_current_location(self):
         return self.__rects[0].centerx, self.__rects[0].centery
 
@@ -220,6 +227,9 @@ class WarWagon:
         self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
                                                                           self.__pivots[2], self.__rotate_direction2)
 
+        '''update mask according the rotation'''
+        self.__mask = pygame.mask.from_surface(self.__images[0])
+
         '''target acquisition mechanism - if there is no target - activate the function which assigns one'''
         if self.__target is None:
             self.__target = self.get_instance_struct().get_target(self.__game)
@@ -235,7 +245,7 @@ class WarWagon:
         '''when machine gun is aiming on target (diff==0) - FIRE!'''
         if diff == 0:
             self.get_instance_struct().shoot \
-                (self, self.__rotate_direction2, self.__fireball_emergence_position, 4, 100)  # original 4,100
+                (self.__game, self, self.__rotate_direction2, self.__fireball_emergence_position, 4, 100)  # original 4,100
         self.get_instance_struct().update_fireballs(self)
 
         '''update shooting data for next time'''

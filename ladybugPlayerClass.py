@@ -43,7 +43,7 @@ class Ladybug_Player(Ladybug):
         '''weapons section'''
         '''fireball'''
         if keys[pygame.K_SPACE]:
-            self.get_instance_struct().shoot(self, self._current_direction, center)
+            self.get_instance_struct().shoot(self._game, self, self._current_direction, center)
         self.get_instance_struct().update_fireballs(self)
 
         '''flamethrower'''

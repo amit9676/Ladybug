@@ -23,12 +23,12 @@ class Instance:
     '''weapons firing section'''
 
     '''shoting sections - these function responsible for shooting fireballs'''
-    def shoot(self,caller, direction, emergernce_pos, speed=2, rate_of_fire=333):
+    def shoot(self,game, caller, direction, emergernce_pos, speed=2, rate_of_fire=333):
         current_time = pygame.time.get_ticks() + rate_of_fire
 
         if current_time - caller._last_shot_time >= rate_of_fire:
             caller._last_shot_time = current_time
-            caller.fireballs.append(Fireball(direction, emergernce_pos, self.__mainActions, speed))
+            caller.fireballs.append(Fireball(game, caller, direction, emergernce_pos, self.__mainActions, speed))
             '''add new fireball instance to the fireball list'''
 
     def update_fireballs(self, caller):

@@ -4,7 +4,10 @@ import pygame
 
 
 class Fireball:
-    def __init__(self, direction, emergence, mainActions, speed=2):
+    def __init__(self, game, caller, direction, emergence, mainActions, speed=2):
+        self.__game = game
+        self.__caller = caller
+
         self.__image = pygame.image.load("fireball.png")
         self.__image = pygame.transform.scale(self.__image, (6, 6))
         self.__mainActions = mainActions
@@ -12,6 +15,7 @@ class Fireball:
 
         # Get the rect of the image
         self.__rect = self.__image.get_rect()
+        self.__mask = pygame.mask.from_surface(self.__image)
 
         self.__emergence_x, self.__emergence_y = emergence
         self.__direction = direction
@@ -19,6 +23,12 @@ class Fireball:
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
         self.self_destruct = False
         self.__winMode = False
+
+    def get_rect(self) -> pygame.rect:
+        return self.__rect
+
+    def get_mask(self) -> pygame.rect:
+        return self.__mask
 
     def __initilizeBullet(self):
         self.__rect.centerx = self.__emergence_x
@@ -31,6 +41,10 @@ class Fireball:
     def move(self):
         self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
             self.__mainActions.advance(self.__direction, self.__speed, self.__current_x, self.__current_y)
+
+        impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
+        if impacted:
+            self.self_destruct = True
 
         if self.__mainActions.check_for_boundary_crossing(self.__rect):
             self.self_destruct = True

@@ -5,12 +5,14 @@ from InstanceClass import NPCInstance
 
 
 class Rocket:
-    def __init__(self, game, team, direction, emergence, mainActions, speed=2):
+    def __init__(self, game, caller, team, direction, emergence, mainActions, speed=2):
         self.__image = pygame.image.load("rocket.png")
         self.__image = pygame.transform.scale(self.__image, (12, 28))
         self.__original = self.__image
+        self.__mask = pygame.mask.from_surface(self.__image)
 
         self.__game = game
+        self.__caller = caller
         self.__mainActions = mainActions
         self.__npcInstance = NPCInstance(team, mainActions)
         self.__speed = speed
@@ -30,6 +32,12 @@ class Rocket:
         self.self_destruct = False
         self.__winMode = False
 
+    def get_rect(self) -> pygame.rect:
+        return self.__rect
+
+    def get_mask(self) -> pygame.rect:
+        return self.__mask
+
     def __initilizeRocket(self):
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False
@@ -39,7 +47,7 @@ class Rocket:
         self.__target = self.__target_acqesition()
 
     def __target_acqesition(self):
-        lowest_turn = 70
+        lowest_turn = 60  # how far the missile may turn to locate target- valid range: 1 <= x <= 180
         target = None
         for ins in self.__game.inctances:
             if ins.get_instance_struct().get_team() == self.__npcInstance.get_team():
@@ -50,7 +58,7 @@ class Rocket:
                 diff -= 360
             elif diff < -180:
                 diff += 360
-            diff=abs(diff)
+            diff = abs(diff)
             # print(f"direction from me to target: {self.__npcInstance.get_desired_direction(ins, self.__rect)}, "
             #       f"where i am heading: {self.__movement_direction}")
             # print(f"distance_of_current_direction_and_desired_direction:"
@@ -63,12 +71,13 @@ class Rocket:
             return None
         return target
 
+
     '''move fireball at the pre determined path'''
 
     def move(self):
         if self.__target is not None:
-            self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target,self.__rect)
-            self.__movement_direction, diff = self.__npcInstance.make_turn\
+            self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
+            self.__movement_direction, diff = self.__npcInstance.make_turn \
                 (self.__movement_direction, self.__desired_direction)
             self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
 
@@ -79,6 +88,13 @@ class Rocket:
         '''rotate the rocket according to the new location'''
         self.__image, self.__rect = self.__mainActions.blitRotate \
             (self.__original, (self.__rect.centerx, self.__rect.centery), self.__pivot, self.__rotation_angle)
+
+        '''rotate the mask according the new image after the rotation'''
+        self.__mask = pygame.mask.from_surface(self.__image)
+
+        impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
+        if impacted:
+            self.self_destruct = True
 
         if self.__mainActions.check_for_boundary_crossing(self.__rect):
             self.self_destruct = True

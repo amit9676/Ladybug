@@ -30,7 +30,7 @@ class Game:
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
         self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "red")
+        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []

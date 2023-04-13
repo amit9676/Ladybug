@@ -57,6 +57,54 @@ class main:
             return True
         return False
 
+    '''given position, direction and radius - return nre position that is at distance of radius at the
+    given direction'''
     def circular_emergernce_position(self, position: (int, int), direction: int, radius: int) -> (int,int):
         return [position[0] + math.cos(math.radians(direction)) * radius,
                 position[1] - math.sin(math.radians(direction)) * radius]
+
+
+    '''methods required for check collision between 2 objects - it has 2 methods: impact identifier
+    and __check_collision.
+    impact_identifier - get called by the caller - an object does checks for collision
+    the caller can be a projectile (missile, flamethrower, sniper or fireball) or warwagon.
+    the caller constantly checks if there is a colision between the caller and the instances - if it does,
+     for a projectile it means it hit its target.
+     and for the warwagon it means it runs the target over.     
+     the function might have some variants in the future - fireball and sniper can hit only one enemy.
+     sniper can hit only units from the other team (no friendly fire)
+     currently the function returns a list of objects in which there was an impact on them
+     
+     __check_collision - private method called  by the impact_identifier - it is the function that makes the actual
+     checking for collision - it takes the 2 objects it wants to check - first it checks rectangle collision by
+     calling every instance 'get_rect() method. if that checks out - it means that the rectangles overlap, however
+     that by itself does not means there is indeed an impact, so there is a verification check - in which the function
+     calls the objects 'get_mask() for check if they overlap - if they does - it means the object's images overlap -
+     meaning impact!'''
+    def __check_collision(self,obj1, obj2):
+        """
+        Checks for collision between two objects using masks.
+        """
+        # Check for rect collision first
+        if obj1.get_rect().colliderect(obj2.get_rect()):
+            # If rect collision occurs, check for mask collision
+            offset = (obj2.get_rect().left - obj1.get_rect().left, obj2.get_rect().top - obj1.get_rect().top)
+            if obj1.get_mask().overlap(obj2.get_mask(), offset):
+                return True
+        return False
+
+    '''projectile - the object that is used as projectile (or war wagon) - meaning the object that does the hitting
+        it is the equivalent of bullet.
+        
+        caller - the object that sent the projectile - equivalent of gun, in case of war wagon - it will be itself
+        
+        game - the game object, with the data on current instances on screen'''
+    def impact_identifier(self,projectile, caller, game):
+        impacted = []
+        for ins in game.inctances:
+            if ins == caller:
+                continue
+            res = self.__check_collision(projectile,ins)
+            if res:
+                impacted.append(res)
+        return impacted
