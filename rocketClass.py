@@ -82,25 +82,59 @@ class Rocket:
     '''move fireball at the pre determined path'''
 
     def move(self):
-        if self.__target is not None:
-            self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
-            self.__movement_direction, diff = self.__npcInstance.make_turn \
-                (self.__movement_direction, self.__desired_direction,0.5)
-            self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
+        if self.__explosion is None:
+            if self.__target is not None:
+                self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
+                self.__movement_direction, diff = self.__npcInstance.make_turn \
+                    (self.__movement_direction, self.__desired_direction,0.5)
+                self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
 
-        '''calculation the location in which the rocket should go'''
-        self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
-            self.__mainActions.advance(self.__movement_direction, self.__speed, self.__current_x, self.__current_y)
+            '''calculation the location in which the rocket should go'''
+            self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
+                self.__mainActions.advance(self.__movement_direction, self.__speed, self.__current_x, self.__current_y)
 
-        '''rotate the rocket according to the new location'''
-        self.__image, self.__rect = self.__mainActions.blitRotate \
-            (self.__original, (self.__rect.centerx, self.__rect.centery), self.__pivot, self.__rotation_angle)
+            '''rotate the rocket according to the new location'''
+            self.__image, self.__rect = self.__mainActions.blitRotate \
+                (self.__original, (self.__rect.centerx, self.__rect.centery), self.__pivot, self.__rotation_angle)
 
-        '''rotate the mask according the new image after the rotation'''
-        self.__mask = pygame.mask.from_surface(self.__image)
+            '''rotate the mask according the new image after the rotation'''
+            self.__mask = pygame.mask.from_surface(self.__image)
 
-        impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
-        if impacted: #and self.__explosion is None:
+            impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
+            if impacted:
+                #self.self_destruct = True
+                self.__setup_explosion()
+
+            x = pygame.time.get_ticks() - self.__timer
+            if x >= 10000:
+                self.__setup_explosion()
+                #self.self_destruct = True
+        else:
+            #self.__image = self.__explosion.get_image()
+            if self.__explosion.self_destruct:
+                #print("x")
+                self.self_destruct = True
+            else:
+                self.__explosion.move()
+                self.__image = self.__explosion.get_image()
+                temp = self.__rect.centerx, self.__rect.centery
+                self.__rect = self.__image.get_rect()
+                self.__rect.center = temp
+
+
+    def draw(self, surface):
+        # Draw the image on the surface
+        #pygame.draw.rect(surface, (0, 255, 0), self.__rect, 2)
+        self.__mainActions.draw(surface, self.__image, self.__rect)
+        # if self.__explosion:
+        #     print("x")
+        #     self.__explosion.draw(surface)
+
+    def __setup_explosion(self):
+        self.__explosion = Explosion(self.__mainActions,(self.__rect.x,self.__rect.y))
+
+
+'''if impacted: #and self.__explosion is None:
         #     self.__explosion = Explosion(self.__mainActions,(200,200))
         # elif impacted and self.__explosion is not None and not self.__explosion.self_destruct:
         #     self.__explosion.move()
@@ -109,17 +143,7 @@ class Rocket:
         #
         # if self.__mainActions.check_for_boundary_crossing(self.__rect) and not self.__target:
             self.self_destruct = True
-
-        x = pygame.time.get_ticks() - self.__timer
-        if x >= 10000:
-            # self.__explosion = Explosion(self.__mainActions,(200,200))
-            # for i in range(0,17):
-            #     self.__explosion.move()
-            self.self_destruct = True
-
-    def draw(self, surface):
-        # Draw the image on the surface
-        self.__mainActions.draw(surface, self.__image, self.__rect)
-        if self.__explosion:
-            print("x")
-            self.__explosion.draw(surface)
+            
+        # self.__explosion = Explosion(self.__mainActions,(200,200))
+        # for i in range(0,17):
+        #     self.__explosion.move()'''

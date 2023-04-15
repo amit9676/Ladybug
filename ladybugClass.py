@@ -111,6 +111,7 @@ class Ladybug:
         # Draw the image on the surface
         # surface.blit(self.image, self.rect)
         self._mainActions.draw(surface, self._image, self._rect)
+        #pygame.draw.rect(surface, (255, 0, 0), self._rect, 2)
         #pygame.draw.circle(surface, (255, 25, 0), self._rect.center, 2, 0)
 
 

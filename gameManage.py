@@ -29,14 +29,14 @@ class Game:
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
-        self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
+        #self.__flag = Flag(self.__window_size, self.__mainActions)
+        #self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
-        self.inctances.append(self.__warWagon)
+        #self.inctances.append(self.__warWagon)
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
@@ -95,23 +95,23 @@ class Game:
 
         '''war wagons'''
 
-        '''update if war wagon still exists'''
-        if self.__warWagon is not None:
-            self.__warWagon.update()
-            if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
-                self.inctances.remove(self.__warWagon)
-                self.__warWagon = None
+        # '''update if war wagon still exists'''
+        # if self.__warWagon is not None:
+        #     self.__warWagon.update()
+        #     if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
+        #         self.inctances.remove(self.__warWagon)
+        #         self.__warWagon = None
 
         # Check if the ladybug has reached the flag
-        if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
-            self.__win = True
-            self.__playing = False
-            self.__ladybug.win()
-            self.__ladybug_npc.win()
-            self.__flag.win()
-            self.__create_button()
-            self.__message = None
-            self.__show_message("YOU WIN!")
+        # if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
+        #     self.__win = True
+        #     self.__playing = False
+        #     self.__ladybug.win()
+        #     self.__ladybug_npc.win()
+        #     #self.__flag.win()
+        #     self.__create_button()
+        #     self.__message = None
+        #     self.__show_message("YOU WIN!")
 
     '''main draw method - in here make sure every game instance is being drown'''
 
@@ -121,13 +121,13 @@ class Game:
 
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
-        self.__flag.draw(self.__window)
+        #self.__flag.draw(self.__window)
         self.__ladybug_npc.draw(self.__window)
 
-        if self.__warWagon:
-            self.__warWagon.draw(self.__window)
-            for fireball in self.__warWagon.fireballs:
-                fireball.draw(self.__window)
+        # if self.__warWagon:
+        #     self.__warWagon.draw(self.__window)
+        #     for fireball in self.__warWagon.fireballs:
+        #         fireball.draw(self.__window)
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
@@ -184,7 +184,7 @@ class Game:
         # Reset the game state
         self.__ladybug.initilize_instance()
         self.__ladybug_npc.initilize_instance()
-        self.__flag.initilize_instance()
+        #self.__flag.initilize_instance()
         self.__message = None
         self.__button = None
         self.__win = False
