@@ -2,6 +2,7 @@ import math
 
 import pygame
 from InstanceClass import NPCInstance
+from explosionClass import Explosion
 
 
 class Rocket:
@@ -32,11 +33,17 @@ class Rocket:
         self.self_destruct = False
         self.__winMode = False
 
+        self.__timer = pygame.time.get_ticks()
+        self.__explosion = None
+
     def get_rect(self) -> pygame.rect:
         return self.__rect
 
     def get_mask(self) -> pygame.rect:
         return self.__mask
+
+    def get_rocket_explosion(self) -> pygame.rect:
+        return self.__explosion
 
     def __initilizeRocket(self):
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
@@ -78,7 +85,7 @@ class Rocket:
         if self.__target is not None:
             self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
             self.__movement_direction, diff = self.__npcInstance.make_turn \
-                (self.__movement_direction, self.__desired_direction)
+                (self.__movement_direction, self.__desired_direction,0.5)
             self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
 
         '''calculation the location in which the rocket should go'''
@@ -93,12 +100,26 @@ class Rocket:
         self.__mask = pygame.mask.from_surface(self.__image)
 
         impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
-        if impacted:
+        if impacted: #and self.__explosion is None:
+        #     self.__explosion = Explosion(self.__mainActions,(200,200))
+        # elif impacted and self.__explosion is not None and not self.__explosion.self_destruct:
+        #     self.__explosion.move()
+        # elif impacted and self.__explosion is not None and self.__explosion.self_destruct:
+        #     self.self_destruct = True
+        #
+        # if self.__mainActions.check_for_boundary_crossing(self.__rect) and not self.__target:
             self.self_destruct = True
 
-        if self.__mainActions.check_for_boundary_crossing(self.__rect):
+        x = pygame.time.get_ticks() - self.__timer
+        if x >= 10000:
+            # self.__explosion = Explosion(self.__mainActions,(200,200))
+            # for i in range(0,17):
+            #     self.__explosion.move()
             self.self_destruct = True
 
     def draw(self, surface):
         # Draw the image on the surface
         self.__mainActions.draw(surface, self.__image, self.__rect)
+        if self.__explosion:
+            print("x")
+            self.__explosion.draw(surface)

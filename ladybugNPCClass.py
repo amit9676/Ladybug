@@ -48,6 +48,10 @@ class Ladybug_NPC(Ladybug):
         # if diff <= abs(100):
         #     self.advance()
         #print(diff)
+
+        # self.get_instance_struct().launch_rocket(self, self._current_direction, center)
+        # self.get_instance_struct().update_rockets(self)
+
         if diff == 0:
             self.get_instance_struct().shoot(self._game, self, self._current_direction, center)
         self.get_instance_struct().update_fireballs(self)

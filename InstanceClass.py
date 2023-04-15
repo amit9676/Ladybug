@@ -56,11 +56,15 @@ class Instance:
 
     '''end of weapons sections'''
 
-    def turn_right(self, current_direction):
-        return (current_direction + 1) % 360
+    # def turn_right(self, current_direction):
+    #     return (current_direction + 1) % 360
+    #
+    # def turn_left(self, current_direction):
+    #     return (current_direction - 1) % 360
 
-    def turn_left(self, current_direction):
-        return (current_direction - 1) % 360
+    def turn(self,current_direction,degree):
+        #positive degree - turn right, negative degree - turn left.
+        return (current_direction + degree) % 360
 
 
 '''this is an NPC instance class - a child class of Instance - which holds common fields and actions for all NPC
@@ -110,7 +114,7 @@ class NPCInstance(Instance):
 
 
 
-    def make_turn(self, current_dir: int, desired_dir: int) -> (int, int):
+    def make_turn(self, current_dir: int, desired_dir: int, degree=1) -> (int, int):
 
         # If the current and desired direction are the same, return None
         #print(f"current_dir: {current_dir}, desired_dir: {desired_dir}")
@@ -128,9 +132,10 @@ class NPCInstance(Instance):
 
         # If the difference is positive, turn right; otherwise, turn left
         if diff > 0:
-            #self.__current_direction = (self.__current_direction + 1) % 360
-            current_dir = self.turn_right(current_dir)
+            #current_dir = self.turn_right(current_dir)
+            current_dir = self.turn(current_dir,degree)
         else:
-            current_dir = self.turn_left(current_dir)
+            #current_dir = self.turn_left(current_dir)
+            current_dir = self.turn(current_dir,degree * -1)
 
         return current_dir, diff

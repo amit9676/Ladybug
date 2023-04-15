@@ -52,7 +52,7 @@ class Sprite:
 
     '''this method is for testing only, it runs the animation from inside the class.
     the coordinates input is tuple of (x,y) and determine where the sprite will be displayed on screen'''
-    def __run(self, coordinates):
+    def run(self, coordinates):
         pygame.init()
         win = pygame.display.set_mode((640, 480))
         self.fill_frames_and_get_first_frame()
@@ -106,10 +106,13 @@ class Sprite:
     def __get_next_frame(self):
         self.__current_frame_index += 1
         self.__current_frame_index %= len(self.__frames)
-        '''the commended code is in case i would like to make the sprite appearance gradual, currently not in use'''
+
+        '''this code is to make some rows in the beggining of the sprite to appear once - they run and then they
+        are removed from frame list'''
         if self.__current_frame_index == 0 and self.__start:
             self.__frames = self.__frames[(5*self.__num_start):]
             self.__start = False
+
         return self.__frames[self.__current_frame_index]
 
     '''drawing method - is used internally for testing (called by run)'''
@@ -125,3 +128,10 @@ class Sprite:
 
 # x2 = Sprite("flame002.png", 181, 404, 10, 5, 40)
 # x2.run((120, 40))
+
+# x3 = Sprite("explosion.png", 142, 200, 4, 5, 25, 0)
+# x3.run((100,100))
+
+# x3 = Sprite("explosion_small.png", 28, 40, 4, 5, 25, 0)
+# x3.run((100,100))
+

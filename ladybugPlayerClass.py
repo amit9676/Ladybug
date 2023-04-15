@@ -22,11 +22,13 @@ class Ladybug_Player(Ladybug):
         # Move the ladybug based on the arrow key input
         '''turn left'''
         if keys[pygame.K_LEFT]:
-            self._current_direction = self.get_instance_struct().turn_left(self._current_direction)
+            #self._current_direction = self.get_instance_struct().turn_left(self._current_direction)
+            self._current_direction = self.get_instance_struct().turn(self._current_direction,-1)
 
         '''turn right'''
         if keys[pygame.K_RIGHT]:
-            self._current_direction = self.get_instance_struct().turn_right(self._current_direction)
+            #self._current_direction = self.get_instance_struct().turn_right(self._current_direction)
+            self._current_direction = self.get_instance_struct().turn(self._current_direction,1)
 
         '''advance'''
         if keys[pygame.K_UP]:
