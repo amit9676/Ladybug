@@ -13,7 +13,7 @@ class Rocket:
         self.__mask = pygame.mask.from_surface(self.__image)
 
         self.__game = game
-        self.__caller = caller
+        self.__caller = caller #the unit that launched the rocket
         self.__mainActions = mainActions
         self.__npcInstance = NPCInstance(team, mainActions)
         self.__speed = speed
@@ -21,7 +21,7 @@ class Rocket:
 
         # Get the rect of the image
         self.__rect = self.__image.get_rect()
-        self.__pivot = (0, self.__rect.height / 2)
+        self.__pivot = (self.__rect.width/2, self.__rect.height / 2)
 
         self.__emergence_x, self.__emergence_y = emergence
         self.__movement_direction = direction
@@ -51,22 +51,31 @@ class Rocket:
         self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False
         self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
-        self.__image, self.__rect = self.__mainActions.blitRotate \
-            (self.__image, (self.__emergence_x, self.__emergence_y), self.__pivot, self.__rotation_angle)
-        self.__target = self.__target_acqesition()
 
-    def __target_acqesition(self):
+        '''make the rocket appear on the right of the caller'''
+        pos = self.__mainActions.circular_emergernce_position((self.__emergence_x, self.__emergence_y),
+                                    (self.__rotation_angle - 90) % 360,self.__caller.get_rect().width/2)
+
+
+        self.__image, self.__rect = self.__mainActions.blitRotate \
+            (self.__image, pos, self.__pivot, self.__rotation_angle)
+        self.__target = self.__target_acquisition()
+
+    '''this target acquisition function is DIFFERENT than the normal target acquisition function - the normal
+    function taking the first available target, this function takes the closest target based on angle - the lesser
+    you need to turn for the target - the target is being prioritized.
+    
+    as the function is different - it will be consideted a different function than the general "get_target" function,
+    as for now it is only being used by the rocket - however it might be changed in the future.'''
+    def __target_acquisition(self):
         lowest_turn = 60  # how far the missile may turn to locate target- valid range: 1 <= x <= 180
         target = None
         for ins in self.__game.inctances:
             if ins.get_instance_struct().get_team() == self.__npcInstance.get_team():
                 continue
-            diff = \
-                self.__npcInstance.get_desired_direction(ins, self.__rect) - self.__movement_direction
-            if diff > 180:
-                diff -= 360
-            elif diff < -180:
-                diff += 360
+
+            cur, diff = self.__npcInstance.make_turn(self.__movement_direction,
+                                                     self.__npcInstance.get_desired_direction(ins, self.__rect))
             diff = abs(diff)
 
             if diff < lowest_turn:
@@ -81,6 +90,7 @@ class Rocket:
     '''move fireball at the pre determined path'''
 
     def move(self):
+
         if self.__explosion is None: #this if condition is for the build in explodion implementation - might be removed
             if self.__target is not None:
                 self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
@@ -101,13 +111,11 @@ class Rocket:
 
             impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
             if impacted:
-                #self.self_destruct = True
                 self.__setup_explosion()
 
             x = pygame.time.get_ticks() - self.__timer
             if x >= 10000:
                 self.__setup_explosion()
-                #self.self_destruct = True
         else: #if the explosion implementation is changed - remove all else block
             if self.__explosion.self_destruct:
                 self.self_destruct = True
@@ -126,18 +134,3 @@ class Rocket:
 
     def __setup_explosion(self):
         self.__explosion = Explosion(self.__mainActions,(self.__rect.x,self.__rect.y))
-
-
-'''if impacted: #and self.__explosion is None:
-        #     self.__explosion = Explosion(self.__mainActions,(200,200))
-        # elif impacted and self.__explosion is not None and not self.__explosion.self_destruct:
-        #     self.__explosion.move()
-        # elif impacted and self.__explosion is not None and self.__explosion.self_destruct:
-        #     self.self_destruct = True
-        #
-        # if self.__mainActions.check_for_boundary_crossing(self.__rect) and not self.__target:
-            self.self_destruct = True
-            
-        # self.__explosion = Explosion(self.__mainActions,(200,200))
-        # for i in range(0,17):
-        #     self.__explosion.move()'''

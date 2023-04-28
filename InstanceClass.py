@@ -42,7 +42,7 @@ class Instance:
 
     '''launch rockets section'''
     def launch_rocket(self,caller, direction, emergernce_pos, speed=2, rate_of_fire=2000):
-        current_time = pygame.time.get_ticks() + rate_of_fire
+        current_time = pygame.time.get_ticks()
         if current_time - caller._last_rocket_shot_time >= rate_of_fire:
             caller._last_rocket_shot_time = current_time
             caller.add_rocket()
@@ -106,10 +106,10 @@ class NPCInstance(Instance):
         direction = (direction - 90) % 360
         return direction
 
-    def calculate_distance(self, target: pygame.rect, rect: pygame.rect) -> int:
+    def calculate_distance(self, target: pygame.rect, rect: pygame.rect) -> int or None:
         dx, dy = self.__you_and_target(rect, target)
         if dx is None:
-            return
+            return None
         return int(math.sqrt(dx ** 2 + dy ** 2))
 
 
