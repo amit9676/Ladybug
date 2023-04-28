@@ -34,6 +34,8 @@ class Rocket:
         self.__winMode = False
 
         self.__timer = pygame.time.get_ticks()
+
+        '''this field is for attached explosion, might be removed with better explosion implementation'''
         self.__explosion = None
 
     def get_rect(self) -> pygame.rect:
@@ -66,10 +68,7 @@ class Rocket:
             elif diff < -180:
                 diff += 360
             diff = abs(diff)
-            # print(f"direction from me to target: {self.__npcInstance.get_desired_direction(ins, self.__rect)}, "
-            #       f"where i am heading: {self.__movement_direction}")
-            # print(f"distance_of_current_direction_and_desired_direction:"
-            #       f" {diff}\n")
+
             if diff < lowest_turn:
                 lowest_turn = diff
                 target = ins
@@ -82,7 +81,7 @@ class Rocket:
     '''move fireball at the pre determined path'''
 
     def move(self):
-        if self.__explosion is None:
+        if self.__explosion is None: #this if condition is for the build in explodion implementation - might be removed
             if self.__target is not None:
                 self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
                 self.__movement_direction, diff = self.__npcInstance.make_turn \
@@ -109,10 +108,8 @@ class Rocket:
             if x >= 10000:
                 self.__setup_explosion()
                 #self.self_destruct = True
-        else:
-            #self.__image = self.__explosion.get_image()
+        else: #if the explosion implementation is changed - remove all else block
             if self.__explosion.self_destruct:
-                #print("x")
                 self.self_destruct = True
             else:
                 self.__explosion.move()
@@ -126,9 +123,6 @@ class Rocket:
         # Draw the image on the surface
         #pygame.draw.rect(surface, (0, 255, 0), self.__rect, 2)
         self.__mainActions.draw(surface, self.__image, self.__rect)
-        # if self.__explosion:
-        #     print("x")
-        #     self.__explosion.draw(surface)
 
     def __setup_explosion(self):
         self.__explosion = Explosion(self.__mainActions,(self.__rect.x,self.__rect.y))
