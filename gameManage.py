@@ -4,6 +4,7 @@ from ladybugPlayerClass import Ladybug_Player
 from flagClass import Flag
 from warWagonClass import WarWagon
 from ladybugNPCClass import Ladybug_NPC
+from discClass import Disc
 from main import main
 
 
@@ -30,13 +31,14 @@ class Game:
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
         #self.__flag = Flag(self.__window_size, self.__mainActions)
-        #self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
+        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
+        self.__disc = Disc(self.__window_size, self.__mainActions,self, "warWagon_model")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
-        #self.inctances.append(self.__warWagon)
+        self.inctances.append(self.__warWagon)
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
@@ -96,11 +98,11 @@ class Game:
         '''war wagons'''
 
         # '''update if war wagon still exists'''
-        # if self.__warWagon is not None:
-        #     self.__warWagon.update()
-        #     if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
-        #         self.inctances.remove(self.__warWagon)
-        #         self.__warWagon = None
+        if self.__warWagon is not None:
+            self.__warWagon.update()
+            if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
+                self.inctances.remove(self.__warWagon)
+                self.__warWagon = None
 
         # Check if the ladybug has reached the flag
         # if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
@@ -119,15 +121,17 @@ class Game:
         # Fill the window with the background color
         self.__window.fill(self.background)
 
+        self.__disc.draw(self.__window)
+
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
         #self.__flag.draw(self.__window)
         self.__ladybug_npc.draw(self.__window)
 
-        # if self.__warWagon:
-        #     self.__warWagon.draw(self.__window)
-        #     for fireball in self.__warWagon.fireballs:
-        #         fireball.draw(self.__window)
+        if self.__warWagon:
+            self.__warWagon.draw(self.__window)
+            for fireball in self.__warWagon.fireballs:
+                fireball.draw(self.__window)
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
@@ -146,6 +150,8 @@ class Game:
 
         if self.__ladybug_npc.flame:
             self.__ladybug_npc.flame.draw(self.__window)
+
+
 
         # Show the message if there is one
         if self.__message:

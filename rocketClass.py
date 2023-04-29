@@ -109,6 +109,8 @@ class Rocket:
             '''rotate the mask according the new image after the rotation'''
             self.__mask = pygame.mask.from_surface(self.__image)
 
+            '''when rocket impacts its target (or any other unit on screen) - set impact mode active and replace
+            rocket animation with explosion animation'''
             impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
             if impacted:
                 self.__setup_explosion()
@@ -120,6 +122,7 @@ class Rocket:
             if self.__explosion.self_destruct:
                 self.self_destruct = True
             else:
+                '''run explosion animation'''
                 self.__explosion.move()
                 self.__image = self.__explosion.get_image()
                 temp = self.__rect.centerx, self.__rect.centery

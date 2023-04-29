@@ -35,7 +35,7 @@ class WarWagon:
         self.__images = [self.__image1, self.__image2, self.__image3]
         self.__originals = [self.__image1, self.__image2, self.__image3]
         self.__rects = [self.__image1.get_rect(), self.__image2.get_rect(), self.__image3.get_rect()]
-        self.__pivots = ((30, 79), (17, 55), (15, 15))
+        self.__pivots = ((30, 79), (18, 55), (15, 15))
 
         '''initlize mask'''
         self.__mask = pygame.mask.from_surface(self.__images[0])
