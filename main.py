@@ -101,10 +101,13 @@ class main:
         game - the game object, with the data on current instances on screen'''
     def impact_identifier(self,projectile, caller, game):
         impacted = []
-        for ins in game.inctances:
+        instances = []
+        instances += game.inctances
+        instances += game.warWagons
+        for ins in instances:
             if ins == caller:
                 continue
             res = self.__check_collision(projectile,ins)
             if res:
-                impacted.append(res)
+                impacted.append(ins)
         return impacted

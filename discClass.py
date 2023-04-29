@@ -31,9 +31,13 @@ class Disc:
         '''initlize mask'''
         self.__mask = pygame.mask.from_surface(self.__image1)
 
-        self.__location = (100,100)
-        self.__rect1.center = self.__location
-        self.__rect2.center = self.__rect1.center
+        # self.__location = (100,100)
+        # self.__rect1.center = self.__location
+        # self.__rect2.center = self.__rect1.center
+        self.__initilizeDisc()
+        self.__timer = pygame.time.get_ticks()
+        self.__duration = random.randint(3,15)
+        self.self_destruct = False
 
 
 
@@ -45,8 +49,12 @@ class Disc:
     '''this method is responsible for the creating itself of the wagon - where to place it (a bit outside the screen)
     and in which direction it will travel'''
 
-    def initilizeDisc(self):
-        pass
+    def __initilizeDisc(self):
+        x = random.randint(20, self.__window[0] - self.__rect1.width / 2)
+        y = random.randint(20, self.__window[1] - self.__rect1.height / 2)
+        self.__rect1.center = (x,y)
+        self.__rect2.center = self.__rect1.center
+        return x, y
 
 
 
@@ -54,7 +62,7 @@ class Disc:
         pass
 
     def get_rect(self):
-        return self.__rect
+        return self.__rect1
 
     def get_mask(self) -> pygame.rect:
         return self.__mask
@@ -66,7 +74,15 @@ class Disc:
     screen - it will be considered as non active and will be self destrcuted.'''
 
     def update(self):
-        pass
+        impacted = self.__mainActions.impact_identifier(self, None, self.__game)
+        if impacted:
+            self.__game.create_warWagon(impacted[0].get_instance_struct().get_team())
+            impacted = []
+            self.self_destruct = True
+
+        x = pygame.time.get_ticks() - self.__timer
+        if x >= self.__duration * 1000:
+            self.self_destruct = True
 
     def draw(self, surface):
         self.__mainActions.draw(surface, self.__image1, self.__rect1)

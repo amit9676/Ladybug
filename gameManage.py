@@ -31,14 +31,16 @@ class Game:
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 
         #self.__flag = Flag(self.__window_size, self.__mainActions)
-        self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
+        #self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
         self.__disc = Disc(self.__window_size, self.__mainActions,self, "warWagon_model")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
+        self.warWagons = []
+        self.discs = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
-        self.inctances.append(self.__warWagon)
+        #self.inctances.append(self.__warWagon)
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
@@ -98,11 +100,21 @@ class Game:
         '''war wagons'''
 
         # '''update if war wagon still exists'''
-        if self.__warWagon is not None:
-            self.__warWagon.update()
-            if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
-                self.inctances.remove(self.__warWagon)
-                self.__warWagon = None
+        # if self.__warWagon is not None:
+        #     self.__warWagon.update()
+        #     if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
+        #         self.inctances.remove(self.__warWagon)
+        #         self.__warWagon = None
+        for w in self.warWagons:
+            w.update()
+            if w.self_destruct and not w.fireballs:
+                self.warWagons.remove(w)
+
+        self.create_disk()
+        for d in self.discs:
+            d.update()
+            if d.self_destruct:
+                self.discs.remove(d)
 
         # Check if the ladybug has reached the flag
         # if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
@@ -121,17 +133,25 @@ class Game:
         # Fill the window with the background color
         self.__window.fill(self.background)
 
-        self.__disc.draw(self.__window)
+        # if self.__disc:
+        #     self.__disc.draw(self.__window)
+        for d in self.discs:
+            d.draw(self.__window)
+
+        for w in self.warWagons:
+            w.draw(self.__window)
+            for fireball in w.fireballs:
+                fireball.draw(self.__window)
 
         # Draw the ladybug and flag on the window
         self.__ladybug.draw(self.__window)
         #self.__flag.draw(self.__window)
         self.__ladybug_npc.draw(self.__window)
 
-        if self.__warWagon:
-            self.__warWagon.draw(self.__window)
-            for fireball in self.__warWagon.fireballs:
-                fireball.draw(self.__window)
+        # if self.__warWagon:
+        #     self.__warWagon.draw(self.__window)
+        #     for fireball in self.__warWagon.fireballs:
+        #         fireball.draw(self.__window)
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(self.__window)
@@ -194,6 +214,16 @@ class Game:
         self.__message = None
         self.__button = None
         self.__win = False
+
+    def create_disk(self):
+        probability = 7500
+        chance = random.randint(1, probability)
+        if chance % probability == 0:
+            self.discs.append(Disc(self.__window_size, self.__mainActions,self, "warWagon_model"))
+
+    def create_warWagon(self, team):
+        self.warWagons.append(WarWagon(self.__window_size, self.__mainActions, self, team))
+        #self.inctances.append(WarWagon(self.__window_size, self.__mainActions, self, team))
 
     def run(self):
         # Set the game's framerate
