@@ -216,6 +216,11 @@ class Game:
         self.__win = False
 
     def create_disk(self):
+        """default value 7500
+        this method is responsible to create a disk at probablity of 1 to 7500.
+        currently - there are 3 types of disk:
+        war wagon - which summons war wagon to help the summoner.
+        rockets ammo, and flamethrower ammo."""
         probability = 7500
         chance = random.randint(1, probability)
         if chance % probability == 0:

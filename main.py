@@ -111,3 +111,7 @@ class main:
             if res:
                 impacted.append(ins)
         return impacted
+
+    '''currently un-used, might change in the future'''
+    def get_random_int(self, low: int, high: int) -> int:
+        return random.randint(low, high)

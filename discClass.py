@@ -20,10 +20,9 @@ class Disc:
         self.__image1 = pygame.transform.scale(self.__image1, (40, 40))
         downscale = self.__image2.get_height() / 30
         new_scale = (self.__image2.get_width() / downscale, self.__image2.get_height() / downscale)
-        if model_dimensions != (0,0):
+        if model_dimensions != (0, 0):
             new_scale = model_dimensions
         self.__image2 = pygame.transform.scale(self.__image2, new_scale)
-
 
         '''Store the images in a list'''
         self.__rect1 = self.__image1.get_rect()
@@ -38,11 +37,9 @@ class Disc:
         # self.__rect2.center = self.__rect1.center
         self.__initilizeDisc()
         self.__timer = pygame.time.get_ticks()
-        self.__duration = random.randint(3, 15)
+        self.__duration = random.randint(1, 8)
         self.self_destruct = False
-
-        '''initlization on screen and destruction fields'''
-        self.self_destruct = False  # public method
+        self.__model = model
 
     '''this method is responsible for the creating itself of the wagon - where to place it (a bit outside the screen)
     and in which direction it will travel'''
@@ -69,7 +66,24 @@ class Disc:
     def update(self):
         impacted = self.__mainActions.impact_identifier(self, None, self.__game)
         if impacted:
-            self.__game.create_warWagon(impacted[0].get_instance_struct().get_team())
+            if self.__model == "warWagon_model":
+                self.__game.create_warWagon(impacted[0].get_instance_struct().get_team())
+            elif self.__model == "rocket":
+                '''the try catch is needed in case some unit (war wagon or any future unit that wont shoot rockets)
+                attempts to pickup the rocket disc (which they can with collision) - that they dont have the method
+                "add_rockets" - the game wont crash.
+                so only when unit that able to fire rockets (lady bug or potential future unit that fires rockets)
+                the rockets will be added.'''
+                try:
+                    impacted[0].add_rockets()
+                except:
+                    pass
+            elif self.__model == "flame001_model":
+                try:
+                    impacted[0].add_flamethrower()
+                except:
+                    pass
+
             impacted = []
             self.self_destruct = True
 

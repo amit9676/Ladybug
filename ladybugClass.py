@@ -52,6 +52,9 @@ class Ladybug:
         self._last_shot_time = 0
         self._last_rocket_shot_time = 0
 
+        self._rockets = 0
+        self._flamethrower = 0
+
     def initilize_instance(self):
         self._rect.x = random.randint(0, self._window[0] - self._rect.width)
         self._rect.y = random.randint(0, self._window[1] - self._rect.height)
@@ -63,6 +66,25 @@ class Ladybug:
 
     def get_mask(self) -> pygame.rect:
         return self._mask
+
+    def add_rockets(self):
+        amount = random.randint(3, 10)
+        self._rockets += amount
+        print(f"added {amount} rockets")
+
+    def decrease_rocket(self):
+        self._rockets -= 1
+
+    def get_rockets_amount(self) -> int:
+        return self._rockets
+
+    def add_flamethrower(self):
+        amount = random.randint(500, 1500)
+        self._flamethrower += amount
+        print(f"added {amount} flames")
+
+    def decrease_flamethrower(self):
+        self._flamethrower -= 1
 
     def get_current_location(self) -> (int, int):
         return self._rect.centerx, self._rect.centery
@@ -131,7 +153,11 @@ class Ladybug:
                                       self._mainActions)
         else:
             self.flame.move(self._current_direction, self._rect.center)
+        self.decrease_flamethrower()
+        print(f"flames: {self._flamethrower}")
 
-    def add_rocket(self):
+    def fire_rocket(self):
         self.rockets.append(Rocket(self._game, self, self._team,self._current_direction, self._rect.center,
                                    self._mainActions,2.5))
+        self.decrease_rocket()
+        print(f"rockets: {self._rockets}")

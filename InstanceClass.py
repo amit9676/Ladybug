@@ -1,4 +1,5 @@
 import math
+import random
 
 import pygame
 
@@ -45,13 +46,17 @@ class Instance:
         current_time = pygame.time.get_ticks()
         if current_time - caller._last_rocket_shot_time >= rate_of_fire:
             caller._last_rocket_shot_time = current_time
-            caller.add_rocket()
+            caller.fire_rocket()
 
     def update_rockets(self, caller):
         for rocket in caller.rockets:
             rocket.move()  # update rocket
             if rocket.self_destruct:
                 caller.rockets.remove(rocket)
+
+    # def add_rockets(self, caller):
+    #     amount = random.randint(3, 10)
+    #     caller.fire_rocket(amount)
     '''end of rockets section'''
 
     '''end of weapons sections'''

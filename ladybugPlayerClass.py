@@ -49,12 +49,12 @@ class Ladybug_Player(Ladybug):
         self.get_instance_struct().update_fireballs(self)
 
         '''flamethrower'''
-        if keys[pygame.K_a]:
+        if keys[pygame.K_a] and self._flamethrower > 0:
             self.manage_flamethrower()
         else:
             self.flame = None
 
         '''rocket'''
-        if keys[pygame.K_s]:
+        if keys[pygame.K_s] and self._rockets > 0:
             self.get_instance_struct().launch_rocket(self, self._current_direction, center)
         self.get_instance_struct().update_rockets(self)
