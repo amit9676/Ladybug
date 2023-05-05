@@ -219,7 +219,13 @@ class Game:
         probability = 7500
         chance = random.randint(1, probability)
         if chance % probability == 0:
-            self.discs.append(Disc(self.__window_size, self.__mainActions,self, "warWagon_model"))
+            chance = random.randint(1, 3)
+            if chance == 1:
+                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "warWagon_model"))
+            elif chance == 2:
+                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "rocket", (12, 28)))
+            else:
+                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "flame001_model"))
 
     def create_warWagon(self, team):
         self.warWagons.append(WarWagon(self.__window_size, self.__mainActions, self, team))

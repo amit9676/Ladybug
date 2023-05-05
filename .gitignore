@@ -2,7 +2,6 @@ flame001.gif
 flame002.gif
 ladybug.psd
 rotateTest.py
-rotateTest.py
 weaponClass.py
 gameManage.exe
 ladybug_draft.png
@@ -12,4 +11,8 @@ sources
 random_point_on_shape_test.py
 warwagonplans.png
 testing
+flame001_10frames.png
+flame002.png
+flame002_original.png
+flame001_original.png
 __pycache__
