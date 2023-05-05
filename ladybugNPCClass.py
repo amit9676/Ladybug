@@ -32,7 +32,6 @@ class Ladybug_NPC(Ladybug):
         if super().update():
             return
 
-        #return
         self.__target = self.get_instance_struct().get_target(self._game)
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         self._current_direction,diff = self.get_instance_struct().make_turn(self._current_direction,self.__desired_direction)

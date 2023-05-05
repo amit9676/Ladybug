@@ -45,7 +45,7 @@ class main:
         rotated_image_rect = rotated_image.get_rect(center=rotated_image_center)
         return rotated_image, rotated_image_rect
 
-    '''this private method is required to convert the game directions (which 0 degrees is up arrow) - to mathematical
+    '''this method is required to convert the game directions (which 0 degrees is up arrow) - to mathematical
     angles which are needed for the rotation calculations, which are based on radians, circles and trigonometry.'''
 
     def game_to_graph_axis_degrees(self, direction: int) -> int:
@@ -57,7 +57,7 @@ class main:
             return True
         return False
 
-    '''given position, direction and radius - return nre position that is at distance of radius at the
+    '''given position, direction and radius - return position that is at distance of radius at the
     given direction'''
     def circular_emergernce_position(self, position: (int, int), direction: int, radius: int) -> (int,int):
         return [position[0] + math.cos(math.radians(direction)) * radius,

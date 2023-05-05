@@ -61,12 +61,6 @@ class Instance:
 
     '''end of weapons sections'''
 
-    # def turn_right(self, current_direction):
-    #     return (current_direction + 1) % 360
-    #
-    # def turn_left(self, current_direction):
-    #     return (current_direction - 1) % 360
-
     def turn(self,current_direction,degree):
         #positive degree - turn right, negative degree - turn left.
         return (current_direction + degree) % 360

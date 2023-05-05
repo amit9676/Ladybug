@@ -114,6 +114,8 @@ class Rocket:
             impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
             if impacted:
                 self.__setup_explosion()
+                impacted[0].decrease_hitPoints(100)
+                #print(impacted[0].get_hitpoints())
 
             x = pygame.time.get_ticks() - self.__timer
             if x >= 10000:

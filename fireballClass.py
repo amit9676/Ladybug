@@ -45,6 +45,8 @@ class Fireball:
         impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
         if impacted:
             self.self_destruct = True
+            impacted[0].decrease_hitPoints(10)
+            #print(impacted[0].get_hitpoints())
 
         if self.__mainActions.check_for_boundary_crossing(self.__rect):
             self.self_destruct = True

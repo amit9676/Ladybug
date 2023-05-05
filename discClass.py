@@ -7,7 +7,15 @@ from InstanceClass import NPCInstance
 
 
 class Disc:
-
+    """The Disc Class is a disc which a moving (ground) unit can take for some assistance.
+    it appears to a random amount of short time, and if activated by a unit when reaching it - it provides the
+    assistance.
+    currently there are 3 kinds of assistance:
+    a. warwagon - the unit that activates the disk summons war wagon to target enemy unit.
+    b. rocket ammunition - activating the rocket disc will give the activating unit a random number of rocket
+    in range of 3-10. note: the ammunition will be given only if the activating unit can fire rockets, else the disc
+    activating will be disregarded.
+    c. flamethrower ammunition - same with rockets but with flamethrower, giving 500 to 1500 flames."""
     def __init__(self, window, mainActions, game, model, model_dimensions: (int, int) = (0, 0)):
         self.__game = game
         self.__mainActions = mainActions
@@ -17,9 +25,13 @@ class Disc:
         self.__window = window
 
         '''Scale the images'''
+        '''default scaling: scale the model to approximate 30 pixels'''
         self.__image1 = pygame.transform.scale(self.__image1, (40, 40))
         downscale = self.__image2.get_height() / 30
         new_scale = (self.__image2.get_width() / downscale, self.__image2.get_height() / downscale)
+
+
+        '''there is also an option to enter custom scale for input'''
         if model_dimensions != (0, 0):
             new_scale = model_dimensions
         self.__image2 = pygame.transform.scale(self.__image2, new_scale)
@@ -41,8 +53,7 @@ class Disc:
         self.self_destruct = False
         self.__model = model
 
-    '''this method is responsible for the creating itself of the wagon - where to place it (a bit outside the screen)
-    and in which direction it will travel'''
+    '''this method is responsible for the creating the disc at random point in the window'''
 
     def __initilizeDisc(self):
         x = random.randint(20, self.__window[0] - self.__rect1.width / 2)
@@ -51,9 +62,6 @@ class Disc:
         self.__rect2.center = self.__rect1.center
         return x, y
 
-    def get_instance_struct(self):
-        pass
-
     def get_rect(self):
         return self.__rect1
 
@@ -61,8 +69,10 @@ class Disc:
         return self.__mask
 
     def get_current_location(self):
-        return self.__rect.centerx, self.__rect.centery
+        return self.__rect1.centerx, self.__rect1.centery
 
+
+    '''update the disc - check for any activations and disable when the lifetime of it exceeded.'''
     def update(self):
         impacted = self.__mainActions.impact_identifier(self, None, self.__game)
         if impacted:

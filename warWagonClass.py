@@ -67,6 +67,8 @@ class WarWagon:
         self.__fireball_emergence_position = self.__mainActions. \
             circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
+        self.__hitpoints = 7000
+
     '''this method is responsible for the creating itself of the wagon - where to place it (a bit outside the screen)
     and in which direction it will travel'''
 
@@ -205,6 +207,14 @@ class WarWagon:
 
     def get_current_location(self):
         return self.__rects[0].centerx, self.__rects[0].centery
+
+    '''hitpoints section'''
+    def get_hitpoints(self) -> int:
+        return self.__hitpoints
+
+    def decrease_hitPoints(self, amount: int):
+        self.__hitpoints -= amount
+    '''end of hitpoints section'''
 
     '''update wagon movement - the wagon will always move straight. no turns - when it will finishes crossing the
     screen - it will be considered as non active and will be self destrcuted.'''

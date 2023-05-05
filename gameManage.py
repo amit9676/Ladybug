@@ -40,7 +40,6 @@ class Game:
         self.discs = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
-        #self.inctances.append(self.__warWagon)
         self.inctances.append(self.__ladybug)
         self.inctances.append(self.__ladybug_npc)
         ''' until here'''
@@ -98,18 +97,12 @@ class Game:
         self.__ladybug_npc.update()
 
         '''war wagons'''
-
-        # '''update if war wagon still exists'''
-        # if self.__warWagon is not None:
-        #     self.__warWagon.update()
-        #     if self.__warWagon.self_destruct and not self.__warWagon.fireballs:
-        #         self.inctances.remove(self.__warWagon)
-        #         self.__warWagon = None
         for w in self.warWagons:
             w.update()
             if w.self_destruct and not w.fireballs:
                 self.warWagons.remove(w)
 
+        '''discs'''
         self.create_disk()
         for d in self.discs:
             d.update()
