@@ -2,6 +2,7 @@ import pygame
 from main import main
 from interface import Interface
 from singlePlayer import Game
+from credits import Credits
 
 class gameManage:
     def __init__(self):
@@ -11,7 +12,9 @@ class gameManage:
         self.__window, self.background = self.__start_initilzation()
 
         self.interface = Interface(self.__window_size,self.__mainActions)
-        self.singlePlayer = Game(self.__window_size,self.__mainActions, self.__window)
+        self.singlePlayer = Game(self.__window_size,self.__mainActions)
+
+        self.credits = Credits(self.__window_size,self.__mainActions)
         self.currentDisplay = self.interface
 
         self.state = 1
@@ -48,6 +51,8 @@ class gameManage:
         elif self.state == 2:
             self.currentDisplay = self.singlePlayer
             self.currentDisplay.update()
+        elif self.state == 5:
+            self.currentDisplay = self.credits
         else:
             self.currentDisplay = None
 
@@ -63,7 +68,8 @@ class gameManage:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.currentDisplay == self.interface:
                         self.state = self.currentDisplay.click_detected()
-                        print(self.state)
+                    if self.currentDisplay == self.credits:
+                        self.state = self.currentDisplay.click_detected()
 
             self.update()
             self.__draw()

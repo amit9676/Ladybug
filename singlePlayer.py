@@ -9,11 +9,10 @@ from main import main
 
 
 class Game:
-    def __init__(self, size, mainActions, window):
+    def __init__(self, size, mainActions):
         # Create the ladybug and flag objects
         self.__mainActions = mainActions
         self.__window_size = size
-        self.__window = window
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
 

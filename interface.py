@@ -38,7 +38,7 @@ class Interface:
             pygame.draw.rect(surface, (225, 150, 80), button)
             button_label = self.button_labels[i]
             button_label_rect = button_label.get_rect(center=button.center)
-            surface.blit(button_label, button_label_rect)
+            self.__mainActions.draw(surface, button_label, button_label_rect)
 
         # Update the display
         pygame.display.update()
@@ -53,23 +53,3 @@ class Interface:
                 return i+2
                 #break
         return 1
-
-    # def button_clicked(self, index) -> int:
-    #     if index == 0:
-    #         print("Single Player clicked")
-    #         return 2
-    #     elif index == 1:
-    #         print("Multiplayer clicked")
-    #         return 3
-    #     elif index == 2:
-    #         print("How to Play clicked")
-    #         return 4
-    #     elif index == 3:
-    #         print("Credits clicked")
-    #         return 5
-    #     return 1
-
-
-# Run the game interface
-#interface = Interface()
-#interface.run()
