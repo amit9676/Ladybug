@@ -48,6 +48,13 @@ class gameManage:
         pygame.display.update()
 
     def update(self):
+
+        if self.state == 2:
+            if self.singlePlayer is None:
+                self.singlePlayer = Game(self.__window_size,self.__mainActions)
+        else:
+            self.singlePlayer = None
+
         if self.state == 1:
             self.currentDisplay = self.interface
         elif self.state == 2:
@@ -70,8 +77,8 @@ class gameManage:
                     pygame.quit()
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.currentDisplay != self.singlePlayer:
-                        self.state = self.currentDisplay.click_detected()
+                    #if self.currentDisplay != self.singlePlayer:
+                    self.state = self.currentDisplay.click_detected()
                     # if self.currentDisplay == self.interface:
                     #     self.state = self.currentDisplay.click_detected()
                     # if self.currentDisplay == self.credits:

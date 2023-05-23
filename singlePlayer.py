@@ -21,9 +21,6 @@ class Game:
         self.information = InformationDisplayClass((0, self.__window_size[1]), self.__mainActions
             , (self.__window_size[0],information_height_size), self.__ladybug.get_ladybug_data())
 
-        #self.__flag = Flag(self.__window_size, self.__mainActions)
-        #self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
-        #self.__disc = Disc(self.__window_size, self.__mainActions,self, "warWagon_model")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
@@ -38,24 +35,9 @@ class Game:
         # Set the game state to "running"
         self.__running = True
         self.__clock = pygame.time.Clock()
-        self.__font = pygame.font.SysFont('Arial', 50)
-        self.__message = None
         self.__playing = True
         self.__win = False
-        self.__button = None
 
-    # def __start_initilzation(self):
-    #     #pygame.init()
-    #
-    #     # Create the window
-    #     window = pygame.display.set_mode((self.__window_size[0], self.__window_size[1]))
-    #     pygame.display.set_caption("Ladybug Game")
-    #     pygame_icon = pygame.image.load('ladybug_red.png')
-    #     pygame.display.set_icon(pygame_icon)
-    #
-    #     # Set the background color
-    #     background_color = (135, 206, 235)
-    #     return window, background_color
 
     def get_window_size(self) -> (int,int):
         return self.__window_size
@@ -68,18 +50,6 @@ class Game:
     def get_inctances(self):
         pass
 
-    '''main method for event handling, such as game over and stuff'''
-
-    def __handle_events(self):
-        # Handle events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                # Quit the game if the user closes the window
-                self.__running = False
-            if event.type == pygame.MOUSEBUTTONDOWN and self.__button is not None:
-                # If the player clicks on the button, reset the game
-                if self.__button.collidepoint(event.pos):
-                    self.__reset()
 
     '''update the game - in here make sure everything in the game is being updated.'''
 
@@ -104,16 +74,6 @@ class Game:
             if d.self_destruct:
                 self.discs.remove(d)
 
-        # Check if the ladybug has reached the flag
-        # if self.__ladybug.get_rect().colliderect(self.__flag.get_rect()):
-        #     self.__win = True
-        #     self.__playing = False
-        #     self.__ladybug.win()
-        #     self.__ladybug_npc.win()
-        #     #self.__flag.win()
-        #     self.__create_button()
-        #     self.__message = None
-        #     self.__show_message("YOU WIN!")
 
     '''main draw method - in here make sure every game instance is being drown'''
 
@@ -136,10 +96,7 @@ class Game:
         #self.__flag.draw(self.__window)
         self.__ladybug_npc.draw(window)
 
-        # if self.__warWagon:
-        #     self.__warWagon.draw(self.__window)
-        #     for fireball in self.__warWagon.fireballs:
-        #         fireball.draw(self.__window)
+
 
         for fireball in self.__ladybug.fireballs:
             fireball.draw(window)
@@ -163,12 +120,15 @@ class Game:
 
     def __reset(self):
         # Reset the game state
-        self.__ladybug.initilize_instance()
-        self.__ladybug_npc.initilize_instance()
-        #self.__flag.initilize_instance()
-        self.__message = None
-        self.__button = None
-        self.__win = False
+        #self.__ladybug.initilize_instance()
+        #self.__ladybug_npc.initilize_instance()
+        self.__ladybug = None
+        self.__ladybug_npc = None
+        self.warWagons = []
+        self.discs = []
+
+
+        #self.__win = False
 
     def create_disk(self):
         """default value 7500
@@ -214,6 +174,12 @@ class Game:
 
         # Quit Pygame
         pygame.quit()
+
+    def click_detected(self) -> int:
+        result = self.information.click_detected()
+        # if result != 2:
+        #     self.__reset()
+        return result
 
 
 # Run the game
