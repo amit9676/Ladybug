@@ -24,7 +24,7 @@ class HowToPlay:
                  "You advance the Ladybug with the up arrow and turn it with the left and right arrow keys.","",
                  "The mission: defeat enemy Ladybug.","",
                  "It can be done with shooting fireballs as default weapon.",
-                 "Aim for the target and press space to shoot it, there are infinite ammunition of it."
+                 "Aim for the target and press space to shoot it, there is infinite ammunition of it."
                  "",
                  "The second weapon is flamethrower - get close to your target and fire it by pressing 'a'."
                  , "ammunition can be gained by flamethrower discs randomly appearing on the game - ",
@@ -72,4 +72,4 @@ class HowToPlay:
             #return self.button_clicked(i)
             return 1
             #break
-        return 5
+        return 4

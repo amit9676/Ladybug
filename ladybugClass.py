@@ -69,6 +69,9 @@ class Ladybug:
     def get_mask(self) -> pygame.rect:
         return self._mask
 
+    def get_ladybug_data(self) -> (int,int,int):
+        return self._hitpoints, self._flamethrower, self._rockets
+
     '''rockets section'''
     def add_rockets(self):
         amount = random.randint(3, 10)
@@ -89,6 +92,9 @@ class Ladybug:
     '''end of rockets section'''
 
     '''flamethrower section'''
+    def get_flamethrower(self) -> int:
+        return self._flamethrower
+
     def add_flamethrower(self):
         amount = random.randint(500, 1500)
         self._flamethrower += amount

@@ -5,6 +5,7 @@ from flagClass import Flag
 from warWagonClass import WarWagon
 from ladybugNPCClass import Ladybug_NPC
 from discClass import Disc
+from informationDisplayClass import InformationDisplayClass
 from main import main
 
 
@@ -12,13 +13,17 @@ class Game:
     def __init__(self, size, mainActions):
         # Create the ladybug and flag objects
         self.__mainActions = mainActions
-        self.__window_size = size
+        #self.__window_size = size
+        information_height_size = 100
+        self.__window_size = (size[0], size[1] - information_height_size)
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
+        self.information = InformationDisplayClass((0, self.__window_size[1])
+            , (self.__window_size[0],information_height_size), self.__ladybug.get_ladybug_data())
 
         #self.__flag = Flag(self.__window_size, self.__mainActions)
         #self.__warWagon = WarWagon(self.__window_size, self.__mainActions, self, "blue")
-        self.__disc = Disc(self.__window_size, self.__mainActions,self, "warWagon_model")
+        #self.__disc = Disc(self.__window_size, self.__mainActions,self, "warWagon_model")
 
         # a list of all inctances (ladybugs, warwagons and future instances)
         self.inctances = []
@@ -52,6 +57,9 @@ class Game:
     #     background_color = (135, 206, 235)
     #     return window, background_color
 
+    def get_window_size(self) -> (int,int):
+        return self.__window_size
+
     '''this method compiles a list of all actives instances on the game - that include player controlled ladybugs,
     NPC ladybugs, war wagon and future instances. this method has to be PUBLIC in order for the "players" to receive
     real time data about other players - instances, and their current location. all inctances must have a public method
@@ -81,6 +89,7 @@ class Game:
         keys = pygame.key.get_pressed()
         self.__ladybug.update(keys)
         self.__ladybug_npc.update()
+        self.information.update(self.__ladybug.get_ladybug_data())
 
         '''war wagons'''
         for w in self.warWagons:
@@ -150,40 +159,7 @@ class Game:
         if self.__ladybug_npc.flame:
             self.__ladybug_npc.flame.draw(window)
 
-
-
-        # Show the message if there is one
-        if self.__message:
-            text_surface = self.__font.render("YOU WIN", True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=self.__message.center)
-            self.__window.blit(text_surface, text_rect)
-
-        # Draw the button
-        if self.__button:
-            pygame.draw.rect(self.__window, (0, 255, 0), self.__button)
-            text_surface = self.__font.render("Play again", True, (255, 255, 255))
-            text_rect = text_surface.get_rect(center=self.__button.center)
-            self.__window.blit(text_surface, text_rect)
-
-        if self.__button and self.__button.collidepoint(pygame.mouse.get_pos()):
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-        else:
-            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-
-    def __show_message(self, message):
-        button_width = 200
-        button_height = 50
-        button_x = self.__window_size[0] // 2 - button_width // 2
-        button_y = self.__window_size[1] // 2 - 100
-        self.__message = pygame.Rect(button_x, button_y, button_width, button_height)
-
-    def __create_button(self):
-        # Create a button to restart the game
-        button_width = 200
-        button_height = 50
-        button_x = self.__window_size[0] // 2 - button_width // 2
-        button_y = self.__window_size[1] // 2
-        self.__button = pygame.Rect(button_x, button_y, button_width, button_height)
+        self.information.draw(window)
 
     def __reset(self):
         # Reset the game state
@@ -202,6 +178,7 @@ class Game:
         rockets ammo, and flamethrower ammo."""
         probability = 7500
         chance = random.randint(1, probability)
+        #location = self.__mainActions.generate_random_location(self.__window_size)
         if chance % probability == 0:
             chance = random.randint(1, 3)
             if chance == 1:
@@ -224,7 +201,7 @@ class Game:
             #self.__handle_events()
 
             # Update the game state
-            self.__update()
+            self.update()
 
             # Draw the game
             self.draw()

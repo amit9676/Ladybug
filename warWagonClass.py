@@ -265,9 +265,9 @@ class WarWagon:
 
         '''when the wagon is no longer on screen - self destruct the object and erase it from memory'''
         if not self.__active:
-            self.__active = not self.__mainActions.check_for_boundary_crossing(self.__rects[0])
+            self.__active = not self.__mainActions.check_for_boundary_crossing(self.__rects[0], self.__window)
         else:
-            self.self_destruct = self.__mainActions.check_for_boundary_crossing(self.__rects[0])
+            self.self_destruct = self.__mainActions.check_for_boundary_crossing(self.__rects[0], self.__window)
 
     def draw(self, surface):
         for img, rect in zip(self.__images, self.__rects):

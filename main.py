@@ -51,9 +51,9 @@ class main:
     def game_to_graph_axis_degrees(self, direction: int) -> int:
         return (90 - direction) % 360
 
-    def check_for_boundary_crossing(self, rect: pygame.rect) -> bool:
-        if rect.right < 0 or rect.left > self.__WINDOW_WIDTH or rect.bottom < 0 \
-                or rect.top > self.__WINDOW_HEIGHT:
+    def check_for_boundary_crossing(self, rect: pygame.rect, window: (int,int)) -> bool:
+        if rect.right < 0 or rect.left > window[0] or rect.bottom < 0 \
+                or rect.top > window[1]:
             return True
         return False
 
@@ -115,3 +115,8 @@ class main:
     '''currently un-used, might change in the future'''
     def get_random_int(self, low: int, high: int) -> int:
         return random.randint(low, high)
+
+    def generate_random_location(self,window) -> (int,int):
+        width = self.get_random_int(0,window[0])
+        height = self.get_random_int(1,window[1])
+        return width, height

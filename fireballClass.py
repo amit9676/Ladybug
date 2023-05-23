@@ -48,7 +48,7 @@ class Fireball:
             impacted[0].decrease_hitPoints(10)
             #print(impacted[0].get_hitpoints())
 
-        if self.__mainActions.check_for_boundary_crossing(self.__rect):
+        if self.__mainActions.check_for_boundary_crossing(self.__rect, self.__game.get_window_size()):
             self.self_destruct = True
 
     def draw(self, surface):

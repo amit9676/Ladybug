@@ -56,7 +56,6 @@ class Flamethrower:
         impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
         for i in impacted:
             i.decrease_hitPoints(1)
-            print(i.get_hitpoints())
 
 
 
