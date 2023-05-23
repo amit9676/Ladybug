@@ -136,7 +136,7 @@ class Game:
         currently - there are 3 types of disk:
         war wagon - which summons war wagon to help the summoner.
         rockets ammo, and flamethrower ammo."""
-        probability = 750
+        probability = 7500
         chance = random.randint(1, probability)
         #location = self.__mainActions.generate_random_location(self.__window_size)
         if chance % probability == 0:
@@ -152,33 +152,9 @@ class Game:
         self.warWagons.append(WarWagon(self.__window_size, self.__mainActions, self, team))
         #self.inctances.append(WarWagon(self.__window_size, self.__mainActions, self, team))
 
-    def run(self):
-        # Set the game's framerate
-        framerate = 300
-
-        while self.__running:
-            # Handle events
-            #self.__handle_events()
-
-            # Update the game state
-            self.update()
-
-            # Draw the game
-            self.draw()
-
-            # Update the display
-            pygame.display.update()
-
-            # Set the framerate of the game
-            self.__clock.tick(framerate)
-
-        # Quit Pygame
-        pygame.quit()
 
     def click_detected(self) -> int:
         result = self.information.click_detected()
-        # if result != 2:
-        #     self.__reset()
         return result
 
 
