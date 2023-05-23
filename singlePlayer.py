@@ -4,7 +4,7 @@ from ladybugPlayerClass import Ladybug_Player
 from flagClass import Flag
 from warWagonClass import WarWagon
 from ladybugNPCClass import Ladybug_NPC
-from discClass import Disc
+from discGameClass import DiscGame
 from informationDisplayClass import InformationDisplayClass
 from main import main
 
@@ -18,7 +18,7 @@ class Game:
         self.__window_size = (size[0], size[1] - information_height_size)
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
-        self.information = InformationDisplayClass((0, self.__window_size[1])
+        self.information = InformationDisplayClass((0, self.__window_size[1]), self.__mainActions
             , (self.__window_size[0],information_height_size), self.__ladybug.get_ladybug_data())
 
         #self.__flag = Flag(self.__window_size, self.__mainActions)
@@ -176,17 +176,17 @@ class Game:
         currently - there are 3 types of disk:
         war wagon - which summons war wagon to help the summoner.
         rockets ammo, and flamethrower ammo."""
-        probability = 7500
+        probability = 750
         chance = random.randint(1, probability)
         #location = self.__mainActions.generate_random_location(self.__window_size)
         if chance % probability == 0:
             chance = random.randint(1, 3)
             if chance == 1:
-                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "warWagon_model"))
+                self.discs.append(DiscGame(self.__window_size, self.__mainActions,self, "warWagon_model"))
             elif chance == 2:
-                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "rocket", (12, 28)))
+                self.discs.append(DiscGame(self.__window_size, self.__mainActions,self, "rocket", (12, 28)))
             else:
-                self.discs.append(Disc(self.__window_size, self.__mainActions,self, "flame001_model"))
+                self.discs.append(DiscGame(self.__window_size, self.__mainActions,self, "flame001_model"))
 
     def create_warWagon(self, team):
         self.warWagons.append(WarWagon(self.__window_size, self.__mainActions, self, team))
