@@ -53,7 +53,7 @@ class Game:
 
     '''update the game - in here make sure everything in the game is being updated.'''
 
-    def update(self):
+    def update(self) -> int:
 
         # Update the ladybug object
         keys = pygame.key.get_pressed()
@@ -73,6 +73,12 @@ class Game:
             d.update()
             if d.self_destruct:
                 self.discs.remove(d)
+
+        if self.__ladybug.get_hitpoints() <= 0:
+            return -1
+        elif self.__ladybug_npc.get_hitpoints() <= 0:
+            return 1
+        return 0
 
 
     '''main draw method - in here make sure every game instance is being drown'''
