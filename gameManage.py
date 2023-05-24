@@ -4,6 +4,7 @@ from interface import Interface
 from singlePlayer import Game
 from credits import Credits
 from messageDisplay import MessageDisplay
+from settings import Setting
 
 class gameManage:
     def __init__(self):
@@ -17,8 +18,9 @@ class gameManage:
 
         self.credits = Credits(self.__window_size,self.__mainActions)
         self.howToPlay = MessageDisplay(self.__window_size, self.__mainActions, 28, False, 4)
-        self.lost = MessageDisplay(self.__window_size, self.__mainActions, 35, True, 6, ["YOU LOSE!"])
-        self.win = MessageDisplay(self.__window_size, self.__mainActions, 35, True, 7, ["YOU WIN!"])
+        self.settings = Setting(self.__window_size, self.__mainActions)
+        self.lost = MessageDisplay(self.__window_size, self.__mainActions, 45, True, 7, ["YOU LOSE!"])
+        self.win = MessageDisplay(self.__window_size, self.__mainActions, 45, True, 8, ["YOU WIN!"])
         self.currentDisplay = self.interface
 
         self.state = 1
@@ -63,16 +65,19 @@ class gameManage:
             self.currentDisplay = self.singlePlayer
             result = self.currentDisplay.update()
             if result == -1:
-                self.state = 6
-            elif result == 1:
                 self.state = 7
+            elif result == 1:
+                self.state = 8
         elif self.state == 4:
             self.currentDisplay = self.howToPlay
         elif self.state == 5:
-            self.currentDisplay = self.credits
+            self.currentDisplay = self.settings
+            #self.currentDisplay.update()
         elif self.state == 6:
-            self.currentDisplay = self.lost
+            self.currentDisplay = self.credits
         elif self.state == 7:
+            self.currentDisplay = self.lost
+        elif self.state == 8:
             self.currentDisplay = self.win
         else:
             self.currentDisplay = None
@@ -92,7 +97,11 @@ class gameManage:
                     # if self.currentDisplay == self.interface:
                     #     self.state = self.currentDisplay.click_detected()
                     # if self.currentDisplay == self.credits:
-                    #     self.state = self.currentDisplay.click_detected()
+                    #     self.state = self.currentDisplay.click_detected
+                elif event.type == pygame.KEYDOWN:
+                    if self.currentDisplay == self.settings:
+                        self.settings.update(event)
+
 
             self.update()
             self.__draw()

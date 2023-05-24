@@ -49,4 +49,4 @@ class Credits:
             #return self.button_clicked(i)
             return 1
             #break
-        return 5
+        return 6

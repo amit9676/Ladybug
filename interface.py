@@ -12,14 +12,15 @@ class Interface:
         # Set the button positions and dimensions
         button_width, button_height = 200, 50
         button_x = self.__window_size[0] // 2 - button_width // 2
-        button_y = self.__window_size[1] // 2 - button_height * 2
+        button_y = self.__window_size[1] // 2 - button_height * 3
 
         # Create the buttons
         self.buttons = [
             pygame.Rect(button_x, button_y, button_width, button_height),  # Single Player
             pygame.Rect(button_x, button_y + button_height * 1.5, button_width, button_height),  # Multiplayer
             pygame.Rect(button_x, button_y + button_height * 3, button_width, button_height),  # How to Play
-            pygame.Rect(button_x, button_y + button_height * 4.5, button_width, button_height)  # Credits
+            pygame.Rect(button_x, button_y + button_height * 4.5, button_width, button_height),  # Settings
+            pygame.Rect(button_x, button_y + button_height * 6, button_width, button_height)  # Credits
         ]
 
         # Set the button labels
@@ -27,6 +28,7 @@ class Interface:
             self.font.render("Single Player", True, (255, 255, 255)),
             self.font.render("Multiplayer", True, (255, 255, 255)),
             self.font.render("How to Play", True, (255, 255, 255)),
+            self.font.render("Settings", True, (255, 255, 255)),
             self.font.render("Credits", True, (255, 255, 255))
         ]
 
