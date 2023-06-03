@@ -7,6 +7,9 @@ from messageDisplay import MessageDisplay
 from settings import Setting
 from artisticDesignClass import ArtisticDesignClass
 
+'''main game class - this class initilize the entire program which is the Ladybug game
+this class consists of objects of all possible options, and management system to handle them.'''
+
 
 class gameManage:
     def __init__(self):
@@ -16,21 +19,23 @@ class gameManage:
         self.__window, self.background = self.__start_initilzation()
         self.__artisticDesign = ArtisticDesignClass()
 
-        self.interface = Interface(self.__window_size, self.__mainActions, self.__artisticDesign)
-        self.singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
+        '''initlize the different game components such as interface, game, credits, settings and instructions.'''
+        self.__interface = Interface(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.__singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
 
-        self.credits = Credits(self.__window_size, self.__mainActions, self.__artisticDesign)
-        self.howToPlay = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 28, False, 4)
-        self.settings = Setting(self.__window_size, self.__mainActions, self.__artisticDesign)
-        self.lost = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 45, True, 7,
-                                   ["YOU LOSE!"])
-        self.win = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 45, True, 8,
-                                  ["YOU WIN!"])
-        self.currentDisplay = self.interface
+        self.__credits = Credits(self.__window_size, self.__mainActions, self.__artisticDesign)
 
-        self.state = 1
+        self.__howToPlay = self.__generate_message_display_window(28, False, 4)
+        self.__settings = Setting(self.__window_size, self.__artisticDesign)
+
+        self.__lost = self.__generate_message_display_window(45,True,7,"YOU LOSE")
+        self.__win = self.__generate_message_display_window(45,True,8,"YOU WIN")
+
+        self.__currentDisplay = self.__interface
+
+        self.__state = 1
         '''1 is for interface, 2 is for singleplayer, 3 is for multiplayer,
-        # 4 is for how to run, 5 is for credits'''
+        # 4 is for how to run, 5 is for settings, 6 is for credits, 7 is for lose, 8 is for win'''
 
         self.__clock = pygame.time.Clock()
 
@@ -49,43 +54,52 @@ class gameManage:
 
     def __draw(self):
         self.__window.fill(self.background)
-        if self.currentDisplay:
-            self.currentDisplay.draw(self.__window)
+        if self.__currentDisplay:
+            self.__currentDisplay.draw(self.__window)
 
         # Update the display
         pygame.display.update()
 
-    def update(self):
+    '''update the different component of the game depend on the situation of the game
+    the variable state is being constantly updated by the run method, and the update knows to update
+    the game interface accordingly.'''
+    def __update(self):
 
-        if self.state == 2:
-            if self.singlePlayer is None:
-                self.singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
+        if self.__state == 2:
+            if self.__singlePlayer is None:
+                self.__singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
         else:
-            self.singlePlayer = None
+            self.__singlePlayer = None
 
-        if self.state == 1:
-            self.currentDisplay = self.interface
-        elif self.state == 2:
-            self.currentDisplay = self.singlePlayer
-            result = self.currentDisplay.update()
+        if self.__state == 1:
+            self.__currentDisplay = self.__interface
+        elif self.__state == 2:
+            self.__currentDisplay = self.__singlePlayer
+            result = self.__currentDisplay.update()
             if result == -1:
-                self.state = 7
+                self.__state = 7
             elif result == 1:
-                self.state = 8
-        elif self.state == 4:
-            self.currentDisplay = self.howToPlay
-        elif self.state == 5:
-            self.currentDisplay = self.settings
+                self.__state = 8
+        elif self.__state == 4:
+            self.__currentDisplay = self.__howToPlay
+        elif self.__state == 5:
+            self.__currentDisplay = self.__settings
             # self.currentDisplay.update()
-        elif self.state == 6:
-            self.currentDisplay = self.credits
-        elif self.state == 7:
-            self.currentDisplay = self.lost
-        elif self.state == 8:
-            self.currentDisplay = self.win
+        elif self.__state == 6:
+            self.__currentDisplay = self.__credits
+        elif self.__state == 7:
+            self.__currentDisplay = self.__lost
+        elif self.__state == 8:
+            self.__currentDisplay = self.__win
         else:
-            self.currentDisplay = None
+            self.__currentDisplay = None
 
+    '''set the framerate and handle user mouse and keyboard input - the run method is the main game loop - in the loop
+    it takes care of event, and passes it to the different objects and methods accordingly.
+    
+    the main game loop also constantly updates the game, draw it and updates the clock.
+    the game framerate is set to 300 - that in order to allow ladybug to rotate at degree of 1 angle with reasonable
+    speed.'''
     def run(self):
         framerate = 300
 
@@ -96,19 +110,27 @@ class gameManage:
                     pygame.quit()
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    # if self.currentDisplay != self.singlePlayer:
-                    self.state = self.currentDisplay.click_detected()
-                    # if self.currentDisplay == self.interface:
-                    #     self.state = self.currentDisplay.click_detected()
-                    # if self.currentDisplay == self.credits:
-                    #     self.state = self.currentDisplay.click_detected
-                elif event.type == pygame.KEYDOWN:
-                    if self.currentDisplay == self.settings:
-                        self.settings.update(event)
+                    self.__state = self.__currentDisplay.click_detected()
 
-            self.update()
+                elif event.type == pygame.KEYDOWN:
+                    if self.__currentDisplay == self.__settings:
+                        self.__settings.update(event)
+
+            self.__update()
             self.__draw()
             self.__clock.tick(framerate)
+
+    '''method to generate message display object with more ease - just enter the parameters and message display object
+    will be returned.'''
+    def __generate_message_display_window(self, font_size: int, play_again_button: bool,
+                                          return_state: int, message=None)-> MessageDisplay:
+        if message is None:
+            return MessageDisplay(size=self.__window_size, mainActions=self.__mainActions,
+                                  artisticDesign=self.__artisticDesign, font_size=font_size, play_again_button=play_again_button,
+                                  returnState=return_state)
+        return MessageDisplay(size=self.__window_size, mainActions=self.__mainActions,
+                              artisticDesign=self.__artisticDesign, font_size=font_size, play_again_button=play_again_button,
+                              returnState=return_state, lines=[message])
 
 
 # Run the game interface

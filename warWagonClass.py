@@ -174,12 +174,10 @@ class WarWagon:
 
     '''calculate a random direction in which the cart will travel - the possible directions are up, down, right, left
     and diagonals it means the possible values are 0, 45, 90, 135, 180, 225, 270, 315'''
-
     def __generate_random_direction(self) -> int:
         return random.randint(0, 7) * 45
 
-    '''aid method to return a random point within the broundries of a rectangle, NOT including the edges'''
-
+    '''aid method to return a random point within the boundaries of a rectangle, NOT including the edges'''
     def __random_point_within_rect(self, rect) -> (int, int):
 
         x = random.randint(rect[0][0] + 1, rect[1][0] - 1)
@@ -189,7 +187,6 @@ class WarWagon:
     '''aid method to return a random point within one of two input rectangles.
     because there is an intersection between the 2 rectangles - the chance the random point will be in the
     intersection is higher than outside of it.'''
-
     def __random_point_within_union(self, rect_a, rect_b) -> (int, int):
         rect = random.choice((rect_a, rect_b))
         return self.__random_point_within_rect(rect)
@@ -272,11 +269,3 @@ class WarWagon:
     def draw(self, surface):
         for img, rect in zip(self.__images, self.__rects):
             self.__mainActions.draw(surface, img, rect)
-
-        # pygame.draw.rect(surface, (255, 0, 0), self.__rects[0], 2)
-        # pygame.draw.rect(surface, (140, 140, 21), self.__rects[1], 2)
-        # pygame.draw.circle(surface, (0, 255, 0), (250, 250), 7, 0)
-        # pygame.draw.circle(surface, (195, 145, 145),  (self.rects[0].centerx,self.rects[0].centery + 25), 7, 0)
-        #pygame.draw.circle(surface, (0, 255, 0), self.__rects[2].center, 2, 0)
-        #pygame.draw.circle(surface, (253, 255, 0), self.__rects[1].center, 2, 0)
-        # pygame.draw.circle(surface, (222, 255, 0), self.pos, 2, 0)

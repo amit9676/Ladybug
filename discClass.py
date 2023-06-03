@@ -33,11 +33,9 @@ class Disc:
         '''Store the images in a list'''
         self._rect1 = self._image1.get_rect()
         #self._rect2 = self._image2.get_rect()
-
         self._model = model
 
-
-
+    '''scale the image object properly into disc dimensions'''
     def _downScale(self, scale, model_dimensions):
         downscale = self._image2.get_height() / scale
         new_scale = (self._image2.get_width() / downscale, self._image2.get_height() / downscale)
@@ -48,7 +46,7 @@ class Disc:
         self._image2 = pygame.transform.scale(self._image2, new_scale)
         self._rect2 = self._image2.get_rect()
 
-
+    '''get disc dimensions'''
     def get_dimensions(self) -> (int,int):
         return self._rect1.width, self._rect1.height
 

@@ -1,8 +1,6 @@
 import pygame
 
 '''this classed handles Sprites - it takes sprite and makes it an animation'''
-
-
 class Sprite:
     """initialization method - it takes the filename, width and height of each frame, amount of rows and
     columns, and frame rate"""
@@ -85,7 +83,6 @@ class Sprite:
 
     '''this function is responsible for the transition from the current frame to the next one, needs to be public
     it returns the desired frame, and the time of transition for further checkups'''
-
     def update_animation_frame(self, initial_time):
         current_time = pygame.time.get_ticks()
         time_since_last_frame = current_time - initial_time
@@ -97,12 +94,10 @@ class Sprite:
         return current_frame, initial_time
 
     '''this method returns current frame'''
-
     def __get_current_frame(self):
         return self.__frames[self.__current_frame_index]
 
     '''this method returns the next frame, and resets the frame index is necessary for looping'''
-
     def __get_next_frame(self):
         self.__current_frame_index += 1
         self.__current_frame_index %= len(self.__frames)
@@ -116,7 +111,6 @@ class Sprite:
         return self.__frames[self.__current_frame_index]
 
     '''drawing method - is used internally for testing (called by run)'''
-
     def __draw(self, current_frame, coordinates, win):
         win.fill((0, 0, 0))
         win.blit(current_frame, coordinates)

@@ -4,5 +4,5 @@ Advance = a
 Turn Right = g
 Turn Left = f2
 Shoot Fireball = backspace
-Shoot Flamethrower = s
+Shoot Flamethrower = q
 Shoot Rocket = caps lock

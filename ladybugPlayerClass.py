@@ -7,7 +7,9 @@ from fireballClass import Fireball
 from flameThrowerClass import Flamethrower
 
 
-# Define the Ladybug class
+# Define the Ladybug
+'''player ladybug class - inherent from ladybug class and contains actions and fields which are for player controlled
+lady bug'''
 class Ladybug_Player(Ladybug):
     """initilize the ladybug with necessary parameters"""
 

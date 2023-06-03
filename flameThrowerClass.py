@@ -3,22 +3,28 @@ import math
 import pygame
 from spriteHandler_Class import Sprite
 
-
+'''flamethrower class, fired by ladybug and warwagon (and with the option of future units)'''
 class Flamethrower:
     """main initlization of the flamethrower - takes the sprite, direction and x,y coordinates from external method.
     in addition initilize from vairables required for the object, such as radius, speed"""
 
     def __init__(self,game,caller, direction, emergence, mainActions, radius=3, speed=5):
-        self.spr = Sprite("flame001_5frames.png", 93, 216, 15, 5, 23, 1)
-        #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0)
+        self.spr = Sprite(filename="flame001_5frames.png", frame_width=93, frame_height=216,
+                          num_rows=15, num_cols=5, frame_rate=23, num_rows_start=1)
+        #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0) #- bigger flamethrower for future use
+
+        '''load initial parameters'''
         self.__image = self.spr.fill_frames_and_get_first_frame()
         self.__mainActions = mainActions
         self.__game = game
         self.__caller = caller
 
+        '''the point of image in which the image will rotate around - in the flamethower image its the center
+        of its width, and bottom of its height'''
         self.pivot = (self.spr.get_dimentions()[0]/2, self.spr.get_dimentions()[1])
+
         direction = self.__mainActions.game_to_graph_axis_degrees(direction)
-        self.radius = radius
+        self.radius = radius  # the distance from caller to pivot emergence point
         pos = self.__mainActions.circular_emergernce_position(emergence,direction,self.radius)
         self.speed = speed
 

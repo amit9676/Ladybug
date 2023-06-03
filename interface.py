@@ -1,5 +1,6 @@
 import pygame
 
+'''this is the interface class - it has all the main menu buttons.'''
 class Interface:
     def __init__(self, size, mainActions, artisticDesign):
 
@@ -8,7 +9,7 @@ class Interface:
         self.__artisticDesign = artisticDesign
 
         # Set the font for the buttons
-        self.font = self.__artisticDesign.get_default_font()
+        self.__font = self.__artisticDesign.get_default_font()
 
         # Set the button positions and dimensions
         button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
@@ -26,11 +27,11 @@ class Interface:
 
         # Set the button labels
         self.button_labels = [
-            self.font.render("Single Player", True, self.__artisticDesign.get_default_button_text_color()),
-            self.font.render("Multiplayer", True, self.__artisticDesign.get_default_button_text_color()),
-            self.font.render("How to Play", True, self.__artisticDesign.get_default_button_text_color()),
-            self.font.render("Settings", True, self.__artisticDesign.get_default_button_text_color()),
-            self.font.render("Credits", True, self.__artisticDesign.get_default_button_text_color())
+            self.__font.render("Single Player", True, self.__artisticDesign.get_default_button_text_color()),
+            self.__font.render("Multiplayer", True, self.__artisticDesign.get_default_button_text_color()),
+            self.__font.render("How to Play", True, self.__artisticDesign.get_default_button_text_color()),
+            self.__font.render("Settings", True, self.__artisticDesign.get_default_button_text_color()),
+            self.__font.render("Credits", True, self.__artisticDesign.get_default_button_text_color())
         ]
 
 
@@ -48,6 +49,8 @@ class Interface:
 
 
 
+    '''click handling function - detect which button clicked - and return the appropiete value - depends
+     on the clicked button to the gameManage class to react accordingly,'''
     def click_detected(self) -> int:
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons):

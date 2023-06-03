@@ -11,6 +11,8 @@ from InstanceClass import NPCInstance
 
 
 # Define the Ladybug class
+'''npc ladybug class - inherent from ladybug class and contains actions and fields which are for computer controlled
+lady bug'''
 class Ladybug_NPC(Ladybug):
     """initilize the ladybug with necessary parameters"""
 
@@ -44,8 +46,8 @@ class Ladybug_NPC(Ladybug):
         #     self.manage_flamethrower()
         # else:
         #     self.flame = None
-        # if diff <= abs(100):
-        #     self.advance()
+        if dist >= abs(100):
+            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
         #print(diff)
 
         if self._rockets > 0:

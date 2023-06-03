@@ -4,7 +4,11 @@ import pygame
 from InstanceClass import NPCInstance
 from explosionClass import Explosion
 
+'''rocket class, fired by ladybug (and with the option of future units).
+unlike the fireball and flamethrower - the rocket is automatically guided at the target mid-flight.
 
+when impacted or 10 seconds passed since rocket launch - the rocket will be replaced by explosion animation, however
+as the explosion is bound to the rocket - it will be considered the same object, they are programmatically.'''
 class Rocket:
     def __init__(self, game, caller, team, direction, emergence, mainActions, speed=2):
         self.__image = pygame.image.load("rocket.png")
@@ -17,7 +21,7 @@ class Rocket:
         self.__mainActions = mainActions
         self.__npcInstance = NPCInstance(team, mainActions)
         self.__speed = speed
-        self.__target = None
+        self.__target = None #as the rocket is guided at target - it needs one to begin with
 
         # Get the rect of the image
         self.__rect = self.__image.get_rect()
@@ -59,18 +63,21 @@ class Rocket:
 
         self.__image, self.__rect = self.__mainActions.blitRotate \
             (self.__image, pos, self.__pivot, self.__rotation_angle)
+
+        '''get target, if None it return - the rocket will fly straight forward until it crosses window boundries and
+        removed from game.'''
         self.__target = self.__target_acquisition()
 
     '''this target acquisition function is DIFFERENT than the normal target acquisition function - the normal
     function taking the first available target, this function takes the closest target based on angle - the lesser
     you need to turn for the target - the target is being prioritized.
     
-    as the function is different - it will be consideted a different function than the general "get_target" function,
+    as the function is different - it will be considered a different function than the general "get_target" function,
     as for now it is only being used by the rocket - however it might be changed in the future.'''
     def __target_acquisition(self):
         lowest_turn = 60  # how far the missile may turn to locate target- valid range: 1 <= x <= 180
         target = None
-        for ins in self.__game.inctances:
+        for ins in self.__game.get_inctances():
             if ins.get_instance_struct().get_team() == self.__npcInstance.get_team():
                 continue
 
@@ -86,8 +93,6 @@ class Rocket:
             return None
         return target
 
-
-    '''move fireball at the pre determined path'''
 
     def move(self):
 
@@ -137,5 +142,7 @@ class Rocket:
         #pygame.draw.rect(surface, (0, 255, 0), self.__rect, 2)
         self.__mainActions.draw(surface, self.__image, self.__rect)
 
+    '''sets up an explosion - basically the rocket changes to explosion animation with different behavior.
+    as the explosion is bound to the rocket - the rocket class will contain an instance of explosion object as well'''
     def __setup_explosion(self):
         self.__explosion = Explosion(self.__mainActions,(self.__rect.x,self.__rect.y))

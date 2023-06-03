@@ -2,7 +2,8 @@ import math
 import pygame
 import random
 
-'''main operations class - this class contains method which are used by multiple classes'''
+'''logic operations class - this class contains method which are used by multiple classes.
+it is a support class containing logic operations used by various units, projectile and objects in general in the game.'''
 
 
 class main:
@@ -102,8 +103,8 @@ class main:
     def impact_identifier(self,projectile, caller, game):
         impacted = []
         instances = []
-        instances += game.inctances
-        instances += game.warWagons
+        instances += game.get_inctances()
+        instances += game.get_wagons()
         for ins in instances:
             if ins == caller:
                 continue

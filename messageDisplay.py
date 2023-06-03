@@ -2,6 +2,8 @@ import pygame
 from typing import List
 #used for def__init line in order to make the pyinstaller work, the normal list[str] wont work on compiled exe
 
+'''this class is used to display a message in the screen, the howtoplay message is chosen as default due to its length.
+however it is possible to enter custum input to override it.'''
 class MessageDisplay:
     def __init__(self, size, mainActions, artisticDesign, font_size: int, play_again_button: bool, returnState: int, lines: List[str] = None):
         self.__mainActions = mainActions
@@ -10,8 +12,8 @@ class MessageDisplay:
         self.__artisticDesign = artisticDesign
 
         # Set the font for the buttons
-        self.font_text = artisticDesign.get_default_font(font_size)
-        self.font_buttons = artisticDesign.get_default_font()
+        self.__font_text = artisticDesign.get_default_font(font_size)
+        self.__font_buttons = artisticDesign.get_default_font()
 
         # Set the button position and dimensions
         button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
@@ -19,18 +21,18 @@ class MessageDisplay:
         button_y = self.__window_size[1] - button_height * 2
 
         # Create the button
-        self.back_button = pygame.Rect(button_x, button_y, button_width, button_height)
+        self.__back_button = pygame.Rect(button_x, button_y, button_width, button_height)
         # Set the button label
-        self.back_button_label = self.font_buttons.render("Back", True, artisticDesign.get_default_button_text_color())
+        self.__back_button_label = self.__font_buttons.render("Back", True, artisticDesign.get_default_button_text_color())
 
-        self.play_again_button = None
-        self.play_again_button_label = None
+        self.__play_again_button = None
+        self.__play_again_button_label = None
 
         if play_again_button:
-            self.play_again_button = pygame.Rect(button_x, button_y, button_width, button_height)
-            self.play_again_button_label = self.font_buttons.render("Play again", True, artisticDesign.get_default_button_text_color())
+            self.__play_again_button = pygame.Rect(button_x, button_y, button_width, button_height)
+            self.__play_again_button_label = self.__font_buttons.render("Play again", True, artisticDesign.get_default_button_text_color())
 
-        self.lines = ["How to play the game:",
+        self.__lines = ["How to play the game:",
                       "You advance the Ladybug with the up arrow and turn it with the left and right arrow keys.","",
                       "The mission: defeat enemy Ladybug.","",
                       "It can be done with shooting fireballs as default weapon.",
@@ -46,17 +48,17 @@ class MessageDisplay:
                       "assist you in the battle.","Be advised - The opponent will also seek out the discs, and you.",
                       "","ENJOY!"]
         if lines is not None:
-            self.lines = lines
+            self.__lines = lines
 
 
     def draw(self, surface):
 
         rendered_lines = []
-        line_height = self.font_text.get_height()
+        line_height = self.__font_text.get_height()
 
         # Render the lines
-        for line in self.lines:
-            rendered_line = self.font_text.render(line, True, self.__artisticDesign.get_default_button_text_color())
+        for line in self.__lines:
+            rendered_line = self.__font_text.render(line, True, self.__artisticDesign.get_default_button_text_color())
             rendered_lines.append(rendered_line)
 
         # Calculate the total height of the text
@@ -74,29 +76,30 @@ class MessageDisplay:
 
         # Draw the button
         y = total_text_height + y_position + 20
-        if self.play_again_button is not None:
-            y = self.play_again_button.y + self.back_button.height + 20
+        if self.__play_again_button is not None:
+            y = self.__play_again_button.y + self.__back_button.height + 20
 
-        self.back_button.y = y
-        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.back_button)
-        button_label_rect = self.back_button_label.get_rect(center=self.back_button.center)
-        surface.blit(self.back_button_label, button_label_rect)
+        self.__back_button.y = y
+        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.__back_button)
+        button_label_rect = self.__back_button_label.get_rect(center=self.__back_button.center)
+        surface.blit(self.__back_button_label, button_label_rect)
 
-        if self.play_again_button is not None:
-            self.play_again_button.y = total_text_height + y_position + 20
-            pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.play_again_button)
-            button_label_rect = self.play_again_button_label.get_rect(center=self.play_again_button.center)
-            surface.blit(self.play_again_button_label, button_label_rect)
+        if self.__play_again_button is not None:
+            self.__play_again_button.y = total_text_height + y_position + 20
+            pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.__play_again_button)
+            button_label_rect = self.__play_again_button_label.get_rect(center=self.__play_again_button.center)
+            surface.blit(self.__play_again_button_label, button_label_rect)
 
 
         # Update the display
         pygame.display.update()
 
+    '''click interaction class - reacts to use clicks, if its on any button - it reacts accordingly'''
     def click_detected(self) -> int:
         mouse_pos = pygame.mouse.get_pos()
-        if self.back_button.collidepoint(mouse_pos):
+        if self.__back_button.collidepoint(mouse_pos):
             return 1
-        if self.play_again_button is not None:
-            if self.play_again_button.collidepoint(mouse_pos):
+        if self.__play_again_button is not None:
+            if self.__play_again_button.collidepoint(mouse_pos):
                 return 2
         return self.__returnState
