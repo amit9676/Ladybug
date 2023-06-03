@@ -1,0 +1,8 @@
+**** DO NOT CHANGE THIS FILE!!!!!!****
+keys:
+Advance = a
+Turn Right = g
+Turn Left = space
+Shoot Fireball = backspace
+Shoot Flamethrower = s
+Shoot Rocket = l

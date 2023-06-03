@@ -36,6 +36,7 @@ class InputBox:
     def handle_event(self, event):
         if self.active:
             self.text = pygame.key.name(event.key)
+        return self.text
 
     def draw(self, surface):
         #pygame.draw.rect(surface, self.rect_color, self.rect, 2)
@@ -52,4 +53,7 @@ class InputBox:
 
     def disable(self):
         self.active = False
+
+    def insert_value(self, value):
+        self.text = value
 
