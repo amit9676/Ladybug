@@ -2,9 +2,9 @@ import pygame
 
 
 class InputBox:
-    def __init__(self, x, y, width, height, font_size=32, text_color=(255, 255, 255)):
+    def __init__(self,artisticDesign, x, y, width, height, font_size=32, text_color=(255, 255, 255)):
         self.rect = pygame.Rect(x, y, width, height)
-        self.font = pygame.font.SysFont('Arial', font_size)
+        self.font = artisticDesign.get_default_font(font_size)
 
 
         '''colors sections, maybe soon the option to have it on input will be added. but for now - hard coded'''

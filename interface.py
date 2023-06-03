@@ -1,16 +1,17 @@
 import pygame
 
 class Interface:
-    def __init__(self, size, mainActions):
+    def __init__(self, size, mainActions, artisticDesign):
 
         self.__mainActions = mainActions
         self.__window_size = size
+        self.__artisticDesign = artisticDesign
 
         # Set the font for the buttons
-        self.font = pygame.font.SysFont('Arial', 32)
+        self.font = self.__artisticDesign.get_default_font()
 
         # Set the button positions and dimensions
-        button_width, button_height = 200, 50
+        button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
         button_x = self.__window_size[0] // 2 - button_width // 2
         button_y = self.__window_size[1] // 2 - button_height * 3
 
@@ -25,11 +26,11 @@ class Interface:
 
         # Set the button labels
         self.button_labels = [
-            self.font.render("Single Player", True, (255, 255, 255)),
-            self.font.render("Multiplayer", True, (255, 255, 255)),
-            self.font.render("How to Play", True, (255, 255, 255)),
-            self.font.render("Settings", True, (255, 255, 255)),
-            self.font.render("Credits", True, (255, 255, 255))
+            self.font.render("Single Player", True, self.__artisticDesign.get_default_button_text_color()),
+            self.font.render("Multiplayer", True, self.__artisticDesign.get_default_button_text_color()),
+            self.font.render("How to Play", True, self.__artisticDesign.get_default_button_text_color()),
+            self.font.render("Settings", True, self.__artisticDesign.get_default_button_text_color()),
+            self.font.render("Credits", True, self.__artisticDesign.get_default_button_text_color())
         ]
 
 
@@ -37,7 +38,7 @@ class Interface:
 
         # Draw the buttons
         for i, button in enumerate(self.buttons):
-            pygame.draw.rect(surface, (225, 150, 80), button)
+            pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), button)
             button_label = self.button_labels[i]
             button_label_rect = button_label.get_rect(center=button.center)
             self.__mainActions.draw(surface, button_label, button_label_rect)

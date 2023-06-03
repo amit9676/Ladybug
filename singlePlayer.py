@@ -10,16 +10,17 @@ from main import main
 
 
 class Game:
-    def __init__(self, size, mainActions):
+    def __init__(self, size, mainActions, artisticDesign):
         # Create the ladybug and flag objects
         self.__mainActions = mainActions
+        self.__artisticDesign = artisticDesign
         #self.__window_size = size
         information_height_size = 100
         self.__window_size = (size[0], size[1] - information_height_size)
         self.__ladybug = Ladybug_Player(self.__window_size, self.__mainActions, self, "red")
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
         self.information = InformationDisplayClass((0, self.__window_size[1]), self.__mainActions
-            , (self.__window_size[0],information_height_size), self.__ladybug.get_ladybug_data())
+            , (self.__window_size[0],information_height_size), self.__ladybug.get_ladybug_data(), artisticDesign)
 
 
         # a list of all inctances (ladybugs, warwagons and future instances)

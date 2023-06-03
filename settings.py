@@ -3,11 +3,12 @@ from inputBox import InputBox
 
 
 class Setting:
-    def __init__(self, size, mainActions):
+    def __init__(self, size, mainActions, artisticDesign):
         self.__mainActions = mainActions
         self.__window_size = size
-        self.font = pygame.font.SysFont('Arial', 32)
-        self.button_size = (100, 50)
+        self.__artisticDesign = artisticDesign
+        self.font = artisticDesign.get_default_font()
+        self.button_size = artisticDesign.get_default_button_dimensions()
 
         self.wordsList = ["Advance", "Turn Right", "Turn Left", "Shoot Fireball", "Shoot Flamethrower",
                           "Shoot Rocket"]
@@ -43,11 +44,11 @@ class Setting:
         self.disabled_save_text_color = (220,220,220)
         self.disable_save_button = False
 
-        self.original_save_background_color = (225, 150, 80)
-        self.original_save_text_color = (255, 255, 255)
+        self.original_save_background_color = artisticDesign.get_default_button_background_color()
+        self.original_save_text_color = artisticDesign.get_default_button_text_color()
 
-        self.save_background_color = (225, 150, 80)
-        self.save_text_color = (255, 255, 255)
+        self.save_background_color = self.original_save_background_color
+        self.save_text_color = self.original_save_text_color
         self.update(None)
 
     def initilize(self):
@@ -57,10 +58,10 @@ class Setting:
         # Calculate the y position to center the text vertically
         y_position = self.__window_size[1] // 2 - total_text_height // 2 - 30
         for i, item in enumerate(self.wordsList):
-            self.texts.append(self.font.render(str(item) + ": ", True, (255, 255, 255)))
+            self.texts.append(self.font.render(str(item) + ": ", True, self.__artisticDesign.get_default_button_text_color()))
             self.texts_rects.append(self.texts[i].get_rect
                                     (center=(self.__center_x, y_position + i * line_height * 1.5)))
-            self.__input_boxes.append(InputBox(x=self.__center_x + 240,
+            self.__input_boxes.append(InputBox(artisticDesign=self.__artisticDesign,x=self.__center_x + 240,
                                                y=y_position + i * line_height * 1.5 - 25, width=150, height=50, font_size=34,
                                                text_color=(255, 255, 0)))
             #self.current_keys.append("")
@@ -83,27 +84,27 @@ class Setting:
         button_label_rect = save_button_label.get_rect(center=self.__save_button.center)
         surface.blit(save_button_label, button_label_rect)
 
-        pygame.draw.rect(surface, (225, 150, 80), self.__back_button)
-        back_button_label = self.font.render("Back", True, (255, 255, 255))
+        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.__back_button)
+        back_button_label = self.font.render("Back", True, self.__artisticDesign.get_default_button_text_color())
         button_label_rect = back_button_label.get_rect(center=self.__back_button.center)
         surface.blit(back_button_label, button_label_rect)
 
-        smaller_font = pygame.font.SysFont('Arial', 17)
+        smaller_font = self.__artisticDesign.get_default_font(17)
         # Draw doubleKeyNote below the save button
-        double_key_note_text = smaller_font.render(self.doubleKeyNote, True, (255, 255, 255))
+        double_key_note_text = smaller_font.render(self.doubleKeyNote, True, self.__artisticDesign.get_default_button_text_color())
         double_key_note_rect = double_key_note_text.get_rect(center=(self.__center_x, self.__save_button.bottom + 20))
         if self.doubleKeyNoteActive:
             surface.blit(double_key_note_text, double_key_note_rect)
 
         # Draw blankKeyNote below the save button and doubleKeyNote
-        blank_key_note_text = smaller_font.render(self.blankKeyNote, True, (255, 255, 255))
+        blank_key_note_text = smaller_font.render(self.blankKeyNote, True,self.__artisticDesign.get_default_button_text_color())
         blank_key_note_rect = blank_key_note_text.get_rect(center=(self.__center_x, double_key_note_rect.bottom + 20))
         if self.blankKeyNoteActive:
             surface.blit(blank_key_note_text, blank_key_note_rect)
 
 
     def update(self, event):
-        print(self.current_keys)
+        #print(self.current_keys)
         for i, item in enumerate(self.__input_boxes):
             if event is not None:
                 self.current_keys[i] = item.handle_event(event)

@@ -5,6 +5,8 @@ from singlePlayer import Game
 from credits import Credits
 from messageDisplay import MessageDisplay
 from settings import Setting
+from artisticDesignClass import ArtisticDesignClass
+
 
 class gameManage:
     def __init__(self):
@@ -12,15 +14,18 @@ class gameManage:
         self.__mainActions = main()
         self.__window_size = self.__mainActions.get_window()
         self.__window, self.background = self.__start_initilzation()
+        self.__artisticDesign = ArtisticDesignClass()
 
-        self.interface = Interface(self.__window_size,self.__mainActions)
-        self.singlePlayer = Game(self.__window_size,self.__mainActions)
+        self.interface = Interface(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
 
-        self.credits = Credits(self.__window_size,self.__mainActions)
-        self.howToPlay = MessageDisplay(self.__window_size, self.__mainActions, 28, False, 4)
-        self.settings = Setting(self.__window_size, self.__mainActions)
-        self.lost = MessageDisplay(self.__window_size, self.__mainActions, 45, True, 7, ["YOU LOSE!"])
-        self.win = MessageDisplay(self.__window_size, self.__mainActions, 45, True, 8, ["YOU WIN!"])
+        self.credits = Credits(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.howToPlay = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 28, False, 4)
+        self.settings = Setting(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.lost = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 45, True, 7,
+                                   ["YOU LOSE!"])
+        self.win = MessageDisplay(self.__window_size, self.__mainActions, self.__artisticDesign, 45, True, 8,
+                                  ["YOU WIN!"])
         self.currentDisplay = self.interface
 
         self.state = 1
@@ -28,7 +33,6 @@ class gameManage:
         # 4 is for how to run, 5 is for credits'''
 
         self.__clock = pygame.time.Clock()
-
 
     def __start_initilzation(self):
         pygame.init()
@@ -55,7 +59,7 @@ class gameManage:
 
         if self.state == 2:
             if self.singlePlayer is None:
-                self.singlePlayer = Game(self.__window_size,self.__mainActions)
+                self.singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
         else:
             self.singlePlayer = None
 
@@ -72,7 +76,7 @@ class gameManage:
             self.currentDisplay = self.howToPlay
         elif self.state == 5:
             self.currentDisplay = self.settings
-            #self.currentDisplay.update()
+            # self.currentDisplay.update()
         elif self.state == 6:
             self.currentDisplay = self.credits
         elif self.state == 7:
@@ -92,7 +96,7 @@ class gameManage:
                     pygame.quit()
                     return
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    #if self.currentDisplay != self.singlePlayer:
+                    # if self.currentDisplay != self.singlePlayer:
                     self.state = self.currentDisplay.click_detected()
                     # if self.currentDisplay == self.interface:
                     #     self.state = self.currentDisplay.click_detected()
@@ -102,11 +106,9 @@ class gameManage:
                     if self.currentDisplay == self.settings:
                         self.settings.update(event)
 
-
             self.update()
             self.__draw()
             self.__clock.tick(framerate)
-
 
 
 # Run the game interface

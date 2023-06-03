@@ -2,7 +2,7 @@
 keys:
 Advance = a
 Turn Right = g
-Turn Left = space
+Turn Left = f2
 Shoot Fireball = backspace
 Shoot Flamethrower = s
-Shoot Rocket = l
+Shoot Rocket = caps lock

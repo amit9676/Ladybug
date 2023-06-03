@@ -2,12 +2,13 @@ import pygame
 from discDisplayClass import DiscDisplay
 
 class InformationDisplayClass:
-    def __init__(self, location: (int, int), mainActions, window: (int,int), information: (int,int,int)):
+    def __init__(self, location: (int, int), mainActions, window: (int,int), information: (int,int,int), artisticDesign):
         self.__mainActions = mainActions
+        self.__artisticDesign = artisticDesign
 
         # Create the rectangle
         self.__rect = pygame.Rect(location[0], location[1], window[0], window[1])
-        self.font = pygame.font.SysFont('Arial', 32)
+        self.font = self.__artisticDesign.get_default_font()
         self.__hp = information[0]
         self.__flamethrower = information[1]
         self.__rockets = information[2]
@@ -33,14 +34,14 @@ class InformationDisplayClass:
         self.__displayRocketDisc = DiscDisplay(self.__display_rocket_pos, self.__mainActions, "rocket", (24, 48))
 
         # Create the button
-        button_width, button_height = 100, 50
+        button_width, button_height = artisticDesign.get_default_button_dimensions()
         button_x = self.__rect.left +(4 * object_spacing)
         button_y = vertical_center - (button_height / 2)
 
         self.button = pygame.Rect(button_x, button_y, button_width, button_height)
 
         # Set the button label
-        self.button_label = self.font.render("Back", True, (255, 255, 255))
+        self.button_label = self.font.render("Back", True, self.__artisticDesign.get_default_button_text_color())
 
     def update(self, information: (int,int,int)):
         self.__hp = information[0]
@@ -52,9 +53,9 @@ class InformationDisplayClass:
         pygame.draw.rect(surface, (30, 125, 162), self.__rect)
 
         # Render the text
-        hp_text = self.font.render(" x " + str(self.__hp), True, (255, 255, 255))
-        flame_text = self.font.render(" x " + str(self.__flamethrower), True, (255, 255, 255))
-        rockets_text = self.font.render(" x " + str(self.__rockets), True, (255, 255, 255))
+        hp_text = self.font.render(" x " + str(self.__hp), True, self.__artisticDesign.get_default_button_text_color())
+        flame_text = self.font.render(" x " + str(self.__flamethrower), True, self.__artisticDesign.get_default_button_text_color())
+        rockets_text = self.font.render(" x " + str(self.__rockets), True, self.__artisticDesign.get_default_button_text_color())
         self.__displayHeartDisc.draw(surface)
         self.__displayFlameDisc.draw(surface)
         self.__displayRocketDisc.draw(surface)
@@ -72,7 +73,7 @@ class InformationDisplayClass:
             center=(self.__display_rocket_pos[0] + self.__displayRocketDisc.get_dimensions()[0],
                     self.__display_rocket_pos[1]))
 
-        pygame.draw.rect(surface, (225, 150, 80), self.button)
+        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.button)
         button_label_rect = self.button_label.get_rect(center=self.button.center)
 
 

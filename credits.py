@@ -1,12 +1,13 @@
 import pygame
 
 class Credits:
-    def __init__(self, size, mainActions):
+    def __init__(self, size, mainActions, artisticDesign):
         self.__mainActions = mainActions
         self.__window_size = size
+        self.__artisticDesign = artisticDesign
 
         # Set the font for the buttons
-        self.font = pygame.font.SysFont('Arial', 32)
+        self.font = artisticDesign.get_default_font()
         self.__image = pygame.image.load("eagle.png")
         scaling = 1.02
         new_eagle_scale = (self.__image.get_width()/scaling, self.__image.get_height()/scaling)
@@ -16,7 +17,7 @@ class Credits:
         self.__rect.y = 10
 
         # Set the button position and dimensions
-        button_width, button_height = 200, 50
+        button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
         button_x = self.__window_size[0] // 2 - button_width // 2
         button_y = self.__window_size[1] - button_height * 2
 
@@ -24,7 +25,7 @@ class Credits:
         self.button = pygame.Rect(button_x, button_y, button_width, button_height)
 
         # Set the button label
-        self.button_label = self.font.render("Back", True, (255, 255, 255))
+        self.button_label = self.font.render("Back", True, artisticDesign.get_default_button_text_color())
 
     def draw(self, surface):
         # Draw the image
@@ -36,7 +37,7 @@ class Credits:
         surface.blit(text, text_rect)
 
         # Draw the button
-        pygame.draw.rect(surface, (225, 150, 80), self.button)
+        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.button)
         button_label_rect = self.button_label.get_rect(center=self.button.center)
         surface.blit(self.button_label, button_label_rect)
 

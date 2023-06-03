@@ -3,31 +3,32 @@ from typing import List
 #used for def__init line in order to make the pyinstaller work, the normal list[str] wont work on compiled exe
 
 class MessageDisplay:
-    def __init__(self, size, mainActions, font_size: int, play_again_button: bool, returnState: int, lines: List[str] = None):
+    def __init__(self, size, mainActions, artisticDesign, font_size: int, play_again_button: bool, returnState: int, lines: List[str] = None):
         self.__mainActions = mainActions
         self.__window_size = size
         self.__returnState = returnState
+        self.__artisticDesign = artisticDesign
 
         # Set the font for the buttons
-        self.font_text = pygame.font.SysFont('Arial', font_size)
-        self.font_buttons = pygame.font.SysFont('Arial', 32)
+        self.font_text = artisticDesign.get_default_font(font_size)
+        self.font_buttons = artisticDesign.get_default_font()
 
         # Set the button position and dimensions
-        button_width, button_height = 200, 50
+        button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
         button_x = self.__window_size[0] // 2 - button_width // 2
         button_y = self.__window_size[1] - button_height * 2
 
         # Create the button
         self.back_button = pygame.Rect(button_x, button_y, button_width, button_height)
         # Set the button label
-        self.back_button_label = self.font_buttons.render("Back", True, (255, 255, 255))
+        self.back_button_label = self.font_buttons.render("Back", True, artisticDesign.get_default_button_text_color())
 
         self.play_again_button = None
         self.play_again_button_label = None
 
         if play_again_button:
             self.play_again_button = pygame.Rect(button_x, button_y, button_width, button_height)
-            self.play_again_button_label = self.font_buttons.render("Play again", True, (255, 255, 255))
+            self.play_again_button_label = self.font_buttons.render("Play again", True, artisticDesign.get_default_button_text_color())
 
         self.lines = ["How to play the game:",
                       "You advance the Ladybug with the up arrow and turn it with the left and right arrow keys.","",
@@ -55,7 +56,7 @@ class MessageDisplay:
 
         # Render the lines
         for line in self.lines:
-            rendered_line = self.font_text.render(line, True, (255, 255, 255))
+            rendered_line = self.font_text.render(line, True, self.__artisticDesign.get_default_button_text_color())
             rendered_lines.append(rendered_line)
 
         # Calculate the total height of the text
@@ -77,13 +78,13 @@ class MessageDisplay:
             y = self.play_again_button.y + self.back_button.height + 20
 
         self.back_button.y = y
-        pygame.draw.rect(surface, (225, 150, 80), self.back_button)
+        pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.back_button)
         button_label_rect = self.back_button_label.get_rect(center=self.back_button.center)
         surface.blit(self.back_button_label, button_label_rect)
 
         if self.play_again_button is not None:
             self.play_again_button.y = total_text_height + y_position + 20
-            pygame.draw.rect(surface, (225, 150, 80), self.play_again_button)
+            pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), self.play_again_button)
             button_label_rect = self.play_again_button_label.get_rect(center=self.play_again_button.center)
             surface.blit(self.play_again_button_label, button_label_rect)
 
