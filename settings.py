@@ -190,6 +190,7 @@ class Setting:
             self.__values_initilize(self.__current_keys_values, self.__original_keys_values)
             self.__values_initilize(self.__current_keys_strings, self.__original_keys_strings)
             self.__insert_to_input_box(self.__current_keys_strings, self.__current_keys_values)
+            self.update(None)
             return 1
         elif activated_input_box:
             return 5
