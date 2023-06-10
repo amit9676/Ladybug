@@ -1,3 +1,5 @@
+import collections
+
 import pygame
 from inputBox import InputBox
 
@@ -214,11 +216,21 @@ class Setting:
 
     '''this is in order to check if any of the entered keys are invalid pygame keys'''
     def __checkIllegalKeys(self) -> bool:
-        #1073742086
+        counter = collections.Counter(self.__current_keys_values)
         for attr_name in dir(pygame):
             if attr_name.startswith('K_'):
                 attr_value = getattr(pygame, attr_name)
                 if isinstance(attr_value, int) and attr_value in self.__current_keys_values:
-                    if attr_value is None:
-                        return True
-        return False
+                    counter[attr_value] = 0
+
+        return any(counter.values())
+
+        #1073742086
+        # for attr_name in dir(pygame):
+        #     if attr_name.startswith('K_'):
+        #         attr_value = getattr(pygame, attr_name)
+        #         if isinstance(attr_value, int) and attr_value in self.__current_keys_values:
+        #             keys = pygame.key.get_pressed()
+        #             if not keys[attr_value]:
+        #                 return True
+        # return False
