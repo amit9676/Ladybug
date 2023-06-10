@@ -20,8 +20,8 @@ class Disc:
     a. DiscGame - used by the game - full information at the DiscGame class.
     b. DiscDisplay - used to display current ammunition to the player.
     """
-    def __init__(self, mainActions, model, model_dimensions: (int, int) = (0, 0)):
-        self._mainActions = mainActions
+    def __init__(self, logicSupport, model, model_dimensions: (int, int) = (0, 0)):
+        self._logicSupport = logicSupport
         # self.__instance_struct = NPCInstance(team, mainActions)
         self._image1 = pygame.image.load("disc_model.png")
         self._image2 = pygame.image.load(f"{model}.png")
@@ -51,6 +51,6 @@ class Disc:
         return self._rect1.width, self._rect1.height
 
     def draw(self, surface):
-        self._mainActions.draw(surface, self._image1, self._rect1)
-        self._mainActions.draw(surface, self._image2, self._rect2)
+        self._logicSupport.draw(surface, self._image1, self._rect1)
+        self._logicSupport.draw(surface, self._image2, self._rect2)
         #pygame.draw.rect(surface, (30, 125, 162), self._rect1,2)

@@ -2,9 +2,9 @@ import pygame
 
 class Credits:
     """credit page - in here credits will be shown"""
-    def __init__(self, size, mainActions, artisticDesign):
+    def __init__(self, size, logicSupport, artisticDesign):
         """initialize general data from logic and design support class"""
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
         self.__window_size = size
         self.__artisticDesign = artisticDesign
 

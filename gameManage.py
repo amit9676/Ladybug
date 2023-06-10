@@ -1,5 +1,5 @@
 import pygame
-from main import main
+from logicSupportClass import LogicSupportClass
 from interface import Interface
 from singlePlayer import Game
 from credits import Credits
@@ -14,16 +14,16 @@ this class consists of objects of all possible options, and management system to
 class gameManage:
     def __init__(self):
 
-        self.__mainActions = main()
-        self.__window_size = self.__mainActions.get_window()
+        self.__logicSupport = LogicSupportClass()
+        self.__window_size = self.__logicSupport.get_window()
         self.__window, self.background = self.__start_initilzation()
         self.__artisticDesign = ArtisticDesignClass()
 
         '''initlize the different game components such as interface, game, credits, settings and instructions.'''
-        self.__interface = Interface(self.__window_size, self.__mainActions, self.__artisticDesign)
-        self.__singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.__interface = Interface(self.__window_size, self.__logicSupport, self.__artisticDesign)
+        self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign)
 
-        self.__credits = Credits(self.__window_size, self.__mainActions, self.__artisticDesign)
+        self.__credits = Credits(self.__window_size, self.__logicSupport, self.__artisticDesign)
 
         self.__howToPlay = self.__generate_message_display_window(28, False, 4)
         self.__settings = Setting(self.__window_size, self.__artisticDesign)
@@ -67,7 +67,7 @@ class gameManage:
 
         if self.__state == 2:
             if self.__singlePlayer is None:
-                self.__singlePlayer = Game(self.__window_size, self.__mainActions, self.__artisticDesign)
+                self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign)
         else:
             self.__singlePlayer = None
 
@@ -125,10 +125,10 @@ class gameManage:
     def __generate_message_display_window(self, font_size: int, play_again_button: bool,
                                           return_state: int, message=None)-> MessageDisplay:
         if message is None:
-            return MessageDisplay(size=self.__window_size, mainActions=self.__mainActions,
+            return MessageDisplay(size=self.__window_size, logicSupport=self.__logicSupport,
                                   artisticDesign=self.__artisticDesign, font_size=font_size, play_again_button=play_again_button,
                                   returnState=return_state)
-        return MessageDisplay(size=self.__window_size, mainActions=self.__mainActions,
+        return MessageDisplay(size=self.__window_size, logicSupport=self.__logicSupport,
                               artisticDesign=self.__artisticDesign, font_size=font_size, play_again_button=play_again_button,
                               returnState=return_state, lines=[message])
 

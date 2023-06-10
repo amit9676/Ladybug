@@ -5,8 +5,8 @@ from typing import List
 '''this class is used to display a message in the screen, the howtoplay message is chosen as default due to its length.
 however it is possible to enter custum input to override it.'''
 class MessageDisplay:
-    def __init__(self, size, mainActions, artisticDesign, font_size: int, play_again_button: bool, returnState: int, lines: List[str] = None):
-        self.__mainActions = mainActions
+    def __init__(self, size, logicSupport, artisticDesign, font_size: int, play_again_button: bool, returnState: int, lines: List[str] = None):
+        self.__logicSupport = logicSupport
         self.__window_size = size
         self.__returnState = returnState
         self.__artisticDesign = artisticDesign

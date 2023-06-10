@@ -13,9 +13,9 @@ so to keep things precise - the connection of Instance classes and the units who
 
 
 class Instance:
-    def __init__(self, team, mainActions):
+    def __init__(self, team, logicSupport):
         self._team = team
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
 
 
     def get_team(self):
@@ -29,7 +29,7 @@ class Instance:
 
         if current_time - caller._last_shot_time >= rate_of_fire:
             caller._last_shot_time = current_time
-            caller.fireballs.append(Fireball(game, caller, direction, emergernce_pos, self.__mainActions, speed))
+            caller.fireballs.append(Fireball(game, caller, direction, emergernce_pos, self.__logicSupport, speed))
             '''add new fireball instance to the fireball list'''
 
     def update_fireballs(self, caller):
@@ -71,8 +71,8 @@ instances such as npc lady bugs, war wagon and more'''
 
 
 class NPCInstance(Instance):
-    def __init__(self, team, mainActions):
-        super().__init__(team, mainActions)
+    def __init__(self, team, logicSupport):
+        super().__init__(team, logicSupport)
 
 
     '''npc section - the method below are for npc units only.'''

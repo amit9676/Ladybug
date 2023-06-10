@@ -15,11 +15,11 @@ class WarWagon:
     in the active time (the time the wagon is visible on screen - the machine gun mounted on it will fire at any enemies
     it will locate."""
 
-    def __init__(self, window, mainActions, game, team):
+    def __init__(self, window, logicSupport, game, team):
         '''wagon initlization'''
         self.__game = game
-        self.__mainActions = mainActions
-        self.__instance_struct = NPCInstance(team, mainActions)
+        self.__logicSupport = logicSupport
+        self.__instance_struct = NPCInstance(team, logicSupport)
         self.__image1 = pygame.image.load("wagon.png")
         self.__image2 = pygame.image.load("machine_gun.png")
         self.__image3 = pygame.image.load(f"ladybug_{team}.png")
@@ -64,7 +64,7 @@ class WarWagon:
         self.fireballs = [] # list of current fireballs fired from wagon
 
         '''make the fireball emerge at the end of the barrel (51 pixels away from center)'''
-        self.__fireball_emergence_position = self.__mainActions. \
+        self.__fireball_emergence_position = self.__logicSupport. \
             circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
         self.__hitpoints = 7000
@@ -75,7 +75,7 @@ class WarWagon:
     def initilizeWagon(self):
         direction = self.__generate_random_direction() # create random direction in which the wagon will go
         self.__current_direction = direction  # game direction of wagon movement
-        rotate_direction = self.__mainActions.game_to_graph_axis_degrees(direction)
+        rotate_direction = self.__logicSupport.game_to_graph_axis_degrees(direction)
         self.__rotate_direction = rotate_direction  # graph direction of wagon movement
         self.__rotate_direction2 = self.__rotate_direction  # graph direction of wagon aiming
 
@@ -83,8 +83,8 @@ class WarWagon:
 
         '''rotation of all object images'''
         for i in range(1, len(self.__images)):
-            self.__images[i], self.__rects[i] = self.__mainActions.blitRotate(self.__images[i], (x, y),
-                                                                              self.__pivots[i], rotate_direction)
+            self.__images[i], self.__rects[i] = self.__logicSupport.blitRotate(self.__images[i], (x, y),
+                                                                               self.__pivots[i], rotate_direction)
 
         return x, y
 
@@ -220,19 +220,19 @@ class WarWagon:
 
         '''move wagon on screen'''
         self.__current_x, self.__current_y, a, b = \
-            self.__mainActions.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
+            self.__logicSupport.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
         #a,b = 200,200
 
 
         '''rotate images according developments'''
-        self.__images[0], self.__rects[0] = self.__mainActions.blitRotate(self.__originals[0], (a, b),
-                                                                          self.__pivots[0], self.__rotate_direction)
+        self.__images[0], self.__rects[0] = self.__logicSupport.blitRotate(self.__originals[0], (a, b),
+                                                                           self.__pivots[0], self.__rotate_direction)
 
-        self.__images[1], self.__rects[1] = self.__mainActions.blitRotate(self.__originals[1], (a, b),
-                                                                          self.__pivots[1], self.__rotate_direction2)
+        self.__images[1], self.__rects[1] = self.__logicSupport.blitRotate(self.__originals[1], (a, b),
+                                                                           self.__pivots[1], self.__rotate_direction2)
 
-        self.__images[2], self.__rects[2] = self.__mainActions.blitRotate(self.__originals[2], (a, b),
-                                                                          self.__pivots[2], self.__rotate_direction2)
+        self.__images[2], self.__rects[2] = self.__logicSupport.blitRotate(self.__originals[2], (a, b),
+                                                                           self.__pivots[2], self.__rotate_direction2)
 
         '''update mask according the rotation'''
         self.__mask = pygame.mask.from_surface(self.__images[0])
@@ -245,7 +245,7 @@ class WarWagon:
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.__rects[2])
 
         '''move machine toward target'''
-        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2)
+        self.__rotate_direction2 = self.__logicSupport.game_to_graph_axis_degrees(self.__rotate_direction2)
         self.__rotate_direction2, diff = self.get_instance_struct(). \
             make_turn(self.__rotate_direction2 % 360, self.__desired_direction)
 
@@ -256,16 +256,16 @@ class WarWagon:
         self.get_instance_struct().update_fireballs(self)
 
         '''update shooting data for next time'''
-        self.__rotate_direction2 = self.__mainActions.game_to_graph_axis_degrees(self.__rotate_direction2)
-        self.__fireball_emergence_position = self.__mainActions.\
+        self.__rotate_direction2 = self.__logicSupport.game_to_graph_axis_degrees(self.__rotate_direction2)
+        self.__fireball_emergence_position = self.__logicSupport.\
             circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
         '''when the wagon is no longer on screen - self destruct the object and erase it from memory'''
         if not self.__active:
-            self.__active = not self.__mainActions.check_for_boundary_crossing(self.__rects[0], self.__window)
+            self.__active = not self.__logicSupport.check_for_boundary_crossing(self.__rects[0], self.__window)
         else:
-            self.self_destruct = self.__mainActions.check_for_boundary_crossing(self.__rects[0], self.__window)
+            self.self_destruct = self.__logicSupport.check_for_boundary_crossing(self.__rects[0], self.__window)
 
     def draw(self, surface):
         for img, rect in zip(self.__images, self.__rects):
-            self.__mainActions.draw(surface, img, rect)
+            self.__logicSupport.draw(surface, img, rect)

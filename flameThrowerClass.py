@@ -8,14 +8,14 @@ class Flamethrower:
     """main initlization of the flamethrower - takes the sprite, direction and x,y coordinates from external method.
     in addition initilize from vairables required for the object, such as radius, speed"""
 
-    def __init__(self,game,caller, direction, emergence, mainActions, radius=3, speed=5):
+    def __init__(self, game, caller, direction, emergence, logicSupport, radius=3, speed=5):
         self.spr = Sprite(filename="flame001_5frames.png", frame_width=93, frame_height=216,
                           num_rows=15, num_cols=5, frame_rate=23, num_rows_start=1)
         #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0) #- bigger flamethrower for future use
 
         '''load initial parameters'''
         self.__image = self.spr.fill_frames_and_get_first_frame()
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
         self.__game = game
         self.__caller = caller
 
@@ -23,9 +23,9 @@ class Flamethrower:
         of its width, and bottom of its height'''
         self.pivot = (self.spr.get_dimentions()[0]/2, self.spr.get_dimentions()[1])
 
-        direction = self.__mainActions.game_to_graph_axis_degrees(direction)
+        direction = self.__logicSupport.game_to_graph_axis_degrees(direction)
         self.radius = radius  # the distance from caller to pivot emergence point
-        pos = self.__mainActions.circular_emergernce_position(emergence,direction,self.radius)
+        pos = self.__logicSupport.circular_emergernce_position(emergence, direction, self.radius)
         self.speed = speed
 
         self.original = self.__image
@@ -34,7 +34,7 @@ class Flamethrower:
         self.__rect = self.original.get_rect()
         self.__mask = pygame.mask.from_surface(self.__image)
 
-        self.__image, self.__rect = self.__mainActions.blitRotate(self.original,pos,self.pivot,direction)
+        self.__image, self.__rect = self.__logicSupport.blitRotate(self.original, pos, self.pivot, direction)
         self.self_destruct = False
 
 
@@ -53,13 +53,13 @@ class Flamethrower:
     where to place the flamethrower, and a direction from which to extract the required angle for rotation'''
 
     def move(self, direction, emergence):
-        direction = self.__mainActions.game_to_graph_axis_degrees(direction)
-        pos = self.__mainActions.circular_emergernce_position(emergence,direction,self.radius)
-        self.__image, self.__rect = self.__mainActions.blitRotate(self.original, pos, self.pivot, direction )
+        direction = self.__logicSupport.game_to_graph_axis_degrees(direction)
+        pos = self.__logicSupport.circular_emergernce_position(emergence, direction, self.radius)
+        self.__image, self.__rect = self.__logicSupport.blitRotate(self.original, pos, self.pivot, direction)
         self.original, self.current_time = self.spr.update_animation_frame(self.current_time)
         self.__mask = pygame.mask.from_surface(self.__image)
 
-        impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
+        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game)
         for i in impacted:
             i.decrease_hitPoints(1)
 
@@ -68,4 +68,4 @@ class Flamethrower:
     ''' draw the flame on screen'''
     def draw(self, surface):
         # Draw the image on the surface
-        self.__mainActions.draw(surface,self.__image,self.__rect)
+        self.__logicSupport.draw(surface, self.__image, self.__rect)

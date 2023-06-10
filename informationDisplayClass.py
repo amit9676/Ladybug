@@ -5,11 +5,11 @@ from discDisplayClass import DiscDisplay
 it is activated during the game, and placed on the bottom of it - it gets the location and constant
  information from the game class.'''
 class InformationDisplayClass:
-    def __init__(self, location: (int, int), mainActions, window: (int,int),
+    def __init__(self, location: (int, int), logicSupport, window: (int, int),
                  information: (int,int,int), artisticDesign):
 
         '''get logic and design support classes'''
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
         self.__artisticDesign = artisticDesign
 
         # Create the rectangle
@@ -22,9 +22,9 @@ class InformationDisplayClass:
         self.__rockets = information[2]
 
         '''set the display discs which will be displayed with the data'''
-        self.__displayHeartDisc = DiscDisplay((location[0] + 50, location[1] + 20), self.__mainActions, "heart", (40, 40))
-        self.__displayFlameDisc = DiscDisplay(location, self.__mainActions, "flame001_model")
-        self.__displayRocketDisc = DiscDisplay(location, self.__mainActions, "rocket", (12, 28))
+        self.__displayHeartDisc = DiscDisplay((location[0] + 50, location[1] + 20), self.__logicSupport, "heart", (40, 40))
+        self.__displayFlameDisc = DiscDisplay(location, self.__logicSupport, "flame001_model")
+        self.__displayRocketDisc = DiscDisplay(location, self.__logicSupport, "rocket", (12, 28))
 
         # Calculate the horizontal spacing between the display objects
         object_spacing = self.__rect.width // 5
@@ -38,9 +38,9 @@ class InformationDisplayClass:
         self.__display_rocket_pos = (self.__rect.left +(3 * object_spacing), vertical_center)
 
         # Create the display objects
-        self.__displayHeartDisc = DiscDisplay(self.__display_heart_pos, self.__mainActions, "heart", (40, 40))
-        self.__displayFlameDisc = DiscDisplay(self.__display_flame_pos, self.__mainActions, "flame001_model")
-        self.__displayRocketDisc = DiscDisplay(self.__display_rocket_pos, self.__mainActions, "rocket", (24, 48))
+        self.__displayHeartDisc = DiscDisplay(self.__display_heart_pos, self.__logicSupport, "heart", (40, 40))
+        self.__displayFlameDisc = DiscDisplay(self.__display_flame_pos, self.__logicSupport, "flame001_model")
+        self.__displayRocketDisc = DiscDisplay(self.__display_rocket_pos, self.__logicSupport, "rocket", (24, 48))
 
         # Create the button
         button_width, button_height = artisticDesign.get_default_button_dimensions()

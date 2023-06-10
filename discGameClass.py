@@ -12,9 +12,9 @@ class DiscGame(Disc):
      - it provides the required assistance.
 
     this is a child class of Disc, and its main purpose to be picked up by ladybugs for bonuses."""
-    def __init__(self, window, mainActions, game, model, model_dimensions: (int, int) = (0, 0)):
+    def __init__(self, window, logicSupport, game, model, model_dimensions: (int, int) = (0, 0)):
         self.__game = game
-        super().__init__(mainActions, model, model_dimensions)
+        super().__init__(logicSupport, model, model_dimensions)
 
         self.__window = window
 
@@ -48,7 +48,7 @@ class DiscGame(Disc):
 
     '''update the disc - check for any activations and disable when the lifetime of it exceeded.'''
     def update(self):
-        impacted = self._mainActions.impact_identifier(self, None, self.__game)
+        impacted = self._logicSupport.impact_identifier(self, None, self.__game)
         if impacted:
             if self._model == "warWagon_model":
                 self.__game.create_warWagon(impacted[0].get_instance_struct().get_team())

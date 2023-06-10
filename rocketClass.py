@@ -10,7 +10,7 @@ unlike the fireball and flamethrower - the rocket is automatically guided at the
 when impacted or 10 seconds passed since rocket launch - the rocket will be replaced by explosion animation, however
 as the explosion is bound to the rocket - it will be considered the same object, they are programmatically.'''
 class Rocket:
-    def __init__(self, game, caller, team, direction, emergence, mainActions, speed=2):
+    def __init__(self, game, caller, team, direction, emergence, logicSupport, speed=2):
         self.__image = pygame.image.load("rocket.png")
         self.__image = pygame.transform.scale(self.__image, (12, 28))
         self.__original = self.__image
@@ -18,8 +18,8 @@ class Rocket:
 
         self.__game = game
         self.__caller = caller #the unit that launched the rocket
-        self.__mainActions = mainActions
-        self.__npcInstance = NPCInstance(team, mainActions)
+        self.__logicSupport = logicSupport
+        self.__npcInstance = NPCInstance(team, logicSupport)
         self.__speed = speed
         self.__target = None #as the rocket is guided at target - it needs one to begin with
 
@@ -33,7 +33,7 @@ class Rocket:
         self.__desired_direction = 0
 
         self.__initilizeRocket()
-        self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
+        self.__current_x, self.__current_y = self.__logicSupport.initilize_currents(self.__rect.x, self.__rect.y)
         self.self_destruct = False
         self.__winMode = False
 
@@ -52,16 +52,16 @@ class Rocket:
         return self.__explosion
 
     def __initilizeRocket(self):
-        self.__current_x, self.__current_y = self.__mainActions.initilize_currents(self.__rect.x, self.__rect.y)
+        self.__current_x, self.__current_y = self.__logicSupport.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False
-        self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
+        self.__rotation_angle = self.__logicSupport.game_to_graph_axis_degrees(self.__movement_direction)
 
         '''make the rocket appear on the right of the caller'''
-        pos = self.__mainActions.circular_emergernce_position((self.__emergence_x, self.__emergence_y),
-                                    (self.__rotation_angle - 90) % 360,self.__caller.get_rect().width/2)
+        pos = self.__logicSupport.circular_emergernce_position((self.__emergence_x, self.__emergence_y),
+                                                               (self.__rotation_angle - 90) % 360, self.__caller.get_rect().width / 2)
 
 
-        self.__image, self.__rect = self.__mainActions.blitRotate \
+        self.__image, self.__rect = self.__logicSupport.blitRotate \
             (self.__image, pos, self.__pivot, self.__rotation_angle)
 
         '''get target, if None it return - the rocket will fly straight forward until it crosses window boundries and
@@ -77,7 +77,10 @@ class Rocket:
     def __target_acquisition(self):
         lowest_turn = 60  # how far the missile may turn to locate target- valid range: 1 <= x <= 180
         target = None
-        for ins in self.__game.get_inctances():
+        instances = []
+        instances += self.__game.get_inctances()
+        instances += self.__game.get_wagons()
+        for ins in instances:
             if ins.get_instance_struct().get_team() == self.__npcInstance.get_team():
                 continue
 
@@ -101,14 +104,14 @@ class Rocket:
                 self.__desired_direction = self.__npcInstance.get_desired_direction(self.__target, self.__rect)
                 self.__movement_direction, diff = self.__npcInstance.make_turn \
                     (self.__movement_direction, self.__desired_direction,0.5)
-                self.__rotation_angle = self.__mainActions.game_to_graph_axis_degrees(self.__movement_direction)
+                self.__rotation_angle = self.__logicSupport.game_to_graph_axis_degrees(self.__movement_direction)
 
             '''calculation the location in which the rocket should go'''
             self.__current_x, self.__current_y, self.__rect.x, self.__rect.y = \
-                self.__mainActions.advance(self.__movement_direction, self.__speed, self.__current_x, self.__current_y)
+                self.__logicSupport.advance(self.__movement_direction, self.__speed, self.__current_x, self.__current_y)
 
             '''rotate the rocket according to the new location'''
-            self.__image, self.__rect = self.__mainActions.blitRotate \
+            self.__image, self.__rect = self.__logicSupport.blitRotate \
                 (self.__original, (self.__rect.centerx, self.__rect.centery), self.__pivot, self.__rotation_angle)
 
             '''rotate the mask according the new image after the rotation'''
@@ -116,7 +119,7 @@ class Rocket:
 
             '''when rocket impacts its target (or any other unit on screen) - set impact mode active and replace
             rocket animation with explosion animation'''
-            impacted = self.__mainActions.impact_identifier(self, self.__caller, self.__game)
+            impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game)
             if impacted:
                 self.__setup_explosion()
                 impacted[0].decrease_hitPoints(100)
@@ -140,9 +143,9 @@ class Rocket:
     def draw(self, surface):
         # Draw the image on the surface
         #pygame.draw.rect(surface, (0, 255, 0), self.__rect, 2)
-        self.__mainActions.draw(surface, self.__image, self.__rect)
+        self.__logicSupport.draw(surface, self.__image, self.__rect)
 
     '''sets up an explosion - basically the rocket changes to explosion animation with different behavior.
     as the explosion is bound to the rocket - the rocket class will contain an instance of explosion object as well'''
     def __setup_explosion(self):
-        self.__explosion = Explosion(self.__mainActions,(self.__rect.x,self.__rect.y))
+        self.__explosion = Explosion(self.__logicSupport, (self.__rect.x, self.__rect.y))

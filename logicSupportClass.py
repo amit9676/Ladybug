@@ -6,7 +6,7 @@ import random
 it is a support class containing logic operations used by various units, projectile and objects in general in the game.'''
 
 
-class main:
+class LogicSupportClass:
     def __init__(self):
         self.__WINDOW_WIDTH = 1000
         self.__WINDOW_HEIGHT = 750

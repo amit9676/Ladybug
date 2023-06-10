@@ -6,23 +6,23 @@ from warWagonClass import WarWagon
 from ladybugNPCClass import Ladybug_NPC
 from discGameClass import DiscGame
 from informationDisplayClass import InformationDisplayClass
-from main import main
+from logicSupportClass import LogicSupportClass
 
 '''Single player class - holds all data that related to the game, manages it and updates it. in contant with all various
 game units, projectile and ect to get current game data.'''
 
 class Game:
-    def __init__(self, size, mainActions, artisticDesign):
+    def __init__(self, size, logicSupport, artisticDesign):
         # Create the ladybug and flag objects
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
         self.__artisticDesign = artisticDesign
         # self.__window_size = size
         information_height_size = 100
         self.__window_size = (size[0], size[1] - information_height_size)
-        self.__ladybug = Ladybug_Player(window=self.__window_size, mainActions=self.__mainActions, game=self,
+        self.__ladybug = Ladybug_Player(window=self.__window_size, logicSupport=self.__logicSupport, game=self,
                                         team="red")
-        self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__mainActions, self, "blue")
-        self.__information = InformationDisplayClass((0, self.__window_size[1]), self.__mainActions
+        self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__logicSupport, self, "blue")
+        self.__information = InformationDisplayClass((0, self.__window_size[1]), self.__logicSupport
                                                      , (self.__window_size[0], information_height_size),
                                                      self.__ladybug.get_ladybug_data(), artisticDesign)
 
@@ -137,14 +137,14 @@ class Game:
         if chance % probability == 0:
             chance = random.randint(1, 3)
             if chance == 1:
-                self.__discs.append(DiscGame(self.__window_size, self.__mainActions, self, "warWagon_model"))
+                self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "warWagon_model"))
             elif chance == 2:
-                self.__discs.append(DiscGame(self.__window_size, self.__mainActions, self, "rocket", (12, 28)))
+                self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "rocket", (12, 28)))
             else:
-                self.__discs.append(DiscGame(self.__window_size, self.__mainActions, self, "flame001_model"))
+                self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "flame001_model"))
 
     def create_warWagon(self, team):
-        self.__warWagons.append(WarWagon(window=self.__window_size, mainActions=self.__mainActions, game=self, team=team))
+        self.__warWagons.append(WarWagon(window=self.__window_size, logicSupport=self.__logicSupport, game=self, team=team))
 
     '''if user click on back button in information object, so data passes through this class from/to
      gameManage-information display'''

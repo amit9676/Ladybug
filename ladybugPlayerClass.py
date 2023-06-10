@@ -13,8 +13,8 @@ lady bug'''
 class Ladybug_Player(Ladybug):
     """initilize the ladybug with necessary parameters"""
 
-    def __init__(self, window, mainActions, game, team):
-        super().__init__(window, mainActions, game, team)
+    def __init__(self, window, logicSupport, game, team):
+        super().__init__(window, logicSupport, game, team)
 
     def update(self, keys):
         if self._winMode:
@@ -34,7 +34,7 @@ class Ladybug_Player(Ladybug):
 
         '''advance'''
         if keys[pygame.K_UP]:
-            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
+            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._logicSupport.advance(self._current_direction, self._speed, self._current_x, self._current_y)
 
         '''keep center point for smooth ladybug movment'''
         center = self._rotate_image()

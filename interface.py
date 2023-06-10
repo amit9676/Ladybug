@@ -2,9 +2,9 @@ import pygame
 
 '''this is the interface class - it has all the main menu buttons.'''
 class Interface:
-    def __init__(self, size, mainActions, artisticDesign):
+    def __init__(self, size, logicSupport, artisticDesign):
 
-        self.__mainActions = mainActions
+        self.__logicSupport = logicSupport
         self.__window_size = size
         self.__artisticDesign = artisticDesign
 
@@ -42,7 +42,7 @@ class Interface:
             pygame.draw.rect(surface, self.__artisticDesign.get_default_button_background_color(), button)
             button_label = self.button_labels[i]
             button_label_rect = button_label.get_rect(center=button.center)
-            self.__mainActions.draw(surface, button_label, button_label_rect)
+            self.__logicSupport.draw(surface, button_label, button_label_rect)
 
         # Update the display
         pygame.display.update()

@@ -16,11 +16,11 @@ lady bug'''
 class Ladybug_NPC(Ladybug):
     """initilize the ladybug with necessary parameters"""
 
-    def __init__(self, window, mainActions, game, team):
-        super().__init__(window, mainActions, game, team)
+    def __init__(self, window, logicSupport, game, team):
+        super().__init__(window, logicSupport, game, team)
 
         '''which inctance this inctance is targeting at any moment'''
-        self._instance_struct: NPCInstance = NPCInstance(team, mainActions)
+        self._instance_struct: NPCInstance = NPCInstance(team, logicSupport)
         self.__target = None
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         #print(f"a: {self.__desired_direction}")
@@ -47,7 +47,7 @@ class Ladybug_NPC(Ladybug):
         # else:
         #     self.flame = None
         if dist >= abs(100):
-            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._mainActions.advance(self._current_direction, self._speed, self._current_x, self._current_y)
+            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._logicSupport.advance(self._current_direction, self._speed, self._current_x, self._current_y)
         #print(diff)
 
         if self._rockets > 0:
