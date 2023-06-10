@@ -21,6 +21,7 @@ class InputBox:
 
         self.__text_color = text_color
         self.__text = ""
+        self.__eve = 0
         self.__active = False
         self.__rect_border_color = self.__inactive_border_color
         self.__rect_background_color = self.__inactive_background_color
@@ -47,7 +48,8 @@ class InputBox:
     def handle_event(self, event):
         if self.__active:
             self.__text = pygame.key.name(event.key)
-        return self.__text
+            self.__eve = event.key
+        return self.__text, self.__eve
 
     def draw(self, surface):
         pygame.draw.rect(surface, self.__rect_background_color, self.__rect)
@@ -65,5 +67,6 @@ class InputBox:
 
     '''allow insertion of value from outer classes - it is used on game initialization when the setting class
     reads the current values from file, and update the input box objects accordingly.'''
-    def insert_value(self, value):
-        self.__text = value
+    def insert_value(self, text, code):
+        self.__text = text
+        self.__eve = code

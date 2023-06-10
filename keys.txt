@@ -1,8 +1,8 @@
 **** DO NOT CHANGE THIS FILE!!!!!!****
 keys:
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = up
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = right
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = left
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = a
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = s
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = d
+Advance = 1073741906
+Turn Right = 1073741903
+Turn Left = 1073741904
+Shoot Fireball = 32
+Shoot Flamethrower = 97
+Shoot Rocket = 115

@@ -30,11 +30,14 @@ class Setting:
         self.__texts_rects = []
         self.__current_keys_strings = []
         self.__original_keys_strings = []
+
+        '''values of event(key)'''
         self.__current_keys_values = []
+        self.__original_keys_values = []
 
         self.__initilize()  # initilize the input boxes and texts
 
-        '''some nots about possible saving requirements'''
+        '''some notes about possible saving requirements'''
         self.__doubleKeyNote = "two or more of options have the same keyboard key, please change it"
         self.__doubleKeyNoteActive = False
         self.__blankKeyNote = "one or more key input box is blank, please set a key for it"
@@ -75,16 +78,23 @@ class Setting:
                                                font_size=34,
                                                text_color=(255, 255, 0)))
 
-        self.__original_keys_strings = self.__fileHandler.readFromFile()  # read initial values from file
+        self.__original_keys_values = self.__fileHandler.readFromFile()  # read initial values from file
+        for item in self.__original_keys_values:
+            self.__original_keys_strings.append(pygame.key.name(int(item)))
+        self.__values_initilize(self.__current_keys_values, self.__original_keys_values)
         self.__values_initilize(self.__current_keys_strings, self.__original_keys_strings)
+        self.__insert_to_input_box(self.__current_keys_strings, self.__current_keys_values)
+
+    def __insert_to_input_box(self, words, codes):
+        '''insert to each input box the inital extracted from the file'''
+        for i, item in enumerate(self.__input_boxes):
+            item.insert_value(words[i], codes[i])
 
     def __values_initilize(self, coping, copied):
         coping.clear()
         for item in copied:
             coping.append(item)
-        '''insert to each input box the inital extracted from the file'''
-        for i, item in enumerate(self.__input_boxes):
-            item.insert_value(coping[i])
+
 
     def draw(self, surface):
         for text, text_rect in zip(self.__texts, self.__texts_rects):
@@ -125,7 +135,7 @@ class Setting:
         '''update the current keys from input boxes'''
         for i, item in enumerate(self.__input_boxes):
             if event is not None:
-                self.__current_keys_strings[i] = item.handle_event(event)
+                self.__current_keys_strings[i], self.__current_keys_values[i] = item.handle_event(event)
 
         '''update the save button properties according to the new developments.
         if any key is blank (which should be occured, but safe guard exists nonetheless), or if the same key is used
@@ -157,12 +167,18 @@ class Setting:
             '''saving is allowed only when all requirements are met (no dual, no blank)'''
 
             if not self.__disable_save_button:
-                self.__fileHandler.writeToFile(self.__wordsList, self.__current_keys_strings)
+                self.__fileHandler.writeToFile(self.__wordsList, self.__current_keys_values)
+                #self.__values_initilize(self.__original_keys_strings, self.__current_keys_strings)
+                self.__values_initilize(self.__original_keys_values, self.__current_keys_values)
                 self.__values_initilize(self.__original_keys_strings, self.__current_keys_strings)
+                self.__insert_to_input_box(self.__current_keys_strings, self.__current_keys_values)
+
                 return 1
             return 5
         elif self.__back_button.collidepoint(mouse_pos):
+            self.__values_initilize(self.__current_keys_values, self.__original_keys_values)
             self.__values_initilize(self.__current_keys_strings, self.__original_keys_strings)
+            self.__insert_to_input_box(self.__current_keys_strings, self.__current_keys_values)
             return 1
         elif activated_input_box:
             return 5
@@ -180,9 +196,9 @@ class Setting:
     '''this functions determine if two (or more) input boxes contain the same (valid) value.'''
 
     def __checkDoubleKey(self) -> bool:
-        lst = self.__current_keys_strings
+        lst = self.__current_keys_values
         for i in range(len(lst) - 1):
             for j in range(i + 1, len(lst)):
-                if lst[i] == lst[j] and lst[i] != "":
+                if lst[i] == lst[j]:
                     return True
         return False

@@ -18,12 +18,17 @@ class Ladybug_Player(Ladybug):
         self.__keys = self.__get_pygame_key(keys)
 
 
-    def __get_pygame_key(self,event_key):
-        output_keys = []
-        for item in event_key:
-            output_keys.append(pygame.key.key_code(item))
-            #pygame_key = pygame.key.key_code(event_key)
-        return output_keys
+    def __get_pygame_key(self,codes):
+        pygame_keys = [None] * len(codes)
+        for attr_name in dir(pygame):
+
+            if attr_name.startswith('K_'):
+                attr_value = getattr(pygame, attr_name)
+                if isinstance(attr_value, int) and str(attr_value) in codes:
+                    index = codes.index(str(attr_value))
+                    pygame_keys[index] = attr_value
+        return pygame_keys
+
 
     # def __get_pygame_key(self, keys):
     #     # Get the attribute name for the Pygame key constant

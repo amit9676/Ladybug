@@ -6,7 +6,8 @@ in setting class. the keys are read in game initialization so the player can cho
 it is used by gameManage class and settings class.'''
 class FileHandler:
     def __init__(self):
-        self.__default_keys = ['up', 'right', 'left', 'space', 'a', 's']
+        #self.__default_keys = ['up', 'right', 'left', 'space', 'a', 's']
+        self.__default_keys = [1073741906, 1073741903, 1073741904, 32, 97, 115]
         self.__wordList = ["Advance", "Turn Right", "Turn Left", "Shoot Fireball", "Shoot Flamethrower",
                            "Shoot Rocket"]
 
@@ -20,7 +21,7 @@ class FileHandler:
             file.write("keys:\n")
 
             for i in range(len(wordsList)):
-                line = f"{wordsList} = {currentKeys[i]}\n"
+                line = f"{wordsList[i]} = {currentKeys[i]}\n"
                 file.write(line)
 
     '''this function reads from the file the current keys, used on initialization, for now it remains public as
