@@ -6,6 +6,7 @@ from credits import Credits
 from messageDisplay import MessageDisplay
 from settings import Setting
 from artisticDesignClass import ArtisticDesignClass
+from fileHandlerClass import FileHandler
 
 '''main game class - this class initilize the entire program which is the Ladybug game
 this class consists of objects of all possible options, and management system to handle them.'''
@@ -18,15 +19,18 @@ class gameManage:
         self.__window_size = self.__logicSupport.get_window()
         self.__window, self.background = self.__start_initilzation()
         self.__artisticDesign = ArtisticDesignClass()
+        self.__fileHandler = FileHandler()
+        self.__keys = self.__fileHandler.readFromFile()
+        #print(keys)
 
         '''initlize the different game components such as interface, game, credits, settings and instructions.'''
         self.__interface = Interface(self.__window_size, self.__logicSupport, self.__artisticDesign)
-        self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign)
+        self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign, self.__keys)
 
         self.__credits = Credits(self.__window_size, self.__logicSupport, self.__artisticDesign)
 
         self.__howToPlay = self.__generate_message_display_window(28, False, 4)
-        self.__settings = Setting(self.__window_size, self.__artisticDesign)
+        self.__settings = Setting(self.__window_size, self.__artisticDesign, self.__fileHandler)
 
         self.__lost = self.__generate_message_display_window(45,True,7,"YOU LOSE")
         self.__win = self.__generate_message_display_window(45,True,8,"YOU WIN")
@@ -67,9 +71,11 @@ class gameManage:
 
         if self.__state == 2:
             if self.__singlePlayer is None:
-                self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign)
+                self.__keys = self.__fileHandler.readFromFile()
+                self.__singlePlayer = Game(self.__window_size, self.__logicSupport, self.__artisticDesign, self.__keys)
         else:
             self.__singlePlayer = None
+
 
         if self.__state == 1:
             self.__currentDisplay = self.__interface

@@ -3,6 +3,6 @@ keys:
 ['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = up
 ['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = right
 ['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = left
+['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = space
 ['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = a
 ['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = s
-['Advance', 'Turn Right', 'Turn Left', 'Shoot Fireball', 'Shoot Flamethrower', 'Shoot Rocket'] = d

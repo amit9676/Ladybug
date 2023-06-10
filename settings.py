@@ -8,14 +8,14 @@ to decide which keyboard key will trigget the action.'''
 
 
 class Setting:
-    def __init__(self, size, artisticDesign):
+    def __init__(self, size, artisticDesign, fileHandler):
         self.__window_size = size
         self.__artisticDesign = artisticDesign
+        self.__fileHandler = fileHandler
         self.__font = artisticDesign.get_default_font()
         self.__button_size = artisticDesign.get_default_button_dimensions()
 
-        self.__wordsList = ["Advance", "Turn Right", "Turn Left", "Shoot Fireball", "Shoot Flamethrower",
-                            "Shoot Rocket"]
+        self.__wordsList = self.__fileHandler.get_words_list()
         self.__input_boxes = []
 
         self.__center_x = self.__window_size[0] // 2
@@ -28,7 +28,9 @@ class Setting:
         '''text list fields initialization'''
         self.__texts = []
         self.__texts_rects = []
-        self.__current_keys = []
+        self.__current_keys_strings = []
+        self.__original_keys_strings = []
+        self.__current_keys_values = []
 
         self.__initilize()  # initilize the input boxes and texts
 
@@ -73,10 +75,16 @@ class Setting:
                                                font_size=34,
                                                text_color=(255, 255, 0)))
 
-        self.__current_keys = self.readFromFile()  # read initial values from file
+        self.__original_keys_strings = self.__fileHandler.readFromFile()  # read initial values from file
+        self.__values_initilize(self.__current_keys_strings, self.__original_keys_strings)
+
+    def __values_initilize(self, coping, copied):
+        coping.clear()
+        for item in copied:
+            coping.append(item)
         '''insert to each input box the inital extracted from the file'''
         for i, item in enumerate(self.__input_boxes):
-            item.insert_value(self.__current_keys[i])
+            item.insert_value(coping[i])
 
     def draw(self, surface):
         for text, text_rect in zip(self.__texts, self.__texts_rects):
@@ -117,7 +125,7 @@ class Setting:
         '''update the current keys from input boxes'''
         for i, item in enumerate(self.__input_boxes):
             if event is not None:
-                self.__current_keys[i] = item.handle_event(event)
+                self.__current_keys_strings[i] = item.handle_event(event)
 
         '''update the save button properties according to the new developments.
         if any key is blank (which should be occured, but safe guard exists nonetheless), or if the same key is used
@@ -147,11 +155,14 @@ class Setting:
 
         if self.__save_button.collidepoint(mouse_pos):
             '''saving is allowed only when all requirements are met (no dual, no blank)'''
+
             if not self.__disable_save_button:
-                self.__writeToFile()
+                self.__fileHandler.writeToFile(self.__wordsList, self.__current_keys_strings)
+                self.__values_initilize(self.__original_keys_strings, self.__current_keys_strings)
                 return 1
             return 5
         elif self.__back_button.collidepoint(mouse_pos):
+            self.__values_initilize(self.__current_keys_strings, self.__original_keys_strings)
             return 1
         elif activated_input_box:
             return 5
@@ -161,7 +172,7 @@ class Setting:
     '''this function determines if one or more input boxes does not has any value'''
 
     def __checkBlankKey(self) -> bool:
-        for item in self.__current_keys:
+        for item in self.__current_keys_strings:
             if item == "":
                 return True
         return False
@@ -169,39 +180,9 @@ class Setting:
     '''this functions determine if two (or more) input boxes contain the same (valid) value.'''
 
     def __checkDoubleKey(self) -> bool:
-        lst = self.__current_keys
+        lst = self.__current_keys_strings
         for i in range(len(lst) - 1):
             for j in range(i + 1, len(lst)):
                 if lst[i] == lst[j] and lst[i] != "":
                     return True
         return False
-
-    '''this function writes to keys.txt the saved keys for each action. thus the playing keys are updates'''
-
-    def __writeToFile(self):
-        with open("keys.txt", "w") as file:
-            file.write("**** DO NOT CHANGE THIS FILE!!!!!!****\n")
-            file.write("keys:\n")
-
-            for i in range(len(self.__wordsList)):
-                line = f"{self.__wordsList[i]} = {self.__current_keys[i]}\n"
-                file.write(line)
-
-    '''this function reads from the file the current keys, used on initialization, for now it remains public as
-    it should be used on game initialization to get the playing keys. it might move to "main" class
-    (or future name - logicSupport)'''
-
-    def readFromFile(self):
-        settings = []
-
-        with open("keys.txt", 'r') as file:
-            lines = file.readlines()
-
-            # Skip the first line (header)
-            for line in lines[2:]:
-                line = line.strip()  # Remove leading/trailing whitespaces
-                if line:
-                    key, value = line.split(' = ')
-                    settings.append(value)
-
-        return settings

@@ -12,7 +12,7 @@ from logicSupportClass import LogicSupportClass
 game units, projectile and ect to get current game data.'''
 
 class Game:
-    def __init__(self, size, logicSupport, artisticDesign):
+    def __init__(self, size, logicSupport, artisticDesign, keys):
         # Create the ladybug and flag objects
         self.__logicSupport = logicSupport
         self.__artisticDesign = artisticDesign
@@ -20,7 +20,7 @@ class Game:
         information_height_size = 100
         self.__window_size = (size[0], size[1] - information_height_size)
         self.__ladybug = Ladybug_Player(window=self.__window_size, logicSupport=self.__logicSupport, game=self,
-                                        team="red")
+                                        team="red", keys=keys)
         self.__ladybug_npc = Ladybug_NPC(self.__window_size, self.__logicSupport, self, "blue")
         self.__information = InformationDisplayClass((0, self.__window_size[1]), self.__logicSupport
                                                      , (self.__window_size[0], information_height_size),
