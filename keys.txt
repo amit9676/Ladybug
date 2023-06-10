@@ -1,6 +1,6 @@
 **** DO NOT CHANGE THIS FILE!!!!!!****
 keys:
-Advance = 1073741906
+Advance = 1073742086
 Turn Right = 1073741903
 Turn Left = 1073741904
 Shoot Fireball = 32

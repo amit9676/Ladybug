@@ -42,6 +42,8 @@ class Setting:
         self.__doubleKeyNoteActive = False
         self.__blankKeyNote = "one or more key input box is blank, please set a key for it"
         self.__blankKeyNoteActive = False
+        self.__illegalKeyNote = "one or more key input box is invalid, please change it"
+        self.__illegalKeyActive = False
 
         '''disabled save button properties'''
         self.__disabled_save_background_color = (236, 188, 145)
@@ -129,6 +131,13 @@ class Setting:
         if self.__blankKeyNoteActive:
             surface.blit(blank_key_note_text, blank_key_note_rect)
 
+        # Draw blankKeyNote below the save button and doubleKeyNote
+        illegal_key_note_text = smaller_font.render(self.__illegalKeyNote, True,
+                                                  self.__artisticDesign.get_default_button_text_color())
+        illegal_key_note_rect = illegal_key_note_text.get_rect(center=(self.__center_x, blank_key_note_rect.bottom + 20))
+        if self.__illegalKeyActive:
+            surface.blit(illegal_key_note_text, illegal_key_note_rect)
+
     '''update the save button status based on coming keyboard input'''
 
     def update(self, event):
@@ -143,7 +152,8 @@ class Setting:
         for each action.'''
         self.__blankKeyNoteActive = self.__checkBlankKey()
         self.__doubleKeyNoteActive = self.__checkDoubleKey()
-        if self.__blankKeyNoteActive or self.__doubleKeyNoteActive:
+        self.__illegalKeyActive = self.__checkIllegalKeys()
+        if self.__blankKeyNoteActive or self.__doubleKeyNoteActive or self.__illegalKeyActive:
             self.__disable_save_button = True
             self.__save_text_color = self.__disabled_save_text_color
             self.__save_background_color = self.__disabled_save_background_color
@@ -168,7 +178,6 @@ class Setting:
 
             if not self.__disable_save_button:
                 self.__fileHandler.writeToFile(self.__wordsList, self.__current_keys_values)
-                #self.__values_initilize(self.__original_keys_strings, self.__current_keys_strings)
                 self.__values_initilize(self.__original_keys_values, self.__current_keys_values)
                 self.__values_initilize(self.__original_keys_strings, self.__current_keys_strings)
                 self.__insert_to_input_box(self.__current_keys_strings, self.__current_keys_values)
@@ -201,4 +210,15 @@ class Setting:
             for j in range(i + 1, len(lst)):
                 if lst[i] == lst[j]:
                     return True
+        return False
+
+    '''this is in order to check if any of the entered keys are invalid pygame keys'''
+    def __checkIllegalKeys(self) -> bool:
+        #1073742086
+        for attr_name in dir(pygame):
+            if attr_name.startswith('K_'):
+                attr_value = getattr(pygame, attr_name)
+                if isinstance(attr_value, int) and attr_value in self.__current_keys_values:
+                    if attr_value is None:
+                        return True
         return False

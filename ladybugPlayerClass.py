@@ -24,8 +24,8 @@ class Ladybug_Player(Ladybug):
 
             if attr_name.startswith('K_'):
                 attr_value = getattr(pygame, attr_name)
-                if isinstance(attr_value, int) and str(attr_value) in codes:
-                    index = codes.index(str(attr_value))
+                if isinstance(attr_value, int) and attr_value in codes:
+                    index = codes.index(attr_value)
                     pygame_keys[index] = attr_value
         return pygame_keys
 

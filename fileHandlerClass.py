@@ -40,7 +40,7 @@ class FileHandler:
                     line = line.strip()  # Remove leading/trailing whitespaces
                     if line:
                         key, value = line.split(' = ')
-                        settings.append(value)
+                        settings.append(int(value))
         except FileNotFoundError:
             self.writeToFile(self.__wordList, self.__default_keys)
             return self.__default_keys
