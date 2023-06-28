@@ -6,7 +6,6 @@ in setting class. the keys are read in game initialization so the player can cho
 it is used by gameManage class and settings class.'''
 class FileHandler:
     def __init__(self):
-        #self.__default_keys = ['up', 'right', 'left', 'space', 'a', 's']
         self.__default_keys = [1073741906, 1073741903, 1073741904, 32, 97, 115]
         self.__wordList = ["Advance", "Turn Right", "Turn Left", "Shoot Fireball", "Shoot Flamethrower",
                            "Shoot Rocket"]

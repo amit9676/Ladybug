@@ -8,8 +8,8 @@ it is a support class containing logic operations used by various units, project
 
 class LogicSupportClass:
     def __init__(self):
-        self.__WINDOW_WIDTH = 1000
-        self.__WINDOW_HEIGHT = 750
+        self.__WINDOW_WIDTH = 1200
+        self.__WINDOW_HEIGHT = 800
         self.winMode = True
 
     def get_window(self):
@@ -33,7 +33,9 @@ class LogicSupportClass:
     pos is (x,y) tuple of to where place the pivot of the image on the screen.
     pivot is (x,y) tuple - the point on image that would be used as rotation anchor-the image will be rotated around it.
     angle is the rotation angle, based on mathematical axis graph.
-    the output is the rotation image, and the rectangle of it.'''
+    the output is the rotation image, and the rectangle of it.
+    it was made with the help of
+    https://stackoverflow.com/questions/4183208/how-do-i-rotate-an-image-around-its-center-using-pygame'''
 
     def blitRotate(self, image, pos: (int, int), pivot: (int,int), angle: int) -> (pygame.surface, pygame.rect):
         angle -= 90
@@ -52,11 +54,27 @@ class LogicSupportClass:
     def game_to_graph_axis_degrees(self, direction: int) -> int:
         return (90 - direction) % 360
 
+    '''check if game instance crossed the boundries'''
     def check_for_boundary_crossing(self, rect: pygame.rect, window: (int,int)) -> bool:
         if rect.right < 0 or rect.left > window[0] or rect.bottom < 0 \
                 or rect.top > window[1]:
             return True
         return False
+
+    '''based on unit speed and direction - calculate the velocity of which for each direction - meaning how fast
+    it moves on the X axis, and how fast it moves on the white axis.
+    note: function does NOT considers any boundaries - that must be handles and adjusted in the  specific unit class.
+    
+    note 2: the direction input is mathematical graph degrees, not pygame degrees. '''
+    def calculate_velocity(self, speed: float, direction: int) -> (float, float):
+        # Convert direction from degrees to radians
+        radians = math.radians(direction)
+
+        # Calculate the velocity components
+        velocityX = speed * math.cos(radians)
+        velocityY = speed * math.sin(radians)
+
+        return velocityX, velocityY * -1
 
     '''given position, direction and radius - return position that is at distance of radius at the
     given direction'''

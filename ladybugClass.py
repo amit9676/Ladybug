@@ -37,6 +37,8 @@ class Ladybug:
 
         # Set the initial speed
         self._speed = 1.3
+        self._velocity = [0,0]
+        self._current_speed = 0
         self._winMode = False
         self.initilize_instance()
 
@@ -71,6 +73,15 @@ class Ladybug:
 
     def get_ladybug_data(self) -> (int,int,int):
         return self._hitpoints, self._flamethrower, self._rockets
+
+    def get_current_direction(self) -> int:
+        return self._current_direction
+
+    def get_current_speed(self) -> float:
+        return self._current_speed
+
+    def get_velocity(self) -> (float,float):
+        return self._velocity[0], self._velocity[1]
 
     '''rockets section'''
     def add_rockets(self):
@@ -142,18 +153,22 @@ class Ladybug:
             self._rect.left = 0
             self._current_x = 0
             self._rect.x = 0
+            self._velocity[0] = 0
         if self._rect.right > self._window[0]:
             self._rect.right = self._window[0]
             self._current_x = self._window[0] - self._image.get_width()
             self._rect.x = self._window[0] - self._image.get_width()
+            self._velocity[0] = 0
         if self._rect.top < 0:
             self._rect.top = 0
             self._current_y = 0
             self._rect.y = 0
+            self._velocity[1] = 0
         if self._rect.bottom > self._window[1]:
             self._rect.bottom = self._window[1]
             self._current_y = self._window[1] - self._image.get_height()
             self._rect.y = self._window[1] - self._image.get_height()
+            self._velocity[1] = 0
 
     '''the main ladybug method - check for any keyboard input and updates the ladybug according.
     the input includes movement and weapon using.'''
@@ -169,7 +184,8 @@ class Ladybug:
         # Draw the image on the surface
         self._logicSupport.draw(surface, self._image, self._rect)
         #pygame.draw.rect(surface, (255, 0, 0), self._rect, 2)
-        #pygame.draw.circle(surface, (255, 25, 0), self._rect.center, 2, 0)
+        # pygame.draw.circle(surface, (255, 225, 0), self.get_current_location(), 2, 0)
+        # pygame.draw.circle(surface, (150, 100, 40), (self._current_x, self._current_y), 2, 0)
 
 
     '''if player wins - disable ladybug'''

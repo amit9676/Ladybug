@@ -225,13 +225,3 @@ class Setting:
                     counter[attr_value] = 0
 
         return any(counter.values())
-
-        #1073742086
-        # for attr_name in dir(pygame):
-        #     if attr_name.startswith('K_'):
-        #         attr_value = getattr(pygame, attr_name)
-        #         if isinstance(attr_value, int) and attr_value in self.__current_keys_values:
-        #             keys = pygame.key.get_pressed()
-        #             if not keys[attr_value]:
-        #                 return True
-        # return False

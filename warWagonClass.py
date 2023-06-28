@@ -25,7 +25,6 @@ class WarWagon:
         self.__image3 = pygame.image.load(f"ladybug_{team}.png")
         self.__window = window
 
-
         '''Scale the images'''
         self.__image1 = pygame.transform.scale(self.__image1, (60, 108))
         self.__image2 = pygame.transform.scale(self.__image2, (35, 70))
@@ -41,27 +40,24 @@ class WarWagon:
         self.__mask = pygame.mask.from_surface(self.__images[0])
 
         '''position, moment and aiming fields'''
-        self.__current_direction = 0 # where the wagon is heading (game degrees)
-        self.__rotate_direction = 0 # where the wagon is heading (graph degrees)
-        self.__rotate_direction2 = 0 # where the wagon is aiming
-        self.__current_x, self.__current_y = self.initilizeWagon() # wagon position
+        self.__current_direction = 0  # where the wagon is heading (game degrees)
+        self.__rotate_direction = 0  # where the wagon is heading (graph degrees)
+        self.__rotate_direction2 = 0  # where the wagon is aiming
+        self.__current_x, self.__current_y = self.initilizeWagon()  # wagon position
         self.__speed = 0.25
-
-
-
 
         '''initlization on screen and destruction fields'''
         self.self_destruct = False  # public method
         self.__active = False
 
         '''firing fields'''
-        self.__target = None #current target
+        self.__target = None  # current target
 
         '''where wagon should aim'''
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
 
         self._last_shot_time = 0
-        self.fireballs = [] # list of current fireballs fired from wagon
+        self.fireballs = []  # list of current fireballs fired from wagon
 
         '''make the fireball emerge at the end of the barrel (51 pixels away from center)'''
         self.__fireball_emergence_position = self.__logicSupport. \
@@ -73,7 +69,7 @@ class WarWagon:
     and in which direction it will travel'''
 
     def initilizeWagon(self):
-        direction = self.__generate_random_direction() # create random direction in which the wagon will go
+        direction = self.__generate_random_direction()  # create random direction in which the wagon will go
         self.__current_direction = direction  # game direction of wagon movement
         rotate_direction = self.__logicSupport.game_to_graph_axis_degrees(direction)
         self.__rotate_direction = rotate_direction  # graph direction of wagon movement
@@ -174,10 +170,12 @@ class WarWagon:
 
     '''calculate a random direction in which the cart will travel - the possible directions are up, down, right, left
     and diagonals it means the possible values are 0, 45, 90, 135, 180, 225, 270, 315'''
+
     def __generate_random_direction(self) -> int:
         return random.randint(0, 7) * 45
 
     '''aid method to return a random point within the boundaries of a rectangle, NOT including the edges'''
+
     def __random_point_within_rect(self, rect) -> (int, int):
 
         x = random.randint(rect[0][0] + 1, rect[1][0] - 1)
@@ -187,6 +185,7 @@ class WarWagon:
     '''aid method to return a random point within one of two input rectangles.
     because there is an intersection between the 2 rectangles - the chance the random point will be in the
     intersection is higher than outside of it.'''
+
     def __random_point_within_union(self, rect_a, rect_b) -> (int, int):
         rect = random.choice((rect_a, rect_b))
         return self.__random_point_within_rect(rect)
@@ -206,11 +205,13 @@ class WarWagon:
         return self.__rects[0].centerx, self.__rects[0].centery
 
     '''hitpoints section'''
+
     def get_hitpoints(self) -> int:
         return self.__hitpoints
 
     def decrease_hitPoints(self, amount: int):
         self.__hitpoints -= amount
+
     '''end of hitpoints section'''
 
     '''update wagon movement - the wagon will always move straight. no turns - when it will finishes crossing the
@@ -221,8 +222,6 @@ class WarWagon:
         '''move wagon on screen'''
         self.__current_x, self.__current_y, a, b = \
             self.__logicSupport.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
-        #a,b = 200,200
-
 
         '''rotate images according developments'''
         self.__images[0], self.__rects[0] = self.__logicSupport.blitRotate(self.__originals[0], (a, b),
@@ -242,7 +241,10 @@ class WarWagon:
             self.__target = self.get_instance_struct().get_target(self.__game)
 
         '''lock wagon aiming on target'''
-        self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.__rects[2])
+        #self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.__rects[2])
+        self.__desired_direction = self.get_instance_struct().whereToShoot(4, self.__rects[2].center,
+                                                                           self.__target.get_current_location(),
+                                                                           self.__target.get_velocity())
 
         '''move machine toward target'''
         self.__rotate_direction2 = self.__logicSupport.game_to_graph_axis_degrees(self.__rotate_direction2)
@@ -250,14 +252,15 @@ class WarWagon:
             make_turn(self.__rotate_direction2 % 360, self.__desired_direction)
 
         '''when machine gun is aiming on target (diff==0) - FIRE!'''
-        if diff == 0:
-            self.get_instance_struct().shoot \
-                (self.__game, self, self.__rotate_direction2, self.__fireball_emergence_position, 4, 100)  # original 4,100
+        #if diff == 0:
+        self.get_instance_struct().shoot \
+            (self.__game, self, self.__rotate_direction2, self.__fireball_emergence_position, 4,
+             100)  # original 4,100
         self.get_instance_struct().update_fireballs(self)
 
         '''update shooting data for next time'''
         self.__rotate_direction2 = self.__logicSupport.game_to_graph_axis_degrees(self.__rotate_direction2)
-        self.__fireball_emergence_position = self.__logicSupport.\
+        self.__fireball_emergence_position = self.__logicSupport. \
             circular_emergernce_position(self.__rects[2].center, self.__rotate_direction2, 51)
 
         '''when the wagon is no longer on screen - self destruct the object and erase it from memory'''

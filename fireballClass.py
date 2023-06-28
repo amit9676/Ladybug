@@ -50,7 +50,6 @@ class Fireball:
         if impacted:
             self.self_destruct = True
             impacted[0].decrease_hitPoints(10)
-            # print(impacted[0].get_hitpoints())
 
         '''destroy fireball in case it got exceeded from boundries of the game window - that in order to remove it
         from memory'''
