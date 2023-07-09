@@ -119,7 +119,8 @@ class Rocket:
 
             '''when rocket impacts its target (or any other unit on screen) - set impact mode active and replace
             rocket animation with explosion animation'''
-            impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game)
+            impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_inctances()
+                                                             + self.__game.get_wagons())
             if impacted:
                 self.__setup_explosion()
                 impacted[0].decrease_hitPoints(100)

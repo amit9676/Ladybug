@@ -59,7 +59,8 @@ class Flamethrower:
         self.original, self.current_time = self.spr.update_animation_frame(self.current_time)
         self.__mask = pygame.mask.from_surface(self.__image)
 
-        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game)
+        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_inctances()
+                                                         + self.__game.get_wagons())
         for i in impacted:
             i.decrease_hitPoints(1)
 

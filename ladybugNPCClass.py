@@ -46,18 +46,20 @@ class Ladybug_NPC(Ladybug):
         #     self.manage_flamethrower()
         # else:
         #     self.flame = None
+
+
         if dist >= abs(100):
             self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._logicSupport.advance(self._current_direction, self._speed, self._current_x, self._current_y)
             self._current_speed = self._speed
         else:
             self._current_speed = 0
 
-        if self._rockets > 0:
-            self.get_instance_struct().launch_rocket(self, self._current_direction, center)
-
-        else:
-            if diff == 0:
-                self.get_instance_struct().shoot(self._game, self, self._current_direction, center)
+        # if self._rockets > 0:
+        #     self.get_instance_struct().launch_rocket(self, self._current_direction, center)
+        #
+        # else:
+        #     if diff == 0:
+        #         self.get_instance_struct().shoot(self._game, self, self._current_direction, center)
 
         '''updating velocity'''
         vel = self._logicSupport.calculate_velocity(self._current_speed,

@@ -50,6 +50,9 @@ class Disc:
     def get_dimensions(self) -> (int,int):
         return self._rect1.width, self._rect1.height
 
+    def get_model(self) -> str:
+        return self._model
+
     def draw(self, surface):
         self._logicSupport.draw(surface, self._image1, self._rect1)
         self._logicSupport.draw(surface, self._image2, self._rect2)

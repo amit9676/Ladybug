@@ -48,29 +48,6 @@ class DiscGame(Disc):
 
     '''update the disc - check for any activations and disable when the lifetime of it exceeded.'''
     def update(self):
-        impacted = self._logicSupport.impact_identifier(self, None, self.__game)
-        if impacted:
-            if self._model == "warWagon_model":
-                self.__game.create_warWagon(impacted[0].get_instance_struct().get_team())
-            elif self._model == "rocket":
-                '''the try catch is needed in case some unit (war wagon or any future unit that wont shoot rockets)
-                attempts to pickup the rocket disc (which they can with collision) - that they dont have the method
-                "add_rockets" - the game wont crash.
-                so only when unit that able to fire rockets (lady bug or potential future unit that fires rockets)
-                the rockets will be added.'''
-                try:
-                    impacted[0].add_rockets()
-                except:
-                    pass
-            elif self._model == "flame001_model":
-                try:
-                    impacted[0].add_flamethrower()
-                except:
-                    pass
-
-            impacted = []
-            self.self_destruct = True
-
         x = pygame.time.get_ticks() - self.__timer
         if x >= self.__duration * 1000:
             self.self_destruct = True

@@ -215,7 +215,7 @@ class WarWagon:
     '''end of hitpoints section'''
 
     '''update wagon movement - the wagon will always move straight. no turns - when it will finishes crossing the
-    screen - it will be considered as non active and will be self destrcuted.'''
+    screen - it will be considered as non active and will be self destructed.'''
 
     def update(self):
 
@@ -223,7 +223,7 @@ class WarWagon:
         self.__current_x, self.__current_y, a, b = \
             self.__logicSupport.advance(self.__current_direction, self.__speed, self.__current_x, self.__current_y)
 
-        '''rotate images according developments'''
+        '''rotate images according to developments'''
         self.__images[0], self.__rects[0] = self.__logicSupport.blitRotate(self.__originals[0], (a, b),
                                                                            self.__pivots[0], self.__rotate_direction)
 
@@ -246,7 +246,7 @@ class WarWagon:
                                                                            self.__target.get_current_location(),
                                                                            self.__target.get_velocity())
 
-        '''move machine toward target'''
+        '''move machine gun toward target'''
         self.__rotate_direction2 = self.__logicSupport.game_to_graph_axis_degrees(self.__rotate_direction2)
         self.__rotate_direction2, diff = self.get_instance_struct(). \
             make_turn(self.__rotate_direction2 % 360, self.__desired_direction)

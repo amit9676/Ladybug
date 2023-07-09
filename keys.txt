@@ -3,6 +3,6 @@ keys:
 Advance = 1073741906
 Turn Right = 1073741903
 Turn Left = 1073741904
-Shoot Fireball = 101
+Shoot Fireball = 32
 Shoot Flamethrower = 97
 Shoot Rocket = 115

@@ -27,13 +27,13 @@ class Game:
                                                      self.__ladybug.get_ladybug_data(), artisticDesign)
 
         # a list of all inctances (ladybugs, warwagons and future instances)
-        self.__inctances = []
+        self.__ladybugs = []
         self.__warWagons = []
         self.__discs = []
 
         '''the placement of the following 2 line of codes is TEMPORARY for testing'''
-        self.__inctances.append(self.__ladybug)
-        self.__inctances.append(self.__ladybug_npc)
+        self.__ladybugs.append(self.__ladybug)
+        self.__ladybugs.append(self.__ladybug_npc)
         ''' until here'''
 
         # Set the game state to "running"
@@ -51,7 +51,7 @@ class Game:
     "get_current_location()" in order for every instance to "read the map"'''
 
     def get_inctances(self):
-        return self.__inctances
+        return self.__ladybugs
 
     def get_wagons(self):
         return self.__warWagons
@@ -79,6 +79,11 @@ class Game:
             if d.self_destruct:
                 self.__discs.remove(d)
 
+        '''check for collision between warwagons and ladybug'''
+        self.__collision_ladybug_warwagon()
+        self.__collision_ladybug_disc()
+        self.__collision_warwagons_disc()
+
         if self.__ladybug.get_hitpoints() <= 0:
             return -1
         elif self.__ladybug_npc.get_hitpoints() <= 0:
@@ -92,16 +97,19 @@ class Game:
         for d in self.__discs:
             d.draw(window)
 
+
+        # Draw the ladybug and on the window
+        self.__ladybug.draw(window)
+
+        self.__ladybug_npc.draw(window)
+
         '''draw war wagon and its projectiles'''
         for w in self.__warWagons:
             w.draw(window)
             for fireball in w.fireballs:
                 fireball.draw(window)
 
-        # Draw the ladybug and on the window
-        self.__ladybug.draw(window)
 
-        self.__ladybug_npc.draw(window)
 
         '''draw all projectiles'''
         for fireball in self.__ladybug.fireballs:
@@ -145,6 +153,34 @@ class Game:
 
     def create_warWagon(self, team):
         self.__warWagons.append(WarWagon(window=self.__window_size, logicSupport=self.__logicSupport, game=self, team=team))
+
+    '''this method is used to check collisions between war wagons and ladybugs.
+    if there is a collision - the ladybug hit will lose hp for every frame of collision REGARDLESS of teams'''
+    def __collision_ladybug_warwagon(self):
+        for l in self.__ladybugs:
+            if self.__logicSupport.impact_identifier(l,None, self.__warWagons):
+                l.decrease_hitPoints(1)
+
+    def __collision_ladybug_disc(self):
+        for d in self.__discs:
+            impacted = self.__logicSupport.impact_identifier(d,None, self.__ladybugs)
+            if impacted:
+                if d.get_model() == "warWagon_model":
+                    self.create_warWagon(impacted[0].get_instance_struct().get_team())
+                elif d.get_model() == "rocket":
+                    impacted[0].add_rockets()
+                elif d.get_model() == "flame001_model":
+                    impacted[0].add_flamethrower()
+                d.self_destruct = True
+
+    def __collision_warwagons_disc(self):
+        for d in self.__discs:
+            impacted = self.__logicSupport.impact_identifier(d,None, self.__warWagons)
+            if impacted:
+                if d.get_model() == "warWagon_model":
+                    self.create_warWagon(impacted[0].get_instance_struct().get_team())
+                d.self_destruct = True
+
 
     '''if user click on back button in information object, so data passes through this class from/to
      gameManage-information display'''

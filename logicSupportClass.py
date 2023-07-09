@@ -94,13 +94,13 @@ class LogicSupportClass:
      sniper can hit only units from the other team (no friendly fire)
      currently the function returns a list of objects in which there was an impact on them
      
-     __check_collision - private method called  by the impact_identifier - it is the function that makes the actual
+     __check_collision - a private method called  by the impact_identifier - it is the function that makes the actual
      checking for collision - it takes the 2 objects it wants to check - first it checks rectangle collision by
      calling every instance 'get_rect() method. if that checks out - it means that the rectangles overlap, however
      that by itself does not means there is indeed an impact, so there is a verification check - in which the function
      calls the objects 'get_mask() for check if they overlap - if they does - it means the object's images overlap -
      meaning impact!'''
-    def __check_collision(self,obj1, obj2):
+    def __check_collision(self, obj1, obj2):
         """
         Checks for collision between two objects using masks.
         """
@@ -118,15 +118,15 @@ class LogicSupportClass:
         caller - the object that sent the projectile - equivalent of gun, in case of war wagon - it will be itself
         
         game - the game object, with the data on current instances on screen'''
-    def impact_identifier(self,projectile, caller, game):
+    def impact_identifier(self,projectile, caller, instances):
         impacted = []
-        instances = []
-        instances += game.get_inctances()
-        instances += game.get_wagons()
+        # instances = []
+        # instances += game.get_inctances()
+        # instances += game.get_wagons()
         for ins in instances:
             if ins == caller:
                 continue
-            res = self.__check_collision(projectile,ins)
+            res = self.__check_collision(projectile, ins)
             if res:
                 impacted.append(ins)
         return impacted
