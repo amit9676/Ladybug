@@ -68,6 +68,7 @@ class Flamethrower:
                                                          + self.__game.get_wagons())
         for i in impacted:
             i.decrease_hitPoints(1)
+            i.flamethrower_hit()
 
 
 

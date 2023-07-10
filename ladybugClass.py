@@ -57,7 +57,7 @@ class Ladybug:
         self._rockets = 0
         self._flamethrower = 0
 
-        self._hitpoints = 3000000
+        self._hitpoints = 10000
 
     def initilize_instance(self):
         self._rect.x = random.randint(0, self._window[0] - self._rect.width)
@@ -117,7 +117,10 @@ class Ladybug:
     def decrease_flamethrower(self):
         self._flamethrower -= 1
 
-    def manage_flamethrower(self):
+    def flamethrower_hit(self):
+        pass
+
+    def shoot_flamethrower(self):
         if self.flame is None:
             self.flame = Flamethrower(self._game, self, self._current_direction, self._rect.center,
                                       self._logicSupport)

@@ -14,25 +14,31 @@ from InstanceClass import NPCInstance
 '''npc ladybug class - inherent from ladybug class and contains actions and fields which are for computer controlled
 lady bug'''
 class Ladybug_NPC(Ladybug):
-    """initilize the ladybug with necessary parameters"""
+    """initialize the ladybug with necessary parameters"""
 
     def __init__(self, window, logicSupport, game, team):
         super().__init__(window, logicSupport, game, team)
 
-        '''which inctance this inctance is targeting at any moment'''
+        '''which instance this instance is targeting at any moment'''
         self._instance_struct: NPCInstance = NPCInstance(team, logicSupport)
         self.__target = None
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         self.__evasive_maneuver = False
+        self.__evasive_maneuver_timer = 0
 
 
-    def decrease_hitPoints(self, amount: int):
-        super().decrease_hitPoints(amount)
-        self.__evasive_maneuver = True
+        self.__advanced = False
+        # self.__evasive_maneuver_counter = 0
+        # self.__evasive_maneuver_angle = 0
+
+    # def decrease_hitPoints(self, amount: int):
+    #     super().decrease_hitPoints(amount)
 
     def __advance(self):
-        self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._logicSupport.advance(self._current_direction, self._speed, self._current_x, self._current_y)
-        self._current_speed = self._speed
+        if not self.__advanced:
+            self._current_x, self._current_y, self.get_rect().x, self.get_rect().y = self._logicSupport.advance(self._current_direction, self._speed, self._current_x, self._current_y)
+            self._current_speed = self._speed
+            self.__advanced = True
 
     def __advance_on_some_conditions(self, diff: int, distance):
         if distance < 30:
@@ -46,11 +52,15 @@ class Ladybug_NPC(Ladybug):
     def __stop_advance(self):
         self._current_speed = 0
 
+    def flamethrower_hit(self):
+        self.__evasive_maneuver = True
+        self.__evasive_maneuver_timer = pygame.time.get_ticks()
+
     def __attack_ladybug(self, diff: int, distance):
 
         if self._flamethrower > 0:
             if distance <= self._logicSupport.get_flamethrower_range():
-                self.manage_flamethrower()
+                self.shoot_flamethrower()
                 self.__advance_on_some_conditions(diff, distance)
             else:
                 self.__advance_on_some_conditions(diff, distance)
@@ -66,6 +76,17 @@ class Ladybug_NPC(Ladybug):
             else:
                 self.get_instance_struct().shoot(self._game, self, self._current_direction, self.get_rect().center)
 
+    # def __perform_evasive_maneuver(self):
+    #     self.flame = None
+    #     self.__evasive_maneuver_counter += 1
+    #     if self.__evasive_maneuver_counter % 3000 == 0:
+    #         self.__evasive_maneuver_angle += 1
+    #         self._current_direction = (self._current_direction + self.__evasive_maneuver_angle) % 360
+    #         self._rotate_image()
+    #     if self.__evasive_maneuver_counter >= 2000:
+    #         self.__evasive_maneuver_counter = 0
+    #         self.__evasive_maneuver_angle = 0
+    #         self.__evasive_maneuver = False
 
     '''the main ladybug method - check for any keyboard input and updates the ladybug according.
     the input includes movement and weapon using.'''
@@ -76,9 +97,10 @@ class Ladybug_NPC(Ladybug):
             return
 
         self.__stop_advance()
+        self.__advanced = False
 
-        '''get target, ,may modify'''
-        self.__target = self.get_instance_struct().get_target(self._game) #mark opponent ladybug as target
+        '''get target, may modify'''
+        self.__target = self.get_instance_struct().acquire_target(self._game) #mark opponent ladybug as target
         if self._game.get_discs():
             '''take the nearest disc'''
             min_distance = self.get_instance_struct().calculate_distance(self._game.get_discs()[0], self.get_rect())
@@ -98,6 +120,14 @@ class Ladybug_NPC(Ladybug):
 
         '''turn toward the target, may modify'''
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
+        if self.__evasive_maneuver:
+            self.__desired_direction = (self.__desired_direction + 180) % 360
+            self.flame = None
+            self.__advance()
+            current_time = pygame.time.get_ticks()
+            if current_time - self.__evasive_maneuver_timer >= 300:
+                print("evasive maneuver off")
+                self.__evasive_maneuver = False
         self._current_direction,diff = self.get_instance_struct().make_turn(self._current_direction,self.__desired_direction)
         #diff - the range between current direction and desired direction
         self._rotate_image()
@@ -106,11 +136,28 @@ class Ladybug_NPC(Ladybug):
 
 
         '''main actions - fill this'''
-        if self.__target.get_type() == "ladybug":
-            self.__attack_ladybug(diff, distance)
-        elif self.__target.get_type() == "disc":
-            self.flame = None
-            self.__advance_on_some_conditions(diff, distance)
+        if self._game.get_wagons():
+            for w in self._game.get_wagons():
+                if w.get_instance_struct().get_team() != self.get_instance_struct().get_team():
+                    self.__advance()
+                    break
+
+        if self._game.get_ladybugs():
+            for l in self._game.get_ladybugs():
+                if l.get_instance_struct().get_team() != self.get_instance_struct().get_team():
+                    for r in l.rockets:
+                        if r.get_target() == self:
+                            print("incoming rocket")
+                            self.__advance()
+                            break
+
+
+        if not self.__evasive_maneuver:
+            if self.__target.get_type() == "ladybug":
+                self.__attack_ladybug(diff, distance)
+            elif self.__target.get_type() == "disc":
+                self.flame = None
+                self.__advance_on_some_conditions(diff, distance)
 
 
 

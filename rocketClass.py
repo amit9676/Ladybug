@@ -51,6 +51,9 @@ class Rocket:
     def get_rocket_explosion(self) -> pygame.rect:
         return self.__explosion
 
+    def get_target(self):
+        return self.__target
+
     def __initilizeRocket(self):
         self.__current_x, self.__current_y = self.__logicSupport.initilize_currents(self.__rect.x, self.__rect.y)
         self.__winMode = False

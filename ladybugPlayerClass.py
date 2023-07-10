@@ -74,7 +74,7 @@ class Ladybug_Player(Ladybug):
 
         '''flamethrower'''
         if keys[self.__keys[4]] and self._flamethrower > 0:
-            self.manage_flamethrower()
+            self.shoot_flamethrower()
         else:
             self.flame = None
 

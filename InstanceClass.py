@@ -77,8 +77,8 @@ class NPCInstance(Instance):
     '''npc section - the method below are for npc units only.'''
     '''this method is responsible for the NPC to acquire a target to attack'''
 
-    '''get target function'''
-    def get_target(self, game):
+    '''acquire target function - the first available of the opposite team ladybugs'''
+    def acquire_target(self, game):
         for ins in game.get_ladybugs():
             if ins.get_instance_struct().get_team() != self.get_team():
                 return ins

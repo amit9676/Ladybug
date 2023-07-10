@@ -207,6 +207,9 @@ class WarWagon:
     def get_target(self):
         return self.__target
 
+    def flamethrower_hit(self):
+        pass
+
     def get_current_location(self):
         return self.__rects[0].centerx, self.__rects[0].centery
 
@@ -244,7 +247,7 @@ class WarWagon:
 
         '''target acquisition mechanism - if there is no target - activate the function which assigns one'''
         if self.__target is None:
-            self.__target = self.get_instance_struct().get_target(self.__game)
+            self.__target = self.get_instance_struct().acquire_target(self.__game)
 
         '''lock wagon aiming on target'''
         #self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.__rects[2])
