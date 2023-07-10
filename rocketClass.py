@@ -78,7 +78,7 @@ class Rocket:
         lowest_turn = 60  # how far the missile may turn to locate target- valid range: 1 <= x <= 180
         target = None
         instances = []
-        instances += self.__game.get_inctances()
+        instances += self.__game.get_ladybugs()
         instances += self.__game.get_wagons()
         for ins in instances:
             if ins.get_instance_struct().get_team() == self.__npcInstance.get_team():
@@ -119,7 +119,7 @@ class Rocket:
 
             '''when rocket impacts its target (or any other unit on screen) - set impact mode active and replace
             rocket animation with explosion animation'''
-            impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_inctances()
+            impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                              + self.__game.get_wagons())
             if impacted:
                 self.__setup_explosion()

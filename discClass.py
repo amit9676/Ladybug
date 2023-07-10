@@ -53,6 +53,9 @@ class Disc:
     def get_model(self) -> str:
         return self._model
 
+    def get_type(self):
+        return "disc"
+
     def draw(self, surface):
         self._logicSupport.draw(surface, self._image1, self._rect1)
         self._logicSupport.draw(surface, self._image2, self._rect2)

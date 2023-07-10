@@ -15,6 +15,9 @@ class LogicSupportClass:
     def get_window(self):
         return self.__WINDOW_WIDTH, self.__WINDOW_HEIGHT
 
+    def get_flamethrower_range(self):
+        return 216
+
     def advance(self, direction: int, speed: float, current_x: float, current_y: float) -> (float, float, int, int):
         dx = math.sin(math.radians(direction)) * speed
         dy = math.cos(math.radians(direction)) * speed

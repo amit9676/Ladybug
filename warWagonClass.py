@@ -201,6 +201,12 @@ class WarWagon:
     def get_mask(self) -> pygame.rect:
         return self.__mask
 
+    def get_type(self):
+        return "warwagon"
+
+    def get_target(self):
+        return self.__target
+
     def get_current_location(self):
         return self.__rects[0].centerx, self.__rects[0].centery
 

@@ -79,7 +79,7 @@ class NPCInstance(Instance):
 
     '''get target function'''
     def get_target(self, game):
-        for ins in game.get_inctances():
+        for ins in game.get_ladybugs():
             if ins.get_instance_struct().get_team() != self.get_team():
                 return ins
         return None

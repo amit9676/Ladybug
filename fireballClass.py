@@ -46,7 +46,7 @@ class Fireball:
             self.__logicSupport.advance(self.__direction, self.__speed, self.__current_x, self.__current_y)
 
         '''impact detection and handling'''
-        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_inctances()
+        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                          + self.__game.get_wagons())
         if impacted:
             self.self_destruct = True

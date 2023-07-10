@@ -9,7 +9,8 @@ class Flamethrower:
     in addition initilize from vairables required for the object, such as radius, speed"""
 
     def __init__(self, game, caller, direction, emergence, logicSupport, radius=3, speed=5):
-        self.spr = Sprite(filename="flame001_5frames.png", frame_width=93, frame_height=216,
+        self.__range = logicSupport.get_flamethrower_range()
+        self.spr = Sprite(filename="flame001_5frames.png", frame_width=93, frame_height=self.__range,
                           num_rows=15, num_cols=5, frame_rate=23, num_rows_start=1)
         #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0) #- bigger flamethrower for future use
 
@@ -48,6 +49,10 @@ class Flamethrower:
     def get_mask(self) -> pygame.rect:
         return self.__mask
 
+    '''get flamethrower top range'''
+    def get_range(self) -> int:
+        return self.__range
+
 
     '''the method is responsible of updating the flamethrower - it gets from the outside the x and y coordinates of
     where to place the flamethrower, and a direction from which to extract the required angle for rotation'''
@@ -59,7 +64,7 @@ class Flamethrower:
         self.original, self.current_time = self.spr.update_animation_frame(self.current_time)
         self.__mask = pygame.mask.from_surface(self.__image)
 
-        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_inctances()
+        impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                          + self.__game.get_wagons())
         for i in impacted:
             i.decrease_hitPoints(1)

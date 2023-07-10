@@ -45,16 +45,16 @@ class Game:
     def get_window_size(self) -> (int, int):
         return self.__window_size
 
-    '''this method compiles a list of all actives instances on the game - that include player controlled ladybugs,
-    NPC ladybugs, war wagon and future instances. this method has to be PUBLIC in order for the "players" to receive
-    real time data about other players - instances, and their current location. all inctances must have a public method
-    "get_current_location()" in order for every instance to "read the map"'''
 
-    def get_inctances(self):
+    '''get ladybugs, get war wagons and get discs methods'''
+    def get_ladybugs(self):
         return self.__ladybugs
 
     def get_wagons(self):
         return self.__warWagons
+
+    def get_discs(self):
+        return self.__discs
 
     '''update the game - in here make sure everything in the game is being updated.'''
 
@@ -139,7 +139,7 @@ class Game:
         currently - there are 3 types of disk:
         war wagon - which summons war wagon to help the summoner.
         rockets ammo, and flamethrower ammo."""
-        probability = 750
+        probability = 1500
         chance = random.randint(1, probability)
         # location = self.__mainActions.generate_random_location(self.__window_size)
         if chance % probability == 0:

@@ -57,7 +57,7 @@ class Ladybug:
         self._rockets = 0
         self._flamethrower = 0
 
-        self._hitpoints = 1000
+        self._hitpoints = 3000000
 
     def initilize_instance(self):
         self._rect.x = random.randint(0, self._window[0] - self._rect.width)
@@ -73,6 +73,9 @@ class Ladybug:
 
     def get_ladybug_data(self) -> (int,int,int):
         return self._hitpoints, self._flamethrower, self._rockets
+
+    def get_type(self):
+        return "ladybug"
 
     def get_current_direction(self) -> int:
         return self._current_direction
@@ -121,7 +124,6 @@ class Ladybug:
         else:
             self.flame.move(self._current_direction, self._rect.center)
         self.decrease_flamethrower()
-        #print(f"flames: {self._flamethrower}")
     '''end of flamethrower section'''
 
     '''hitpoints section'''
