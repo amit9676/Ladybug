@@ -111,10 +111,10 @@ class Ladybug_NPC(Ladybug):
             for d in self._game.get_discs():
                 '''if the disc is some ammunition that the ladybug has plenty of - it wont go for it
                 and prioritize other missions.'''
-                if d.get_model() == "rocket" and self._rockets >= 7:
-                    continue
-                if d.get_model() == "flame001_model" and self._flamethrower >= 2500:
-                    continue
+                #if d.get_model() == "rocket" and self._rockets >= 7:
+                    #continue
+                #if d.get_model() == "flame001_model" and self._flamethrower >= 2500:
+                    #continue
                 current_distance = self.get_instance_struct().calculate_distance(d, self.get_rect())
                 if current_distance <= min_distance:
                     min_distance = current_distance
@@ -124,7 +124,7 @@ class Ladybug_NPC(Ladybug):
 
         '''turn toward the target, may modify'''
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
-        if self.__evasive_maneuver:
+        if self.__evasive_maneuver and self.__target.get_type() != "disc":
             #self.__desired_direction = (self.__desired_direction + 180) % 360
             self.__flame_maneuver_angle += 1
             self.flame = None
@@ -169,13 +169,16 @@ class Ladybug_NPC(Ladybug):
             if not zero_guard:
                 self.__rocket_maneuver_angle = 0
 
-        print(f"wagon angle: {self.__wagon_maneuver_angle}")
-        print(f"rocket angle: {self.__rocket_maneuver_angle}")
-        print(f"flame angle: {self.__flame_maneuver_angle}")
+        #print(f"wagon angle: {self.__wagon_maneuver_angle}")
+        #print(f"rocket angle: {self.__rocket_maneuver_angle}")
+        #print(f"flame angle: {self.__flame_maneuver_angle}")
         self.__evasive_maneuver_angle = max(self.__wagon_maneuver_angle,
                                             self.__rocket_maneuver_angle, self.__flame_maneuver_angle)
-        print(f"evasive angle: {self.__evasive_maneuver_angle}")
-        print("----------------------------------------------")
+        if self._flamethrower > 0:
+            self.__evasive_maneuver_angle = 0
+
+        #print(f"evasive angle: {self.__evasive_maneuver_angle}")
+        #print("----------------------------------------------")
         self._current_direction,diff = self.get_instance_struct().make_turn(
             self._current_direction,self.__desired_direction + self.__evasive_maneuver_angle)
         #diff - the range between current direction and desired direction
@@ -184,9 +187,13 @@ class Ladybug_NPC(Ladybug):
         if not self.__evasive_maneuver:
             if self.__target.get_type() == "ladybug":
                 self.__attack_ladybug(diff, distance)
-            elif self.__target.get_type() == "disc":
-                self.flame = None
-                self.__advance_on_some_conditions(diff, distance)
+        if self.__target.get_type() == "disc":
+            self.flame = None
+            self._current_direction,diff = self.get_instance_struct().make_turn(
+                self._current_direction,self.__desired_direction)
+            #diff - the range between current direction and desired direction
+            self._rotate_image()
+            self.__advance_on_some_conditions(diff, distance)
 
 
 
