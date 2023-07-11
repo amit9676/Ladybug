@@ -28,7 +28,7 @@ class gameManage:
 
         self.__credits = Credits(self.__window_size, self.__logicSupport, self.__artisticDesign)
 
-        self.__howToPlay = self.__generate_message_display_window(26, False, 4)
+        self.__howToPlay = self.__generate_message_display_window(25, False, 4)
         self.__settings = Setting(self.__window_size, self.__artisticDesign, self.__fileHandler)
 
         self.__lost = self.__generate_message_display_window(45,True,7,"YOU LOSE")
