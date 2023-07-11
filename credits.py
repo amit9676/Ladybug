@@ -34,7 +34,7 @@ class Credits:
         surface.blit(self.__image, self.__rect)
 
         # Add text below the image
-        text = self.__font.render("The game was developed and designed by Amit Goffer - June 2023", True, (255, 255, 255))
+        text = self.__font.render("The game was developed and designed by Amit Goffer - July 2023", True, (255, 255, 255))
         text_rect = text.get_rect(center=(self.__window_size[0] // 2, self.__rect.bottom + 50))
         surface.blit(text, text_rect)
 

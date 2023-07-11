@@ -35,8 +35,6 @@ class Ladybug_NPC(Ladybug):
         self.__rocket_maneuver_angle = 0
         self.__zero_guard = False
 
-    # def decrease_hitPoints(self, amount: int):
-    #     super().decrease_hitPoints(amount)
 
     def __advance(self):
         if not self.__advanced:
@@ -80,17 +78,6 @@ class Ladybug_NPC(Ladybug):
             else:
                 self.get_instance_struct().shoot(self._game, self, self._current_direction, self.get_rect().center)
 
-    # def __perform_evasive_maneuver(self):
-    #     self.flame = None
-    #     self.__evasive_maneuver_counter += 1
-    #     if self.__evasive_maneuver_counter % 3000 == 0:
-    #         self.__evasive_maneuver_angle += 1
-    #         self._current_direction = (self._current_direction + self.__evasive_maneuver_angle) % 360
-    #         self._rotate_image()
-    #     if self.__evasive_maneuver_counter >= 2000:
-    #         self.__evasive_maneuver_counter = 0
-    #         self.__evasive_maneuver_angle = 0
-    #         self.__evasive_maneuver = False
 
     '''the main ladybug method - check for any keyboard input and updates the ladybug according.
     the input includes movement and weapon using.'''
@@ -109,12 +96,6 @@ class Ladybug_NPC(Ladybug):
             '''take the nearest disc'''
             min_distance = self.get_instance_struct().calculate_distance(self._game.get_discs()[0], self.get_rect())
             for d in self._game.get_discs():
-                '''if the disc is some ammunition that the ladybug has plenty of - it wont go for it
-                and prioritize other missions.'''
-                #if d.get_model() == "rocket" and self._rockets >= 7:
-                    #continue
-                #if d.get_model() == "flame001_model" and self._flamethrower >= 2500:
-                    #continue
                 current_distance = self.get_instance_struct().calculate_distance(d, self.get_rect())
                 if current_distance <= min_distance:
                     min_distance = current_distance

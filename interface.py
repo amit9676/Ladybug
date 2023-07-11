@@ -19,16 +19,16 @@ class Interface:
         # Create the buttons
         self.buttons = [
             pygame.Rect(button_x, button_y, button_width, button_height),  # Single Player
-            pygame.Rect(button_x, button_y + button_height * 1.5, button_width, button_height),  # Multiplayer
-            pygame.Rect(button_x, button_y + button_height * 3, button_width, button_height),  # How to Play
-            pygame.Rect(button_x, button_y + button_height * 4.5, button_width, button_height),  # Settings
-            pygame.Rect(button_x, button_y + button_height * 6, button_width, button_height)  # Credits
+            #pygame.Rect(button_x, button_y + button_height * 1.5, button_width, button_height),  # Multiplayer
+            pygame.Rect(button_x, button_y + button_height * 1.5, button_width, button_height),  # How to Play
+            pygame.Rect(button_x, button_y + button_height * 3, button_width, button_height),  # Settings
+            pygame.Rect(button_x, button_y + button_height * 4.5, button_width, button_height)  # Credits
         ]
 
         # Set the button labels
         self.button_labels = [
             self.__font.render("Single Player", True, self.__artisticDesign.get_default_button_text_color()),
-            self.__font.render("Multiplayer", True, self.__artisticDesign.get_default_button_text_color()),
+            #self.__font.render("Multiplayer", True, self.__artisticDesign.get_default_button_text_color()),
             self.__font.render("How to Play", True, self.__artisticDesign.get_default_button_text_color()),
             self.__font.render("Settings", True, self.__artisticDesign.get_default_button_text_color()),
             self.__font.render("Credits", True, self.__artisticDesign.get_default_button_text_color())
@@ -56,6 +56,8 @@ class Interface:
         for i, button in enumerate(self.buttons):
             if button.collidepoint(mouse_pos):
                 #return self.button_clicked(i)
-                return i+2
+                if i < 1:
+                    return i+2
+                return i+3
                 #break
         return 1

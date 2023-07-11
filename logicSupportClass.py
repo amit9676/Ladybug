@@ -8,8 +8,8 @@ it is a support class containing logic operations used by various units, project
 
 class LogicSupportClass:
     def __init__(self):
-        self.__WINDOW_WIDTH = 1200
-        self.__WINDOW_HEIGHT = 800
+        self.__WINDOW_WIDTH = 1000
+        self.__WINDOW_HEIGHT = 750
         self.winMode = True
 
     def get_window(self):
