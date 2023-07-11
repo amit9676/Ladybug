@@ -21,7 +21,6 @@ class gameManage:
         self.__artisticDesign = ArtisticDesignClass()
         self.__fileHandler = FileHandler()
         self.__keys = self.__fileHandler.readFromFile()
-        #print(keys)
 
         '''initlize the different game components such as interface, game, credits, settings and instructions.'''
         self.__interface = Interface(self.__window_size, self.__logicSupport, self.__artisticDesign)
