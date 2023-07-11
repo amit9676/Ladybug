@@ -29,7 +29,11 @@ class Ladybug_NPC(Ladybug):
 
         self.__advanced = False
         # self.__evasive_maneuver_counter = 0
-        # self.__evasive_maneuver_angle = 0
+        self.__evasive_maneuver_angle = 0
+        self.__flame_maneuver_angle = 0
+        self.__wagon_maneuver_angle = 0
+        self.__rocket_maneuver_angle = 0
+        self.__zero_guard = False
 
     # def decrease_hitPoints(self, amount: int):
     #     super().decrease_hitPoints(amount)
@@ -121,36 +125,61 @@ class Ladybug_NPC(Ladybug):
         '''turn toward the target, may modify'''
         self.__desired_direction = self.get_instance_struct().get_desired_direction(self.__target, self.get_rect())
         if self.__evasive_maneuver:
-            self.__desired_direction = (self.__desired_direction + 180) % 360
+            #self.__desired_direction = (self.__desired_direction + 180) % 360
+            self.__flame_maneuver_angle += 1
             self.flame = None
             self.__advance()
             current_time = pygame.time.get_ticks()
             if current_time - self.__evasive_maneuver_timer >= 300:
-                print("evasive maneuver off")
+                self.__flame_maneuver_angle = 0
                 self.__evasive_maneuver = False
-        self._current_direction,diff = self.get_instance_struct().make_turn(self._current_direction,self.__desired_direction)
-        #diff - the range between current direction and desired direction
-        self._rotate_image()
+        else:
+            self.__flame_maneuver_angle = 0
+
 
         distance = self.get_instance_struct().calculate_distance(self.__target, self.get_rect())
 
 
         '''main actions - fill this'''
         if self._game.get_wagons():
+            self.__zero_guard = False
             for w in self._game.get_wagons():
                 if w.get_instance_struct().get_team() != self.get_instance_struct().get_team():
+                    self.__wagon_maneuver_angle += 1
+                    self.__wagon_maneuver_angle %= 360
+                    self.__zero_guard = True
                     self.__advance()
                     break
+            if not self.__zero_guard:
+                self.__wagon_maneuver_angle = 0
+        else:
+            self.__wagon_maneuver_angle = 0
 
         if self._game.get_ladybugs():
+            zero_guard = False
             for l in self._game.get_ladybugs():
                 if l.get_instance_struct().get_team() != self.get_instance_struct().get_team():
                     for r in l.rockets:
                         if r.get_target() == self:
-                            print("incoming rocket")
+                            self.__rocket_maneuver_angle += 1
+                            self.__rocket_maneuver_angle %= 360
+                            zero_guard = True
                             self.__advance()
                             break
+            if not zero_guard:
+                self.__rocket_maneuver_angle = 0
 
+        print(f"wagon angle: {self.__wagon_maneuver_angle}")
+        print(f"rocket angle: {self.__rocket_maneuver_angle}")
+        print(f"flame angle: {self.__flame_maneuver_angle}")
+        self.__evasive_maneuver_angle = max(self.__wagon_maneuver_angle,
+                                            self.__rocket_maneuver_angle, self.__flame_maneuver_angle)
+        print(f"evasive angle: {self.__evasive_maneuver_angle}")
+        print("----------------------------------------------")
+        self._current_direction,diff = self.get_instance_struct().make_turn(
+            self._current_direction,self.__desired_direction + self.__evasive_maneuver_angle)
+        #diff - the range between current direction and desired direction
+        self._rotate_image()
 
         if not self.__evasive_maneuver:
             if self.__target.get_type() == "ladybug":
