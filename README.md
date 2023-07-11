@@ -39,13 +39,13 @@ In addition of its equipped machine gun, the war wagon will run over anything in
 regardless if its friend or foe.<br>
 the war wagon can be collected with the appropriate disc.
 
-###Game Discs
+### Game Discs
 In order to obtain the valuable tools above - you need to reach game discs.
 The discs appear randomly on the board for a few seconds.
 You need to reach for them before your opponent does or before it disappears.<br>
 Be advised: your opponents will also seek out the discs.
 
-###How to play keys:
+### How to play keys:
 By default, these are the keys in which you can play the game:<br>
 - up arrow to advance
 - right and left key arrows to turn right or left, respectively.
