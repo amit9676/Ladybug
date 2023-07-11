@@ -10,7 +10,7 @@ class Fireball:
         self.__game = game
         self.__caller = caller  # the unit that fired the fireball
 
-        self.__image = pygame.image.load("fireball.png")
+        self.__image = pygame.image.load("images/fireball.png")
         self.__image = pygame.transform.scale(self.__image, (6, 6))
         self.__logicSupport = logicSupport
         self.__speed = speed

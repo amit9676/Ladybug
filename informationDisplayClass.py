@@ -23,7 +23,7 @@ class InformationDisplayClass:
 
         '''set the display discs which will be displayed with the data'''
         self.__displayHeartDisc = DiscDisplay((location[0] + 50, location[1] + 20), self.__logicSupport, "heart", (40, 40))
-        self.__displayFlameDisc = DiscDisplay(location, self.__logicSupport, "flame001_model")
+        self.__displayFlameDisc = DiscDisplay(location, self.__logicSupport, "flame_model")
         self.__displayRocketDisc = DiscDisplay(location, self.__logicSupport, "rocket", (12, 28))
 
         # Calculate the horizontal spacing between the display objects
@@ -39,7 +39,7 @@ class InformationDisplayClass:
 
         # Create the display objects
         self.__displayHeartDisc = DiscDisplay(self.__display_heart_pos, self.__logicSupport, "heart", (40, 40))
-        self.__displayFlameDisc = DiscDisplay(self.__display_flame_pos, self.__logicSupport, "flame001_model")
+        self.__displayFlameDisc = DiscDisplay(self.__display_flame_pos, self.__logicSupport, "flame_model")
         self.__displayRocketDisc = DiscDisplay(self.__display_rocket_pos, self.__logicSupport, "rocket", (24, 48))
 
         # Create the button

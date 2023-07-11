@@ -11,7 +11,7 @@ when impacted or 10 seconds passed since rocket launch - the rocket will be repl
 as the explosion is bound to the rocket - it will be considered the same object, they are programmatically.'''
 class Rocket:
     def __init__(self, game, caller, team, direction, emergence, logicSupport, speed=2):
-        self.__image = pygame.image.load("rocket.png")
+        self.__image = pygame.image.load("images/rocket.png")
         self.__image = pygame.transform.scale(self.__image, (12, 28))
         self.__original = self.__image
         self.__mask = pygame.mask.from_surface(self.__image)

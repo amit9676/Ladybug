@@ -10,7 +10,7 @@ class Credits:
 
         '''set the necessary data for shown objects'''
         self.__font = artisticDesign.get_default_font()
-        self.__image = pygame.image.load("eagle.png")
+        self.__image = pygame.image.load("images/eagle.png")
         scaling = 1.02
         new_eagle_scale = (self.__image.get_width()/scaling, self.__image.get_height()/scaling)
         self.__image = pygame.transform.scale(self.__image, new_eagle_scale)

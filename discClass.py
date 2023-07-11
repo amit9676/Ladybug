@@ -23,8 +23,8 @@ class Disc:
     def __init__(self, logicSupport, model, model_dimensions: (int, int) = (0, 0)):
         self._logicSupport = logicSupport
         # self.__instance_struct = NPCInstance(team, mainActions)
-        self._image1 = pygame.image.load("disc_model.png")
-        self._image2 = pygame.image.load(f"{model}.png")
+        self._image1 = pygame.image.load("images/disc_model.png")
+        self._image2 = pygame.image.load(f"images/{model}.png")
         '''Scale the images'''
         '''default scaling: scale the model to approximate 30 pixels'''
         self._image1 = pygame.transform.scale(self._image1, (40, 40))

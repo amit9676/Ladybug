@@ -29,7 +29,7 @@ class gameManage:
 
         self.__credits = Credits(self.__window_size, self.__logicSupport, self.__artisticDesign)
 
-        self.__howToPlay = self.__generate_message_display_window(28, False, 4)
+        self.__howToPlay = self.__generate_message_display_window(26, False, 4)
         self.__settings = Setting(self.__window_size, self.__artisticDesign, self.__fileHandler)
 
         self.__lost = self.__generate_message_display_window(45,True,7,"YOU LOSE")
@@ -48,8 +48,8 @@ class gameManage:
 
         # Create the window
         window = pygame.display.set_mode((self.__window_size[0], self.__window_size[1]))
-        pygame.display.set_caption("Ladybug Game")
-        pygame_icon = pygame.image.load('ladybug_red.png')
+        pygame.display.set_caption("Ladybug")
+        pygame_icon = pygame.image.load('images/ladybug_red.png')
         pygame.display.set_icon(pygame_icon)
 
         # Set the background color

@@ -44,8 +44,11 @@ class MessageDisplay:
                       "The last Weapon is the rocket - also can be gained by collecting discs.",
                       "they are being automatically guided at the target, press 's' to fire them.",
                       "Both the flamethrower and rocket have limited ammunition given by every disc - use them wisely.",
-                      "","There is also a support unit - the war wagon,"," summon it with the wagon Disc, and it will "
+                      "","There is also a support unit - the war wagon."," summon it with the wagon Disc, and it will "
                       "assist you in the battle.","Be advised - The opponent will also seek out the discs, and you.",
+                      "",
+                      "in settings you may change the game keys to any keys that you wish.",
+                      "it will be saved for that moment on.",
                       "","ENJOY!"]
         if lines is not None:
             self.__lines = lines

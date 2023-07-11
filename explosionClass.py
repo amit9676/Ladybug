@@ -10,7 +10,7 @@ class Explosion:
 
     def __init__(self, logicSupport, position):
         # self.spr = Sprite("explosion.png", 142, 200, 4, 5, 35, 0)
-        self.spr = Sprite(filename="explosion_medium.png", frame_width=56, frame_height=80,
+        self.spr = Sprite(filename="images/explosion_medium.png", frame_width=56, frame_height=80,
                           num_rows=4, num_cols=5, frame_rate=35, num_rows_start=0)
         # self.spr = Sprite("explosion_small.png", 28, 40, 4, 5, 35, 0)
         self.__image = self.spr.fill_frames_and_get_first_frame()

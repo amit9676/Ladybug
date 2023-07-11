@@ -10,7 +10,7 @@ class Flamethrower:
 
     def __init__(self, game, caller, direction, emergence, logicSupport, radius=3, speed=5):
         self.__range = logicSupport.get_flamethrower_range()
-        self.spr = Sprite(filename="flame001_5frames.png", frame_width=93, frame_height=self.__range,
+        self.spr = Sprite(filename="images/flame.png", frame_width=93, frame_height=self.__range,
                           num_rows=15, num_cols=5, frame_rate=23, num_rows_start=1)
         #self.spr = Sprite("flame002_original.png", 181, 404, 10, 5, 30, 0) #- bigger flamethrower for future use
 

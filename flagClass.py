@@ -4,10 +4,11 @@ import random
 
 
 # Define the Flag class
+'''unused class as draft version of the game'''
 class Flag:
     def __init__(self, window, mainActions):
         # Load the image
-        self.__image = pygame.image.load("redFlag.png")
+        self.__image = pygame.image.load("images/redFlag.png")
         self.__image = pygame.transform.scale(self.__image, (30, 30))
         self.__mainActions = mainActions
         self.__window = window

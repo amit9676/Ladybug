@@ -149,7 +149,7 @@ class Game:
             elif chance == 2:
                 self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "rocket", (12, 28)))
             else:
-                self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "flame001_model"))
+                self.__discs.append(DiscGame(self.__window_size, self.__logicSupport, self, "flame_model"))
 
     def create_warWagon(self, team):
         self.__warWagons.append(WarWagon(window=self.__window_size, logicSupport=self.__logicSupport, game=self, team=team))
@@ -169,7 +169,7 @@ class Game:
                     self.create_warWagon(impacted[0].get_instance_struct().get_team())
                 elif d.get_model() == "rocket":
                     impacted[0].add_rockets()
-                elif d.get_model() == "flame001_model":
+                elif d.get_model() == "flame_model":
                     impacted[0].add_flamethrower()
                 d.self_destruct = True
 

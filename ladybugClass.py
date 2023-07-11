@@ -20,7 +20,7 @@ class Ladybug:
 
 
         # Load the image
-        self._image = pygame.image.load(f"ladybug_{team}.png")
+        self._image = pygame.image.load(f"images/ladybug_{team}.png")
         self._image = pygame.transform.scale(self._image, (30, 30))
         self._original = self._image
         self._mask = pygame.mask.from_surface(self._image)

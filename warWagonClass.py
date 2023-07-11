@@ -20,9 +20,9 @@ class WarWagon:
         self.__game = game
         self.__logicSupport = logicSupport
         self.__instance_struct = NPCInstance(team, logicSupport)
-        self.__image1 = pygame.image.load("wagon.png")
-        self.__image2 = pygame.image.load("machine_gun.png")
-        self.__image3 = pygame.image.load(f"ladybug_{team}.png")
+        self.__image1 = pygame.image.load("images/wagon.png")
+        self.__image2 = pygame.image.load("images/machine_gun.png")
+        self.__image3 = pygame.image.load(f"images/ladybug_{team}.png")
         self.__window = window
 
         '''Scale the images'''
