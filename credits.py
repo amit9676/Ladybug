@@ -21,7 +21,7 @@ class Credits:
         # Set the button position and dimensions
         button_width, button_height = artisticDesign.get_enlarged_button_dimensions()
         button_x = self.__window_size[0] // 2 - button_width // 2
-        button_y = self.__window_size[1] - button_height * 2
+        button_y = self.__window_size[1] - button_height -10
 
         # Create the button
         self.__button = pygame.Rect(button_x, button_y, button_width, button_height)

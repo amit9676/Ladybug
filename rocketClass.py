@@ -39,6 +39,11 @@ class Rocket:
 
         self.__timer = pygame.time.get_ticks()
 
+        '''this field is in order to prevent the missile explode on the caller on launch (as it does collide with it
+        at the beggining, however if the rocket makes a rotation - it can go back on the caller, than it will
+        indeed detonate.'''
+        self.__caller_detonation = False
+
         '''this field is for attached explosion, might be removed with better explosion implementation'''
         self.__explosion = None
 
@@ -125,11 +130,13 @@ class Rocket:
             impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                              + self.__game.get_wagons())
             if impacted:
-                self.__setup_explosion()
-                impacted[0].decrease_hitPoints(100)
-                #print(impacted[0].get_hitpoints())
+                if impacted[0] != self.__caller or self.__caller_detonation:
+                    self.__setup_explosion()
+                    impacted[0].decrease_hitPoints(100)
 
             x = pygame.time.get_ticks() - self.__timer
+            if x >= 100:
+                self.__caller_detonation = True
             if x >= 10000:
                 self.__setup_explosion()
         else: #if the explosion implementation is changed - remove all else block

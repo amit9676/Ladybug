@@ -8,7 +8,7 @@ it is a support class containing logic operations used by various units, project
 
 class LogicSupportClass:
     def __init__(self):
-        self.__WINDOW_WIDTH = 1000
+        self.__WINDOW_WIDTH = 1300
         self.__WINDOW_HEIGHT = 650
         self.winMode = True
 
@@ -123,12 +123,9 @@ class LogicSupportClass:
         game - the game object, with the data on current instances on screen'''
     def impact_identifier(self,projectile, caller, instances):
         impacted = []
-        # instances = []
-        # instances += game.get_inctances()
-        # instances += game.get_wagons()
         for ins in instances:
-            if ins == caller:
-                continue
+            # if ins == caller:
+            #     continue
             res = self.__check_collision(projectile, ins)
             if res:
                 impacted.append(ins)

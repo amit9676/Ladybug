@@ -66,6 +66,8 @@ class Flamethrower:
 
         impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                          + self.__game.get_wagons())
+        if impacted and self.__caller in impacted:
+            impacted.remove(self.__caller)
         for i in impacted:
             i.decrease_hitPoints(1)
             i.flamethrower_hit()

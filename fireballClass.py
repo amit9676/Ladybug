@@ -48,6 +48,9 @@ class Fireball:
         '''impact detection and handling'''
         impacted = self.__logicSupport.impact_identifier(self, self.__caller, self.__game.get_ladybugs()
                                                          + self.__game.get_wagons())
+
+        if impacted and self.__caller in impacted:
+            impacted.remove(self.__caller)
         if impacted:
             self.self_destruct = True
             impacted[0].decrease_hitPoints(10)
