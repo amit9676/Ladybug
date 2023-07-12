@@ -13,8 +13,6 @@ in python beyond the studied in the computer science degree.
 
 
 ### To play the game - you can download it from the attached zip on releases section.
-### Alternatively, you can download it from here:
-https://shorturl.at/jzFNW
 
 ## Gameplay
 In Ladybug Showdown, you control a ladybug character with the goal of defeating other ladybug.<br>
