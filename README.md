@@ -1,6 +1,6 @@
 # Ladybug
 
-![ladybug_gameplay](https://github.com/amit9676/Ladybug/assets/47754727/b1911bea-3f4e-4aa9-8991-8116c4244931)
+![ladybug_gameplay](https://github.com/amit9676/Ladybug/assets/47754727/d8d12695-16fc-4af7-af66-287531059195)
 
 ### Ladybug is an exciting 2D battle game where ladybugs engage in intense combat to emerge victorious.
 ### Take control of a ladybug and engage in fast-paced battles against opponents and various challenges.
@@ -62,7 +62,7 @@ The game was developed using pygame, and contains many various classes and units
 for further examination of the code feel free to take a look in the repository.
 
 ### All rights reserved to Amit Goffer.
-<img src="https://github.com/amit9676/Ladybug/assets/47754727/ff11cfa0-43b6-4f2f-8552-212f98ac80c0" width="500px">
+<img src="https://github.com/amit9676/Ladybug/assets/47754727/a78abd25-d8ec-47f2-9ba6-a85615f54131" width="500px">
 
 
 
