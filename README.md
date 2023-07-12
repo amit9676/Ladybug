@@ -1,6 +1,9 @@
 # Ladybug
 
 ![ladybug_gameplay](https://github.com/amit9676/Ladybug/assets/47754727/d8d12695-16fc-4af7-af66-287531059195)
+### Gameplay video:
+https://youtu.be/iKswkhdFN6o
+
 
 ### Ladybug is an exciting 2D battle game where ladybugs engage in intense combat to emerge victorious.
 ### Take control of a ladybug and engage in fast-paced battles against opponents and various challenges.
